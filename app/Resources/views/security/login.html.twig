@@ -1,0 +1,39 @@
+{# app/Resources/views/security/login.html.twig #}
+
+{% extends 'header.html.twig' %}
+
+{% block content %}
+{% if error %}
+    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="row banner-container">
+        <div class="info-box">
+            <form action="{{ path('login') }}" method="post" id="login_form" class="box">
+                <h3 class="page-subheading borde-inf">Beneficios Corporativos</h3>
+                <div class="line-separator"></div>
+                <div class="form_content clearfix">
+                    <div class="form-group">
+                        <input autocomplete='off' placeholder='Correo Electr&oacute;nico' class="is_required validate account_input form-control" data-validate="isEmail" type="email" name="_username" value="{{ last_username }}" />
+                    </div>
+                    <div class="form-group">
+                        <input  autocomplete='off' placeholder='Contrase&ntilde;a' class="is_required validate account_input form-control" type="password" data-validate="isPasswd" id="password" name="_password" />
+                    </div>
+                    <p class="submit">
+                        <button type="submit" id="SubmitLogin" name="SubmitLogin" class="button btn btn-default button-medium">
+                            <span>
+                                <i class="icon-lock left"></i>
+                                Log In
+                            </span>
+                        </button>
+                    </p>
+                    <p class="lost_password form-group"><a href="#" rel="nofollow" style="text-decoration:underline;">Olvidaste tu contrase&ntilde;a, Fluzzer?</a></p>
+                </div>
+                <div class="line-separator"></div>
+                <!--div class="row footer-sign">
+                    <span class="lost_password form-group">No tienes Cuenta?
+                        <a href="#" style='color: #ef4136;font-size: 14px;font-weight: lighter;'> Crea Una Ahora.</a></span>
+                </div-->
+            </form>
+        </div>
+</div>
+{% endblock %}

@@ -1,0 +1,160 @@
+.banner-container{
+    background: url('../images/login_banner.jpg') no-repeat center center fixed;
+    background-size: 100%;
+    min-height: 600px;
+    text-align: center; 
+}
+
+.info-box {
+    margin-top: 10%;
+    padding: 20px;
+    max-width: 320px;
+    min-width: 320px;
+    max-height: 350px;
+    -webkit-box-shadow: 7px 7px 15px -3PX #D3D3D3;
+    -moz-box-shadow: 7px 7px 15px -3PX #D3D3D3;
+    box-shadow: 7px 7px 15px -3PX #D3D3D3;
+    background-color: #fff;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    background-color: #fdfdfd;
+    border: solid 1px #ddd;
+}
+
+.line-separator {
+    width: 100%;
+    border: 1px solid #e5e5e5;
+}
+
+.footer-sign {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.page-subheading {
+    text-align: center;
+    color: #c9b197;
+    font-size: 12px;
+}
+.button.button-medium {
+    background: #c9b197;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    width: 53%;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.button.button-medium:hover{
+    cursor:pointer;
+}
+.info-box p a {
+    font-size: 12px;
+    color: #BDBDBD;
+    font-family: arial;
+}
+.box {
+    line-height: 20px;
+}
+
+.logo{
+    min-width: 100%;
+    background-color: #fff;
+}
+
+.logo img{
+    height: 55px;
+}
+
+.cerrar{
+    float: right;
+    font-size: 1em;
+    color: #ef4136;
+    text-decoration: underline;
+    margin-right: 15px;
+    margin-top: 5px;
+}
+.cerrar:hover{
+    cursor: pointer;
+    color: #c9b197;
+    text-decoration: none;
+}
+
+.fondo{
+    background-color: #f2f2f2;
+    padding: 50px 30px 30px 50px;
+    min-height: 513px;
+}
+.bloque{
+    margin-left: 15px;
+}
+.subtitulo{font-size: 1em; color:#000; line-height: 40px;}
+.etiqueta{font-size: 0.8em; color:#000; line-height: 40px;}
+.nota{font-size: 0.7em; color:#000; font-style: italic; max-width: 350px; margin-top: 15px;}
+.link-down{color: #ef4136;}
+.link-down:hover{color: #c9b197;}
+.custom-file-control:after{
+    float: right;
+    background-color: #D3D3D3;
+    content: 'Buscar';
+    color: #FFF;
+    font-size: 13px;
+    margin-top: -7px;
+    margin-right: -15px;
+    line-height: 36px;
+    min-height: 36px;
+    min-width: 70px;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.footer{
+    background-color: #474747;
+    min-width: 100%;
+    min-height: 50px;
+    text-align: center;
+}
+
+.footer button{
+    background-color: #c9b197;
+    color: #fff;
+    margin-top: 6px;
+    margin-right: 10px;
+    float:right;
+    font-size: 13px;
+    font-weight: bold;
+}
+.footer button:hover{
+    cursor:pointer;
+    background-color: #ef4136;
+    color: #fff;
+}
+.pasos{
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 20px;
+    max-width: 125px;
+    border: solid red 1px;
+}
+
+.footer:before{
+    display: inline-block;
+    content: '1';
+    width: 20px;
+    font-size: 10px;
+    height: 20px;
+    text-align: center;
+    color:#FFF;
+    background-color: #ef4136;
+    border-radius: 25px;
+    border: solid #fff 2px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+}
+.arrastra{
+    padding: 0px;
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}" />
+            <link rel="stylesheet" href="{{asset('css/main.css')}}" />
+            <script src="{{ asset('js/jquery.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        {% block logo %}
+            <div class="logo">
+                <img src="{{asset('images/customer_logo.png')}}"/>
+                {% if is_granted('ROLE_USER') or is_granted('ROLE_USER') %}
+                    <a class="cerrar" href="/logout">Cerrar Sesión</a>
+                {% endif %}
+            </div>
+        {% endblock %}
+        <div id="content">{% block content %}{% endblock %}</div>
+    </body>
+</html>
