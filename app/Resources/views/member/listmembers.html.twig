@@ -1,0 +1,67 @@
+{% extends 'header.html.twig' %}
+
+{% block content %}
+<div id="wrapper" class="fondo">
+        <input type="hidden" value="2" id="paso"/>
+        <div id="container">
+            <h3>Confirmar Distribuci&oacute;n</h3>
+            <hr>
+            <div class="bloque">
+            <div class="subtitulo">Confirmar Datos para procesar Asignaciones de Bonos</div>
+            <div class="tabla">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="encabezado">Nombre*</div>
+                    <ul class="fila-datos">
+                    {% for member in members %}
+                        <li>{{ member.member_name }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="encabezado">Email*</div>
+                    <ul class="fila-datos">
+                    {% for member in members %}
+                        <li>{{ member.member_email }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="encabezado">Teléfono*</div>
+                    <ul class="fila-datos">
+                    {% for member in members %}
+                        <li>{{ member.mobile_phone }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="encabezado">Identificacion*</div>
+                    <ul class="fila-datos">
+                    {% for member in members %}
+                        <li>{{ member.identification }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="encabezado">Bono a Asignar*</div>
+                    <ul class="fila-datos">
+                    {% for member in members %}
+                        <li>
+                            <select class="asigna-bono">
+                                <option value="0" selected="selected">Bono a Asignar</option>
+                                <option value="">Bono de $ 10.000</option>
+                                <option value="">Bono de $ 20.000</option>
+                                <option value="">Bono de $ 30.000</option>
+                                <option value="">Bono de $ 50.000</option>
+                                <option value="">Bono de $ 100.000</option>
+                            </select>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

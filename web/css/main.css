@@ -158,3 +158,40 @@
 .arrastra{
     padding: 0px;
 }
+
+.fila-datos{
+    line-height: 50px;
+    font-size: 14px;
+    color:black;
+    background-color: #FFF;
+    padding:20px;
+    
+}
+.fila-datos li{
+   list-style: none;
+   border-bottom: solid #D3D3D3 1px;
+   min-width: 100%;
+}
+.encabezado{
+    min-height: 30px;
+    color:#FFF;
+    text-align: center;
+    background-color: #474747;
+    line-height: 50px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.tabla{
+    max-height: 80%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y:scroll;
+}
+
+.asigna-bono{
+    line-height: 50px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    height: 34px;
+    width: 100%;
+}

@@ -18,5 +18,39 @@
             </div>
         {% endblock %}
         <div id="content">{% block content %}{% endblock %}</div>
+        <div class="footer">
+            {% block footer %}<button type="button" id="siguiente" class="btn btn-default btn-md">SIGUIENTE PASO</button>{% endblock%}
+        </div>
     </body>
+    <script>
+    $('#siguiente').on('click',function(){
+        var paso = $('#paso').val();
+        switch(paso){
+            case "1":
+                window.location.href = '/member/view';
+                break;
+            case "2":
+                alert('Asignar Bonos')
+                break;
+            default:
+                alert('Paso No definido')
+                break;
+        }
+            
+            /*var form = $("#myform")[0];
+            $.ajax({
+                url: "/member/upload",
+                data: new FormData(form),
+                type: "post",
+                contenType: false,
+                processData:false,
+                cache:false,
+                mimeType: "multipart/form-data",
+                dataType:"json",
+                success: function(response){
+                    alert(response);
+                }
+            })*/
+        })
+    </script>
 </html>
