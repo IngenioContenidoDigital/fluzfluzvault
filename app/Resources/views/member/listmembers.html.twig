@@ -3,65 +3,44 @@
 {% block content %}
 <div id="wrapper" class="fondo">
         <input type="hidden" value="2" id="paso"/>
+        <div class="menu-superior"><span>Necesitas Cargar más usuarios?</span><a href="/">Cargar más usuarios</a></div>
+        <br>
         <div id="container">
             <h3>Confirmar Distribuci&oacute;n</h3>
+            <div class="subtitulo"><strong>{{ total }}</strong>&nbsp;Beneficiarios</div>
             <hr>
             <div class="bloque">
             <div class="subtitulo">Confirmar Datos para procesar Asignaciones de Bonos</div>
-            <div class="tabla">
-            <div class="row">
-                <div class="col-md-2">
-                    <div class="encabezado">Nombre*</div>
-                    <ul class="fila-datos">
+            <form id="form-list" name="form-list" action="" method="post">
+            <table class="table">
+                <thead>
+                    <th class="encabezado">Nombre*</th>
+                    <th class="encabezado">Email*</th>
+                    <th class="encabezado">Teléfono*</th>
+                    <th class="encabezado">Identificación*</th>
+                    <th class="encabezado">Bono a Asignar*</th>
+                </thead>
+                <tbody>
                     {% for member in members %}
-                        <li>{{ member.member_name }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                <div class="col-md-2">
-                    <div class="encabezado">Email*</div>
-                    <ul class="fila-datos">
-                    {% for member in members %}
-                        <li>{{ member.member_email }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                <div class="col-md-2">
-                    <div class="encabezado">Teléfono*</div>
-                    <ul class="fila-datos">
-                    {% for member in members %}
-                        <li>{{ member.mobile_phone }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                <div class="col-md-2">
-                    <div class="encabezado">Identificacion*</div>
-                    <ul class="fila-datos">
-                    {% for member in members %}
-                        <li>{{ member.identification }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                <div class="col-md-2">
-                    <div class="encabezado">Bono a Asignar*</div>
-                    <ul class="fila-datos">
-                    {% for member in members %}
-                        <li>
-                            <select class="asigna-bono">
-                                <option value="0" selected="selected">Bono a Asignar</option>
-                                <option value="">Bono de $ 10.000</option>
-                                <option value="">Bono de $ 20.000</option>
-                                <option value="">Bono de $ 30.000</option>
-                                <option value="">Bono de $ 50.000</option>
-                                <option value="">Bono de $ 100.000</option>
+                    <tr>
+                        <td class="fila-datos">{{ member.member_name }}</td>
+                        <td class="fila-datos">{{ member.member_email }}</td>
+                        <td class="fila-datos">{{ member.mobile_phone }}</td>
+                        <td class="fila-datos">{{ member.identification }}</td>
+                        <td class="fila-datos">
+                            <span class="brand">Bodytech</span>
+                            <select class="asigna-bono" id="{{member.id_member}}" name="{{member.id_member}}">
+                                <option value="0" selected="selected">Sin Bono Asignado</option>
+                                {% for bono in bonos %}
+                                    <option value="{{bono.code_value}}">Bono de $ {{bono.code_value|number_format(0,'.')}}</option>
+                                {% endfor%}
                             </select>
-                        </li>
+                        </td>
+                    </tr>
                     {% endfor %}
-                    </ul>
-                </div>
-            </div>
-            </div>
-            </div>
+                </tbody>
+            </table>
+            </form>
         </div>
     </div>
 {% endblock %}

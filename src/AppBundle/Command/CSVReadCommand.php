@@ -2,13 +2,13 @@
 
 namespace AppBundle\Command;
 
-use AppBundle\Entity\Member;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use AppBundle\Entity\Vault;
 
 class CSVReadCommand extends Command{
     /**
@@ -34,8 +34,8 @@ class CSVReadCommand extends Command{
      */
     protected function configure(){
         $this
-            ->setName('csv:import')
-            ->setDescription('Importar datos desde un archivos CSV')
+            ->setName('codes:import')
+            ->setDescription('Importar Codigos desde un archivos CSV')
         ;
     }
 
@@ -50,25 +50,25 @@ class CSVReadCommand extends Command{
         $io = new SymfonyStyle($input, $output);
         $io->title('Intentando Importar el archivo...');
         
-        $reader = Reader::createFromPath('%kernel.root_dir%/../web/uploads/members.csv')
+        $reader = Reader::createFromPath('%kernel.root_dir%/../web/uploads/codes.csv')
                 ->setHeaderOffset(0)
         ;
         $io->progressStart(iterator_count($reader));
         foreach ($reader as $row) {
-            $member = $this->em->getRepository('AppBundle:Member')
-                ->findMemberByEmail($row['member_email']);
-            $total=count($member);
-                
+            $vault = $this->em->getRepository('AppBundle:Vault')
+                ->findByCode($row['code'])
+            ;
+            $fecha = new \DateTime();
+            $intervalo = new \DateInterval('P1Y');
+            $fecha->add($intervalo);
+            $fecha->format('Y-m-d H:i:s');
+            $total=count($vault);
             if ($total == 0) {
-                $member = (new Member())
-                    ->setMemberName($row['member_name'])
-                    ->setMemberEmail($row['member_email'])
-                    ->setMobilePhone($row['mobile_phone'])
-                    ->setIdentification($row['identification'])
-                    ->setDateAdd(new \DateTime())
-                ;
-
-                $this->em->persist($member);
+                $vault = new Vault();
+                $vault->setCode($row['code']);
+                $vault->setCodeValue($row['code_value']);
+                $vault->setExpiration($fecha);                
+                $this->em->persist($vault);
            }
            $io->progressAdvance();
         }

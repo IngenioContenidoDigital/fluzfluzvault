@@ -15,7 +15,7 @@ class Member {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO") 
      */
-    private $id_member;
+    public $id_member;
     
     /** @ORM\Column(type="string", length=255)*/
     public $member_name;

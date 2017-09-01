@@ -91,7 +91,7 @@
 .bloque{
     margin-left: 15px;
 }
-.subtitulo{font-size: 1em; color:#000; line-height: 40px;}
+.subtitulo{font-size: 0.9em; color:#000; line-height: 40px;}
 .etiqueta{font-size: 0.8em; color:#000; line-height: 40px;}
 .nota{font-size: 0.7em; color:#000; font-style: italic; max-width: 350px; margin-top: 15px;}
 .link-down{color: #ef4136;}
@@ -160,25 +160,23 @@
 }
 
 .fila-datos{
-    line-height: 50px;
+    line-height: 30px;
     font-size: 14px;
     color:black;
     background-color: #FFF;
-    padding:20px;
+    padding-left:20px;
+    padding-right:20px;
+    border-bottom: solid #D3D3D3 1px;
+    min-width: 100%;
     
-}
-.fila-datos li{
-   list-style: none;
-   border-bottom: solid #D3D3D3 1px;
-   min-width: 100%;
 }
 .encabezado{
     min-height: 30px;
-    color:#FFF;
+    color:#c9b197;
     text-align: center;
     background-color: #474747;
-    line-height: 50px;
-    font-size: 14px;
+    line-height: 30px;
+    font-size: 15px;
     font-weight: bold;
 }
 .tabla{
@@ -193,5 +191,26 @@
     border: 1px solid #ccc;
     font-size: 14px;
     height: 34px;
-    width: 100%;
+    width: 70%;
+    background-color: #FFF;
 }
+
+.brand{
+    
+    color: #474747;
+    width: 15px;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.menu-superior{
+    min-width: 100%;
+    min-height: 55px;
+    background-color: #474747;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.menu-superior span{ color:#FFF; float: left; font-size: 13px; line-height: 25px; margin-left: 5px; font-weight: bold;}
+.menu-superior a{float:right; color:#c9b197; font-size: 17px; text-transform: capitalize; margin-right: 15px;}
+.menu-superior a:before{float:right; content:">"; margin-left: 32px; }
