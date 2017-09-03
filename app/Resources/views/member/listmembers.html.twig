@@ -11,14 +11,14 @@
             <hr>
             <div class="bloque">
             <div class="subtitulo">Confirmar Datos para procesar Asignaciones de Bonos</div>
-            <form id="form-list" name="form-list" action="" method="post">
-            <table class="table">
+            <form id="form-list" name="form-list" action="/vault/assign" method="post">
+            <table class="table table-striped">
                 <thead>
-                    <th class="encabezado">Nombre*</th>
-                    <th class="encabezado">Email*</th>
-                    <th class="encabezado">Teléfono*</th>
-                    <th class="encabezado">Identificación*</th>
-                    <th class="encabezado">Bono a Asignar*</th>
+                <th class="encabezado">Nombre<span>&#x21C5;</span></th>
+                    <th class="encabezado">Email<span>&#x21C5;</span></th>
+                    <th class="encabezado">Teléfono<span>&#x21C5;</span></th>
+                    <th class="encabezado">Identificación<span>&#x21C5;</span></th>
+                    <th class="encabezado">Bono a Asignar<span>&#x21C5;</span></th>
                 </thead>
                 <tbody>
                     {% for member in members %}
@@ -43,4 +43,30 @@
             </form>
         </div>
     </div>
+    <script>
+           $(document).ready(function(){
+               $('.table').DataTable({
+                   "ordering": true,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por pagina",
+                        "zeroRecords": "No hay registros",
+                        "info": "Pagina _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros",
+                        "infoFiltered": "(filtrando de  _MAX_ registros)",
+                        "sSearch": "Buscar:",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst":    "Primero",
+                            "sLast":     "Último",
+                            "sNext":     "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                })
+           })
+    </script>
 {% endblock %}

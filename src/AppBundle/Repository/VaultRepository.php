@@ -21,10 +21,11 @@ class VaultRepository extends EntityRepository{
                 ->getResult();
     }
     
-    public function findAvailableCodes($limit){
+    public function findFirstAvailableCodeByValue($code_value){
         return $this->getEntityManager()
-                ->createQuery('SELECT v FROM AppBundle:Vault v WHERE v.id_member is NULL')
-                ->setMaxResults($limit)
-                ->getResult();
+                ->createQuery('SELECT v FROM AppBundle:Vault v WHERE v.code_value=:value AND v.id_member is NULL')
+                ->setParameter('value', $code_value)
+                ->setMaxResults(1)
+                ->getOneOrNullResult();
     }
 }

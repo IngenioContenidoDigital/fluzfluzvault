@@ -15,6 +15,13 @@ class MemberRepository extends EntityRepository{
                 ->getResult();
     }
     
+    public function findMemberById($id_member){
+        return $this->getEntityManager()
+                ->createQuery('SELECT m FROM AppBundle:Member m WHERE m.id_member=:id')
+                ->setParameter('id',$id_member)
+                ->getResult();
+    }
+    
     public function findAllMembers(){
         return $this->getEntityManager()
             ->createQuery(

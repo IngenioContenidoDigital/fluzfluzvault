@@ -1,0 +1,20 @@
+{% extends 'header.html.twig' %}
+
+{% block content %}
+    <div id="wrapper" class="fondo">
+        <div id="container">
+            <h3>Resultado de Proceso</h3>
+            <hr>
+            <div class="bloque">
+                <div class="subtitulo">A continuacion de presentan los resultados de esta transacci&oacute;n</div>
+                <hr>
+                <ul class="resultados">
+                    <li>Se ha realizado la asignaci&oacute;n de <span>{{ bonosasignados }}</span> bonos a <span>{{ bonosasignados }}</span> usuarios seleccionados.</li>
+                    <li>La asinaci&oacute;n de bonos tiene un valor total de <span>$ {{ valortotal|number_format(2,',','.')}}</span> en esta transacci&oacute;n</li>
+                    <li>Los bonos se han enviado a los usuarios <i>v&iacute;a correo electr&oacute;nico.</i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

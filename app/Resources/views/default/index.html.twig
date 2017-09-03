@@ -5,30 +5,30 @@
         <div id="container">
             <h3>Configuración de Cuenta</h3>
             <hr>
-            <form id="myform" name="myform" enctype="multipart/form-data" method="post">
+            {{ form_start(form, {'attr': {'id': 'form', 'enctype':"multipart/form-data"}})}}
             <input type="hidden" value="1" id="paso"/>
             <div class="bloque">
                 <div class="subtitulo">Cargar lista de contactos para asignar Bonos</div>
                 <span class="etiqueta">Importar desde CSV</span>
                 <br>
                 <label class="custom-file">
-                    <input type="file" id="file" name="file" class="custom-file-input">
+                    {{ form_widget(form) }}
                     <span class="custom-file-control"></span>
                 </label>
-                <div class="nota">Si tienes problemas para subir tu CSV. Aseg&uacute;rate de que tu hoja de c&aacute;lculo est&eacute; formateada correctamente. Descargar <a href="../csvcustomer/carga_customer_example.csv" class="link-down">CSV de Ejemplo</a></div>
+                    <div class="nota">Si tienes problemas para subir tu CSV. Aseg&uacute;rate de que tu hoja de c&aacute;lculo est&eacute; formateada correctamente. Descargar <a href="{{asset('templates/members_template.csv')}}" class="link-down">CSV de Ejemplo</a></div>
             </div>
             <div class="bloque">
                 <span class="etiqueta">O Copiar/Arrastrar Archivo</span>
                 <div class="form-group col-md-4 arrastra">
                     <textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
                 </div>
-                <div class="nota">Si tienes problemas para subir tu CSV. Aseg&uacute;rate de que tu hoja de c&aacute;lculo est&eacute; formateada correctamente. Descargar <a href="../csvcustomer/carga_customer_example.csv" class="link-down">CSV de Ejemplo</a></div>
+                <div class="nota">Si tienes problemas para subir tu CSV. Aseg&uacute;rate de que tu hoja de c&aacute;lculo est&eacute; formateada correctamente. Descargar <a href="{{asset('templates/members_template.csv')}}" class="link-down">CSV de Ejemplo</a></div>
             </div>
-            </form>
+            {{ form_end(form) }}
         </div>
     </div>
     <script>
-        $('#file').on('change',function(){
+        $('#form_file').on('change',function(){
             var route =$(this).val();
             var name = route.split("\\");
             var long = name.length;

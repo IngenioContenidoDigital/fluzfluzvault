@@ -4,22 +4,36 @@
         {% block head %}
             <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}" />
             <link rel="stylesheet" href="{{asset('css/main.css')}}" />
+            <link rel="stylesheet" href="{{asset('bundles/jquery-ui/jquery-ui.min.css')}}" />
+            <link rel="stylesheet" href="{{asset('bundles/datatables/jquery.dataTables.min.css')}}" />
+            <!--<link rel="stylesheet" href="{{asset('bundles/datatables/dataTables.bootstrap.min.css')}}" />-->
             <script src="{{ asset('js/jquery.min.js') }}"></script>
             <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('bundles/jquery-ui/jquery-ui.min.js') }}"></script>
+            <script src="{{ asset('bundles/datatables/jquery.dataTables.min.js') }}"></script>
+            <!--<script src="{{ asset('bundles/datatables/dataTables.bootstrap.min.js') }}"></script>-->
         {% endblock %}
     </head>
     <body>
         {% block logo %}
             <div class="logo">
-                <img src="{{asset('images/customer_logo.png')}}"/>
+                <a href="/"><img src="{{asset('images/customer_logo.png')}}"/></a>
                 {% if is_granted('ROLE_USER') or is_granted('ROLE_USER') %}
                     <a class="cerrar" href="/logout">Cerrar Sesión</a>
                 {% endif %}
             </div>
         {% endblock %}
         <div id="content">{% block content %}{% endblock %}</div>
+        <div class="row blanca">
+            <div class="col-md-12">
+                <img class="pull-right img-responsive" src="{{asset('images/banco-de-occidente.jpg')}}" />
+            </div>
+        </div>
         <div class="footer">
             {% block footer %}<button type="button" id="siguiente" class="btn btn-default btn-md">SIGUIENTE PASO</button>{% endblock%}
+        </div>
+        <div id="dialog" title="Elije un Archivo" style="display:none;">
+            <p>Aun no haz seleccionado un archivo. Por Favor elije un archivo CSV para continuar.</p>
         </div>
     </body>
     <script>
@@ -27,10 +41,17 @@
         var paso = $('#paso').val();
         switch(paso){
             case "1":
-                window.location.href = '/member/view';
+                var form = $('#form')
+                var file = $('#form_file').val()
+                if(file.length>0){
+                    form.submit();   
+                }else{
+                    $('#dialog').dialog();
+                }
                 break;
             case "2":
-                alert('Asignar Bonos')
+                var form = $('#form-list')
+                form.submit();
                 break;
             default:
                 alert('Paso No definido')

@@ -86,7 +86,7 @@
 .fondo{
     background-color: #f2f2f2;
     padding: 50px 30px 30px 50px;
-    min-height: 513px;
+    min-height: 600px;
 }
 .bloque{
     margin-left: 15px;
@@ -179,6 +179,13 @@
     font-size: 15px;
     font-weight: bold;
 }
+
+.encabezado span{
+    float: right;
+    font-size: 22px;
+    font-weight: normal;
+}
+
 .tabla{
     max-height: 80%;
     max-width: 100%;
@@ -214,3 +221,7 @@
 .menu-superior span{ color:#FFF; float: left; font-size: 13px; line-height: 25px; margin-left: 5px; font-weight: bold;}
 .menu-superior a{float:right; color:#c9b197; font-size: 17px; text-transform: capitalize; margin-right: 15px;}
 .menu-superior a:before{float:right; content:">"; margin-left: 32px; }
+.resultados li{ line-height: 25px;}
+.resultados li span{ font-weight: bold;}
+.resultados li i{ color:#ef4136;}
+.blanca{background-color: #FFF; min-height: 50px; text-align: right;}

@@ -13,7 +13,7 @@ use League\Csv\Reader;
 class MemberController extends Controller{
     
     
-    /** @Route("/member/view")*/
+    /** @Route("/member/view", name="listarmiembros")*/
     public function viewMembers(Request $request){
         $results = $this->getDoctrine()->getRepository('AppBundle:Member')
                 ->findAllMembers();
