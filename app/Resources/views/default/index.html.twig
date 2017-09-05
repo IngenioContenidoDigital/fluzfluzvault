@@ -19,8 +19,8 @@
             </div>
             <div class="bloque">
                 <span class="etiqueta">O Copiar/Arrastrar Archivo</span>
-                <div class="form-group col-md-4 arrastra">
-                    <textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
+                <div class="form-group col-md-4 arrastra" >
+                    <textarea class="form-control" disabled rows="5" id="comment" name="comment"></textarea>
                 </div>
                 <div class="nota">Si tienes problemas para subir tu CSV. Aseg&uacute;rate de que tu hoja de c&aacute;lculo est&eacute; formateada correctamente. Descargar <a href="{{asset('templates/members_template.csv')}}" class="link-down">CSV de Ejemplo</a></div>
             </div>
@@ -34,5 +34,38 @@
             var long = name.length;
             $('.custom-file-control').html(name[long-1]);
         })
+        
+        $('#comment').on('drop',function(e){
+            e.preventDefault();
+            var file = e.dataTransfer.files[0];
+            alert(file)
+            /*reader = new FileReader();
+            alert(reader);
+            reader.onload = function(event) {
+                console.log(event.target);
+                $('#comment').val("event.target.result");
+                //this.innerText = event.target.result;
+            };
+            //console.log(file);
+            reader.readAsText(file);*/
+        })
+        
+        function getTextFromFile(fileName,callBack){
+            var file = new XMLHttpRequest();
+            file.open("GET", fileName, false);
+            file.onreadystatechange = function ()
+            {
+                if(file.readyState === 4)
+                {
+                    if(file.status === 200 || file.status == 0)
+                    {
+                        var text = file.responseText;
+                        callBack(text);
+                    }
+                }
+            }
+            file.send(null);
+        }
+        
     </script>
 {% endblock %}
