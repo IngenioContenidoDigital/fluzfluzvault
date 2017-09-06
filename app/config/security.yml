@@ -33,6 +33,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+                require_previous_session: false
             logout:
                 path:   /logout
                 target: /

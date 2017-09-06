@@ -42,7 +42,7 @@ class VaultController extends Controller{
                     
                     
                 $message = (new \Swift_Message('Tu Bono Bodytech y Banco de Occidente'))
-                            ->setFrom('bodytech-bancodeoccidente@fluzfluz.com')
+                            ->setFrom('luis.quinones@ingeniocontenido.co')
                             ->setTo($email)
                             ->setBody(
                                 $this->renderView(
