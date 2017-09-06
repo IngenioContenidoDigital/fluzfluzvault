@@ -24,17 +24,6 @@
             </div>
         {% endblock %}
         <div id="content">{% block content %}{% endblock %}</div>
-        <div class="row blanca">
-            <div class="col-md-12">
-                <img class="pull-right img-responsive" src="{{asset('images/banco-de-occidente.jpg')}}" />
-            </div>
-        </div>
-        <div class="footer">
-            {% block footer %}<button type="button" id="siguiente" class="btn btn-default btn-md">SIGUIENTE PASO</button>{% endblock%}
-        </div>
-        <div id="dialog" title="Elije un Archivo" style="display:none;">
-            <p>Aun no haz seleccionado un archivo. Por Favor elije un archivo CSV para continuar.</p>
-        </div>
     </body>
     <script>
     $('#siguiente').on('click',function(){
