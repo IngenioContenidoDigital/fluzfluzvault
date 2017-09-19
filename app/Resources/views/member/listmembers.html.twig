@@ -11,23 +11,40 @@
             <hr>
             <div class="bloque">
             <div class="subtitulo">Confirmar Datos para procesar Asignaciones de Bonos</div>
-            <form id="form-list" name="form-list" action="/vault/assign" method="post">
+            <form id="form-list" name="form-list" action="/vault/assign" method="post" style="background-color: white; padding: 10px; border-radius: 5px;">
+                <div class="row">
+                    <div class="float-left col-md-4">
+                        <label for="tipo-bono" class="seleccion">Elije el tipo de bono a Asignar:</label>
+                        <select class="asigna-bono" id="tipo-bono" name="tipo-bono">
+                            <option value="0" selected="selected">Sin Bono Asignado</option>
+                            {% for bono in bonos %}
+                                <option value="{{bono.code_value}}">Bono de $ {{bono.code_value|number_format(0,'.')}}</option>
+                            {% endfor%}
+                        </select>
+                    </div>
+                    <div class="float-right col-md-8">
+                        <span class="tip">Se asignar&aacute; el bono seleccionado a <i>TODOS</i> los usuarios habilitados con la opci&oacute;n <span>{Seleccionar}</span></span>
+                    </div>
+                </div>
+                <br>
             <table class="table table-striped">
                 <thead>
-                <th class="encabezado">Nombre<span>&#x21C5;</span></th>
+                    <th class="encabezado">Seleccionar<span>&#x21C5;</span></th>
+                    <th class="encabezado">Nombre<span>&#x21C5;</span></th>
                     <th class="encabezado">Email<span>&#x21C5;</span></th>
                     <th class="encabezado">Teléfono<span>&#x21C5;</span></th>
                     <th class="encabezado">Identificación<span>&#x21C5;</span></th>
-                    <th class="encabezado">Bono a Asignar<span>&#x21C5;</span></th>
+                    <!--<th class="encabezado">Bono a Asignar<span>&#x21C5;</span></th>-->
                 </thead>
                 <tbody>
                     {% for member in members %}
                     <tr>
+                        <td class="fila-datos"><input type="checkbox" id="{{member.id_member}}" name="{{member.id_member}}"</td>
                         <td class="fila-datos">{{ member.member_name }}</td>
                         <td class="fila-datos">{{ member.member_email }}</td>
                         <td class="fila-datos">{{ member.mobile_phone }}</td>
                         <td class="fila-datos">{{ member.identification }}</td>
-                        <td class="fila-datos">
+                        <!--<td class="fila-datos">
                             <span class="brand">Bodytech</span>
                             <select class="asigna-bono" id="{{member.id_member}}" name="{{member.id_member}}">
                                 <option value="0" selected="selected">Sin Bono Asignado</option>
@@ -35,7 +52,7 @@
                                     <option value="{{bono.code_value}}">Bono de $ {{bono.code_value|number_format(0,'.')}}</option>
                                 {% endfor%}
                             </select>
-                        </td>
+                        </td>-->
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -43,9 +60,9 @@
             </form>
         </div>
     </div>
-    <div class="row blanca">
-        <div class="col-md-12">
-            <img class="pull-right img-responsive" src="{{asset('images/banco-de-occidente.jpg')}}" />
+    <div class="row" style="padding: 15px;">
+        <div class="col-md-12 blanca">
+            <img class="occidente pull-right img-responsive" src="{{asset('images/banco-de-occidente.jpg')}}" />
         </div>
     </div>
     <div class="footer">

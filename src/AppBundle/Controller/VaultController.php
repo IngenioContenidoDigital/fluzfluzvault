@@ -17,12 +17,10 @@ class VaultController extends Controller{
              $total_asignados=0;
              $valorbonos=0;
             $data =$request->request->all();
-            foreach($data as $k /*member*/ => $d/*value*/){
-                $vault = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                        ->findFirstAvailableCodeByValue($d);
-                if(count($vault)>0){
-                    $vault = $this->getDoctrine()->getRepository(Vault::class)
-                            ->findFirstAvailableCodeByValue($d);
+            foreach($data as $k /*member*/ => $d /*value*/){
+                $vault = $this->getDoctrine()->getRepository(Vault::class)
+                            ->findFirstAvailableCodeByValue($data['tipo-bono']);
+                if(count($vault)>0 && $k!='tipo-bono'){
                     $member = $this->getDoctrine()->getRepository(Member::class)
                             ->find($k);
                     $id = $member->getIdMember();
@@ -41,7 +39,7 @@ class VaultController extends Controller{
                     
                     
                     
-                $message = (new \Swift_Message('Tu Bono Bodytech y Banco de Occidente'))
+                $message = (new \Swift_Message('Bono de Bienvenida Credencial – Bodytech'))
                             ->setFrom('boveda@fluzfluz.com')
                             ->setTo($email)
                             ->setBody(

@@ -186,6 +186,30 @@
     font-weight: normal;
 }
 
+.seleccion{
+    min-height: 30px;
+    min-width: 266px;
+    color:#c9b197;
+    text-align: center;
+    background-color: #474747;
+    line-height: 30px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.tip{
+    line-height: 60px;
+    font-weight: bold;
+    margin: auto;
+    text-decoration: underline;
+}
+.tip i{
+    color:#ef4136;
+}
+
+.tip span{
+    color:#c9b197;
+}
 .tabla{
     max-height: 80%;
     max-width: 100%;
@@ -224,4 +248,5 @@
 .resultados li{ line-height: 25px;}
 .resultados li span{ font-weight: bold;}
 .resultados li i{ color:#ef4136;}
-.blanca{background-color: #FFF; min-height: 50px; text-align: right;}
+.blanca{float:right;background-color: #FFF; min-height: 40px; text-align: right; }
+.occidente{max-height: 50px;}
