@@ -19,9 +19,10 @@ class CustomerController extends Controller{
         $em = $this->getDoctrine()->getManager();
 
         $customer = new Customer();
-        $customer->setName('Bodytech');
-        $customer->setPassword('FluzFluz2017*');
-        $customer->setCompany('Bodytech Colombia');
+        $customer->setName('Milton Andres Quijano Lopez');
+        $customer->setPassword('1031143285');
+        $customer->setCompany('Banco de Occidente');
+	$customer->setEmail('mquijano@bancodeoccidente.com.co');
 
         // tells Doctrine you want to (eventually) save the Product (no queries yet)
         $em->persist($customer);
@@ -29,7 +30,7 @@ class CustomerController extends Controller{
         // actually executes the queries (i.e. the INSERT query)
         $em->flush();
 
-        return new Response('Se ha registrado un nuevo cliente con el Id '.$customer->getId());
+        return new Response('Se ha registrado un nuevo cliente con el Id '.$customer->getIdCustomer());
     }
 
     // if you have multiple entity managers, use the registry to fetch them
@@ -55,12 +56,12 @@ class CustomerController extends Controller{
             throw $this->createNotFoundException("No se ha localizado el cliente: ".$idcustomer." que intenta modificar");
         }
         
-        $customer->setName('Bodytech');
+        //$customer->setName('Bodytech');
         $encoder = $this->get('security.encoder_factory')->getEncoder($customer);
-        $encodedPassword = $encoder->encodePassword('FluzFluz2017**', $customer);
+        $encodedPassword = $encoder->encodePassword('1031143285', $customer);
         $customer->setPassword($encodedPassword);
         $em->flush();
-        return new Response("<div>Se ha realizado la edición del cliente solicitado. Su nuevo nombre es: </div>".$customer->getName());
+        return new Response("<div>Se ha realizado la edición del cliente solicitado. Su nombre es: </div>".$customer->getName());
     }
     
 }
