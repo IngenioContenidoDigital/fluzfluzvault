@@ -22,7 +22,7 @@ class VaultController extends Controller{
                             ->findFirstAvailableCodeByValue($data['tipo-bono']);
                 if(count($vault)>0 && $k!='tipo-bono'){
                     $member = $this->getDoctrine()->getRepository(Member::class)
-                            ->find($k);
+                            ->find((int)$k);
                     $id = $member->getIdMember();
                     $email = $member->getMemberEmail();
                     $name = $member->getMemberName();
