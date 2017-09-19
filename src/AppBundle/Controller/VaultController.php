@@ -20,44 +20,46 @@ class VaultController extends Controller{
             foreach($data as $k /*member*/ => $d /*value*/){
                 $vault = $this->getDoctrine()->getRepository(Vault::class)
                             ->findFirstAvailableCodeByValue($data['tipo-bono']);
-                if(count($vault)>0 && $k!='tipo-bono'){
-                    $member = $this->getDoctrine()->getRepository(Member::class)
-                            ->find((int)$k);
-                    $id = $member->getIdMember();
-                    $email = $member->getMemberEmail();
-                    $name = $member->getMemberName();
-                    
-                    $vault->AssignCode($id);
-                    $total_asignados+=1;
-                    $bono = $vault->getCode();
-                    $fecha = $vault->getExpiration();
-                    $valor = $vault->getCodeValue();
-                    $valorbonos+=$valor;
-                    $cantidad = 1;
-                    
-                    $this->getDoctrine()->getManager()->flush();
-                    
-                    
-                    
-                $message = (new \Swift_Message('Bono de Bienvenida Credencial – Bodytech'))
-                            ->setFrom('boveda@fluzfluz.com')
-                            ->setTo($email)
-                            ->setBody(
-                                $this->renderView(
-                                    // app/Resources/views/email/assign.html.twig
-                                    'email/assign.html.twig',
-                                    array(
-                                        'name' => $name,
-                                        'bono' => $bono,
-                                        'fecha' => $fecha,
-                                        'valor' => $valor,
-                                        'cantidad' => $cantidad
-                                    )
-                                ),
-                                'text/html'
-                            );
-                    
-                    $mailer->send($message);
+                if(count($vault)>0){
+                    if (is_numeric($k)){
+                        $member = $this->getDoctrine()->getRepository(Member::class)
+                                ->find((int)$k);
+                        $id = $member->getIdMember();
+                        $email = $member->getMemberEmail();
+                        $name = $member->getMemberName();
+
+                        $vault->AssignCode($id);
+                        $total_asignados+=1;
+                        $bono = $vault->getCode();
+                        $fecha = $vault->getExpiration();
+                        $valor = $vault->getCodeValue();
+                        $valorbonos+=$valor;
+                        $cantidad = 1;
+
+                        $this->getDoctrine()->getManager()->flush();
+
+
+
+                    $message = (new \Swift_Message('Bono de Bienvenida Credencial – Bodytech'))
+                                ->setFrom('boveda@fluzfluz.com')
+                                ->setTo($email)
+                                ->setBody(
+                                    $this->renderView(
+                                        // app/Resources/views/email/assign.html.twig
+                                        'email/assign.html.twig',
+                                        array(
+                                            'name' => $name,
+                                            'bono' => $bono,
+                                            'fecha' => $fecha,
+                                            'valor' => $valor,
+                                            'cantidad' => $cantidad
+                                        )
+                                    ),
+                                    'text/html'
+                                );
+
+                        $mailer->send($message);
+                    }
                 }
             }
             return $this->render('vault/results.html.twig',array('bonosasignados'=>$total_asignados, 'valortotal'=>$valorbonos));
