@@ -26,10 +26,13 @@
                         <span class="tip">Se asignar&aacute; el bono seleccionado a <i>TODOS</i> los usuarios habilitados con la opci&oacute;n <span>{Seleccionar}</span></span>
                     </div>
                 </div>
-                <br>
+                <span class="tip">&Uacute;nicamente se muestran usuarios SIN BONOS asignados</span>
             <table class="table table-striped">
                 <thead>
-                    <th class="encabezado">Seleccionar<span>&#x21C5;</span></th>
+                    <th class="encabezado">
+                        <b><input type="radio" id="todos" name="marcar"/>&nbsp;Todos&nbsp;</b>
+                        <b><input type="radio" id="ninguno" name="marcar"/>&nbsp;Ninguno&nbsp;</b>
+                    </th>
                     <th class="encabezado">Nombre<span>&#x21C5;</span></th>
                     <th class="encabezado">Email<span>&#x21C5;</span></th>
                     <th class="encabezado">Teléfono<span>&#x21C5;</span></th>
@@ -39,7 +42,7 @@
                 <tbody>
                     {% for member in members %}
                     <tr>
-                        <td class="fila-datos"><input type="checkbox" id="{{member.id_member}}" name="{{member.id_member}}"</td>
+                        <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id_member}}" name="{{member.id_member}}"/></p></td>
                         <td class="fila-datos">{{ member.member_name }}</td>
                         <td class="fila-datos">{{ member.member_email }}</td>
                         <td class="fila-datos">{{ member.mobile_phone }}</td>
@@ -92,6 +95,17 @@
                         }
                     }
                 })
+           })
+           
+           $('#todos').on('click',function(){
+                if ($(this).is(':checked')) {
+                    $('.check').attr('checked',true);
+                };
+           })
+           $('#ninguno').on('click',function(){
+               if ($(this).is(':checked')) {
+                   $('.check').attr('checked', false);
+               }
            })
     </script>
 {% endblock %}

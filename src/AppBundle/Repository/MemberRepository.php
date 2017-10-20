@@ -25,7 +25,7 @@ class MemberRepository extends EntityRepository{
     public function findAllMembers(){
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT m FROM AppBundle:Member m ORDER BY m.id_member ASC'
+                'SELECT m FROM AppBundle:Member m LEFT JOIN AppBundle:Vault v WITH v.id_member=m.id_member WHERE v.id_member IS NULL ORDER BY m.id_member ASC'
             )
             ->getResult();
     }
