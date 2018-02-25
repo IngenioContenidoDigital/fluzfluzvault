@@ -18,8 +18,15 @@
         {% block logo %}
             <div class="logo">
                 <a href="/"><img src="{{asset('images/customer_logo.png')}}"/></a>
-                {% if is_granted('ROLE_USER') or is_granted('ROLE_USER') %}
-                    <a class="cerrar" href="/logout">Cerrar Sesión</a>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {% for key,value in app.user.getRoles %}
+                        {% if value == 'ROLE_ADMIN' %}
+                            <a class="cerrar" href="/admin">Administrar</a>
+                        {% endif %}
+                        {% if value == 'ROLE_USER' %}
+                            <a class="cerrar" href="/logout">Cerrar Sesión</a>
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
             </div>
         {% endblock %}

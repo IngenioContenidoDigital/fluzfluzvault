@@ -1,0 +1,33 @@
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="container-fluid">
+    <h3>Usuarios Vault</h3>
+    <br>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <table class="table table-striped report">
+            <thead>
+                <th class="encabezado">Id</th>
+                <th class="encabezado">Nombre</th>
+                <th class="encabezado">Empresa</th>
+                <th class="encabezado">Email</th>
+                <th class="encabezado">Active</th>
+            </thead>
+            <tbody>
+            {% for customer in customers %}
+                <tr>
+                    <td class="fila-datos">{{customer.id_customer}}</td>
+                    <td class="fila-datos">{{customer.name}}</td>
+                    <td class="fila-datos">{{customer.company}}</td>
+                    <td class="fila-datos">{{customer.email}}</td>
+                    <td class="fila-datos">{% if(customer.isActive==1)%}<span>Activo</span>{%else%}<span>Inactivo</span>{%endif%}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

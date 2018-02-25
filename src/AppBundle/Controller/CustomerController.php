@@ -35,6 +35,18 @@ class CustomerController extends Controller{
 
     // if you have multiple entity managers, use the registry to fetch them
     /** @Route("/customer/view")*/
+    public function getCustomers(){
+        try{
+            $error = NULL;
+            $customer_list = $this->getDoctrine()
+                ->getRepository(Customer::class)
+                ->findAll();
+        }catch(Exception $e){
+            $error = isset($e) ? $e->getMessage() : $error;
+        }
+        return $this->render('admin/viewCustomer.html.twig',array('error' => $error, 'customers' => $customer_list));
+    }
+    
     public function getCustomer($idcustomer = null){
         $idcustomer=1;
         $customer = $this->getDoctrine()

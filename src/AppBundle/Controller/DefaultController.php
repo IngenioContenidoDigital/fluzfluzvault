@@ -11,6 +11,7 @@ use League\Csv\Reader;
 use AppBundle\Entity\Member;
 use AppBundle\Entity\Vault;
 
+
 class DefaultController extends Controller
 {
     /**
@@ -96,4 +97,42 @@ class DefaultController extends Controller
         
     }
     
+    /**
+     * @Route("/admin",name="admin")
+     */
+    public function adminIndex(Request $request){
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            
+            $error = $authUtils->getLastAuthenticationError();
+
+            // last username entered by the user
+            $lastUsername = $authUtils->getLastUsername();            
+            return $this->render('security/login.html.twig', array(
+            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+            'error' => null, 'last_username'=>null,));
+            // get the login error if there is one
+        }else{
+            return $this->render('admin/admin.html.twig', array(
+                'base_dir' => null,
+                'error' => null,
+                'last_username' => $this->getUser()->getUsername(),
+            ));
+        }
+    }
+    
+    /**
+     * @Route("/report", name="report")
+     */
+    public function adminReport(Request $request){
+        try{
+            $error = NULL;
+            $result = $this->getDoctrine()
+                ->getRepository('AppBundle:Vault')
+                ->countAssignedCodes();
+        }catch(Exception $e){
+            $error = isset($e) ? $e->getMessage() : $error;
+        }
+        
+        return $this->render('admin/report.html.twig', array('error' => $error, 'data' => $result));
+    }
 }

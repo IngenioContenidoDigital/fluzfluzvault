@@ -1,0 +1,66 @@
+.logo{
+    background-color: #FF592B;
+    min-height:55px;
+    padding:10px;
+    color:#FFF;
+}   
+
+.vertical-menu a {
+    list-style-type: none;
+    background-color: #eee;    
+    color: black; /* Black text color */
+    display: block; /* Make the links appear below each other */
+    padding: 12px; /* Add some padding */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.vertical-menu a:hover {
+    background-color: #FF592B;
+    color:white;/* Dark grey background on mouse-over */
+}
+
+#content{
+    padding-top: 10px;
+}
+
+.bienvenida{
+    background-color: #eee;
+    padding-top:20px;
+    padding-left:10px;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+.exit{
+    font-weight: bold;
+    font-size: 0.8em;
+    color:#FF592B;
+}
+
+.report, .companies{
+    font-size: 0.75em;
+}
+.dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate, .dataTables_simple_button{
+    font-size: 0.75em;
+}
+
+.form-label{
+    font-size: 0.75em;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.btn-fluz{
+    color: #fff;
+    background-color: #FF592B;
+    border-color: #FF592B;
+}
+
+.btn-fluz:hover{
+    color: #fff;
+    cursor:pointer;
+    font-weight: bold;
+}
+
+.btn-xs{
+    font-size: 0.8em;
+}

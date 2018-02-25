@@ -42,14 +42,14 @@
                 <tbody>
                     {% for member in members %}
                     <tr>
-                        <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id_member}}" name="{{member.id_member}}"/></p></td>
+                        <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id}}" name="{{member.id}}"/></p></td>
                         <td class="fila-datos">{{ member.member_name }}</td>
                         <td class="fila-datos">{{ member.member_email }}</td>
                         <td class="fila-datos">{{ member.mobile_phone }}</td>
                         <td class="fila-datos">{{ member.identification }}</td>
                         <!--<td class="fila-datos">
                             <span class="brand">Bodytech</span>
-                            <select class="asigna-bono" id="{{member.id_member}}" name="{{member.id_member}}">
+                            <select class="asigna-bono" id="{{member.id}}" name="{{member.id}}">
                                 <option value="0" selected="selected">Sin Bono Asignado</option>
                                 {% for bono in bonos %}
                                     <option value="{{bono.code_value}}">Bono de $ {{bono.code_value|number_format(0,'.')}}</option>

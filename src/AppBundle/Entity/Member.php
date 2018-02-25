@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="members")
@@ -15,7 +16,7 @@ class Member {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO") 
      */
-    public $id_member;
+    public $id;
     
     /** @ORM\Column(type="string", length=255)*/
     public $member_name;
@@ -29,10 +30,26 @@ class Member {
     /** @ORM\Column(type="string", length=12, unique=true)*/
     public $identification;
     
-    /** @ORM\Column(type="datetime")*/
+    /**
+     * @Assert\DateTime() 
+     * @ORM\Column(type="datetime")
+     */
     public $date_add;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="members")
+     * @ORM\JoinColumn(name="company_id",referencedColumnName="id")
+     */
+    private $company;
+    
+    public function getCompany(){
+        return $this->company;
+    }
 
+    public function setCompany(Company $company){
+        $this->company = $company;
+    }
+    
     /**
      * Get idMember
      *
@@ -40,7 +57,7 @@ class Member {
      */
     public function getIdMember()
     {
-        return $this->id_member;
+        return $this->id;
     }
     
     /**
@@ -82,6 +99,10 @@ class Member {
      */
     public function getDateAdd(){
         return $this->date_add;
+    }
+    
+    public function dateCreated(){
+        return date_format($this->date_add,'%Y-%m-%d');
     }
     
     /**
@@ -136,7 +157,8 @@ class Member {
      * @return Member
      */
     public function setDateAdd($date_add){
-        $this->date_add=$date_add;
+        $this->date_add = new \DateTime("now");
+        //$this->date_add=$date_add;
         return $this;
     }
     

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}" />
+            <link rel="stylesheet" href="{{asset('css/admin/main.css')}}" />
+            <link rel="stylesheet" href="{{asset('bundles/jquery-ui/jquery-ui.min.css')}}" />
+            <link rel="stylesheet" href="{{asset('bundles/datatables/jquery.dataTables.min.css')}}" />
+            <!--<link rel="stylesheet" href="{{asset('bundles/datatables/dataTables.bootstrap.min.css')}}" />-->
+            <script src="{{ asset('js/jquery.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('bundles/jquery-ui/jquery-ui.min.js') }}"></script>
+            <script src="{{ asset('bundles/datatables/jquery.dataTables.min.js') }}"></script>
+            <script src="{{ asset('js/admin.js') }}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        {% block logo %}
+            <div class="logo">
+                <a href="/"><img src="{{asset('images/logotype.svg')}}"/></a>
+            </div>
+        {% endblock %}
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                {% block menu %}{% endblock %}
+            </div>
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <div id="content">{% block content %}{% endblock %}</div>
+            </div>
+        </div>
+    </body>
+</html>

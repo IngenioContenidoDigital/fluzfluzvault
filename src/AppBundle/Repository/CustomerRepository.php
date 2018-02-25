@@ -15,4 +15,10 @@ class CustomerRepository extends EntityRepository implements UserLoaderInterface
             ->getQuery()
             ->getOneOrNullResult();
     }
+    
+    public function findAll(){
+        return $this->getEntityManager()
+                ->createQuery('SELECT c FROM AppBundle:Customer c')
+                ->getResult();
+    }
 }
