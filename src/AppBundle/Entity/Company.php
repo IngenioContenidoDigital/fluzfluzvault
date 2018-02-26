@@ -60,7 +60,7 @@ class Company
     }
     
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Customer", mappedBy="company")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Customer", mappedBy="company", cascade={"persist"})
      */
     private $users;
     

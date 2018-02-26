@@ -5,10 +5,12 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use League\Csv\Reader;
 use AppBundle\Entity\Member;
+use AppBundle\Entity\MemberGroup;
 use AppBundle\Entity\Vault;
 
 
@@ -17,8 +19,7 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request){
         // replace this example code with whatever you need
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             
@@ -30,12 +31,17 @@ class DefaultController extends Controller
                     ->setAttribute('id', 'myform')
                     ->setAction($this->generateUrl('homepage'))
                     ->setMethod('POST')
+                    ->add('group',TextType::class,array('attr' => array(
+                        "required"=>true,
+                        "placeholder" => "Identificador para este grupo de usuarios"
+                    )))
                     ->add('file', FileType::class,array(
-                "attr" =>array("class" => "custom-file-input", "id"=>"file", "required"=>true, 'accept' => ".csv")))
-                ;
+                        "attr" =>array("class" => "custom-file-input", "id"=>"file", "required"=>true, 'accept' => ".csv")
+                    ));
             $form = $form->getForm();
             $form->handleRequest($request);
-             if ($form->isSubmitted() && $form->isValid()) {
+            
+            if ($form->isSubmitted() && $form->isValid()) {
                 // $form->getData() holds the submitted values
                 
                 $file=$form['file']->getData();
@@ -46,6 +52,10 @@ class DefaultController extends Controller
                 $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/'.$file_name)
                 ->setHeaderOffset(0)
                 ;
+                $em = $this->getDoctrine()->getManager();
+                $group = new MemberGroup();
+                $group->setName($form['group']->getData());
+                $em->persist($group);
                 foreach ($reader as $row) {
                     $member = $this->getDoctrine()->getRepository('AppBundle:Member')
                         ->findMemberByEmail($row['member_email']);
@@ -57,9 +67,18 @@ class DefaultController extends Controller
                             ->setMemberEmail($row['member_email'])
                             ->setMobilePhone($row['mobile_phone'])
                             ->setIdentification($row['identification'])
-                            ->setDateAdd(new \DateTime())
-                        ;
-                        $this->getDoctrine()->getManager()->persist($member);
+                            ->setDateAdd(new \DateTime("now"))
+                            ->setGroup($group);
+                
+                        $user=$this->getUser();
+                        $companyId = $user->getCompany()->getId();
+                        
+
+                        $company = $em->find('AppBundle\Entity\Company', $companyId);
+                        $member->setCompany($company);
+                        
+                        
+                        $em->persist($member);
                    }
                 }
 
@@ -74,20 +93,8 @@ class DefaultController extends Controller
 
                 return $this->render('member/listmembers.html.twig',array('members' => $results,
                     'total'=> $total, 'bonos'=>$bonos));
-                
-                
-                
-
-                // ... perform some action, such as saving the task to the database
-                // for example, if Task is a Doctrine entity, save it!
-                // $em = $this->getDoctrine()->getManager();
-                // $em->persist($task);
-                // $em->flush();
-
-                //return $this->redirectToRoute('listarmiembros');
             }
 
-            
             return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
             'form' => $form->createView()

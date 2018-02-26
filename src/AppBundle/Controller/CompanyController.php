@@ -30,7 +30,7 @@ class CompanyController extends Controller{
             ->add('name', TextType::class)
             ->add('nit', TextType::class)
             ->add('email', EmailType::class)
-            ->add('logo', FileType::class)
+            ->add('logo', FileType::class, array('attr' => array("required"=>true)))
             ->add('phone', NumberType::class)
             ->getForm();
 

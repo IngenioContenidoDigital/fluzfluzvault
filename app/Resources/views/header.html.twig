@@ -18,19 +18,21 @@
         {% block logo %}
             <div class="logo">
                 <a href="/"><img src="{{asset('images/customer_logo.png')}}"/></a>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    {% for key,value in app.user.getRoles %}
-                        {% if value == 'ROLE_ADMIN' %}
-                            <a class="cerrar" href="/admin">Administrar</a>
-                        {% endif %}
-                        {% if value == 'ROLE_USER' %}
-                            <a class="cerrar" href="/logout">Cerrar Sesión</a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
             </div>
         {% endblock %}
-        <div id="content">{% block content %}{% endblock %}</div>
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                {% block menu %}{% endblock %}
+            </div>
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="footer">
+                <button type="button" id="siguiente" class="btn btn-default btn-md">SIGUIENTE PASO</button>
+            </div>
+        </div>
     </body>
     <script>
     $('#siguiente').on('click',function(){

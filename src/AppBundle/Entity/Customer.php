@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CustomerRepository")
@@ -41,13 +43,20 @@ class Customer implements AdvancedUserInterface, \Serializable{
      */
     private $company;
     
+    /**
+     * @return Collection|Company[]
+     */
+    public function getCompany(){
+        return $this->company;
+    }
 
     public function setMember(Member $member){
         $this->member = $member;
     }
     
     public function __construct(){
-        $this->isActive = true;        
+        $this->isActive = true;
+        $this->company = new ArrayCollection();
     }
     
     public function setName($name){
@@ -143,16 +152,22 @@ class Customer implements AdvancedUserInterface, \Serializable{
      * @return Customer
      */
     public function setRoles($role){
-        $lista_roles=explode(',',$this->role);
-        $lista_roles=array_push($lista_roles,$role);
-        $this->role=  implode(',', $lista_roles);
+        if($this->role == NULL){
+            $this->role=$role;
+        }else{
+            $lista_roles=explode(',',$this->role);
+            if(!in_array($role,$lista_roles)){
+                array_push($lista_roles,$role);
+                $this->role=  implode(',', $lista_roles);
+            }
+        }
         return $this;
     }
 
     /**
      * Set company
      *
-     * @param string $company
+     * @param Company $company
      *
      * @return Customer
      */
@@ -164,20 +179,10 @@ class Customer implements AdvancedUserInterface, \Serializable{
     }
 
     /**
-     * Get company
-     *
-     * @return string
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-    /**
      * Set isActive
      *
      * @param boolean $isActive
-     *
+         *
      * @return Customer
      */
     public function setIsActive($isActive)

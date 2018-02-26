@@ -4,10 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Member;
 use AppBundle\Entity\Vault;
+use AppBundle\Entity\Customer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use League\Csv\Reader;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class MemberController extends Controller{
@@ -26,7 +28,7 @@ class MemberController extends Controller{
     }
     
     /** @Route("/member/create")*/
-    public function createMembers(){
+    public function createMembers(Request $request){
         $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/members.csv')
                 ->setHeaderOffset(0)
         ;
@@ -41,8 +43,16 @@ class MemberController extends Controller{
                     ->setMemberEmail($row['member_email'])
                     ->setMobilePhone($row['mobile_phone'])
                     ->setIdentification($row['identification'])
-                    ->setDateAdd(new \DateTime())
+                    ->setDateAdd(new \DateTime("now"))
                 ;
+                
+                $user=$this->getUser();
+                $companyId =  $user->getCompany()->getId();
+                $em = $this->getDoctrine()->getManager();
+
+                $company = $em->find('AppBundle\Entity\Company', $companyId);
+                $member->setCompany($company);
+                
                 $this->getDoctrine()->getManager()->persist($member);
            }
         }

@@ -42,12 +42,48 @@ class Member {
      */
     private $company;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MemberGroup", inversedBy="members")
+     * @ORM\JoinColumn(name="member_group_id",referencedColumnName="id")
+     */
+    private $group;
+    
+    /**
+     * @return Collection|Company[]
+     */
     public function getCompany(){
         return $this->company;
     }
-
+    
+    /**
+     * Set company
+     *
+     * @param Company $company
+     *
+     * @return Member
+     */
     public function setCompany(Company $company){
         $this->company = $company;
+        return $this;
+    }
+    
+    /**
+     * @return Collection|MemberGroup[]
+     */
+    public function getGroup(){
+        return $this->group;
+    }
+    
+    /**
+     * Set group
+     *
+     * @param MemberGroup $group
+     *
+     * @return Member
+     */
+    public function setGroup(MemberGroup $group){
+        $this->group = $group;
+        return $this;
     }
     
     /**
