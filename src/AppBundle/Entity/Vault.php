@@ -35,7 +35,7 @@ class Vault {
     public $assigned;
     
     /**
-     * ORM\OneToOne(targetEntity="AppBundle\Entity\Member", inversedBy="vault")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Member", inversedBy="vault")
      * @ORM\JoinColumn(name="member_id",referencedColumnName="id")
      */
     private $members;

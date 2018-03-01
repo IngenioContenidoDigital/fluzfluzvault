@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <h3>Reporte C&oacute;digos Entregados</h3>
     <br>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         {% set flag = 0 %}
         {% for item in data %}
             {% if item.total > 0 %}
@@ -15,13 +15,12 @@
             {% endif %}
         {% endfor %}
         {% if flag == 0 %}
-            <p>Sin datos para mostrar</p>
+            <div class="alert alert-warning"><b>No hay Datos!!</b>. Por favor distribuye algunos códigos para ver algunos datos en esta sección.</div>
         {%else%}
-            
             <table class="table table-striped report">
                 <thead>
-                    <!--<th class="encabezado">Mes</th>
-                    <th class="encabezado">D&iacute;a</th>-->
+                    <th class="encabezado">Mes</th>
+                    <th class="encabezado">D&iacute;a</th>
                     <th class="encabezado">Total Asignados</th>
                     <th class="encabezado">Valor C&oacute;digos</th>
                     <th class="encabezado">Valor Promedio</th>
@@ -31,8 +30,8 @@
                 {% set count_total = 0 %}
                 {% for item in data %}
                     <tr>
-                       <!-- <td class="fila-datos">{#item.date | date('F')#}</td>
-                        <td class="fila-datos">{#item.date#}</td>-->
+                        <td class="fila-datos">{{item.date | date('F')}}</td>
+                        <td class="fila-datos">{{item.date}}</td>
                         <td class="fila-datos">{{item.total}}</td>
                         <td class="fila-datos">$ {{item.value | number_format(0, '.', ',')}}</td>
                         {% set avg = item.value / item.total %}
@@ -44,7 +43,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <!--<td class="fila-datos" colspan="2"></td>-->
+                        <td class="fila-datos" colspan="2"></td>
                         <td class="fila-datos"><b>{{count_total | number_format(0, '.', ',')}}</b></td>
                         <td class="fila-datos"><b>$ {{sum_total | number_format(0, '.', ',')}}</b></td>
                         {% set avg_total = sum_total / count_total %}
@@ -53,9 +52,6 @@
                 </tfoot>
             </table>
         {%endif%}
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-        
     </div>
 </div>
 <script>

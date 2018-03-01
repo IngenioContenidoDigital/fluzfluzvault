@@ -31,10 +31,10 @@ class VaultRepository extends EntityRepository{
     
     public function countAssignedCodes(){
         $query = $this->createQueryBuilder('v')
-        ->select('count(v.id) total, sum(v.code_value) value' )
-        //->Join('v.member', 'm')
-        //->groupBy('date')
-        //->orderBy('date')
+        ->select('count(v.id) total, sum(v.code_value) value, DATE_FORMAT(m.date_add, \'%Y-%m-%d\') date')
+        ->innerJoin('v.members', 'm')
+        ->groupBy('date')
+        ->orderBy('date')
         //->where('r.foo = :parameter')
         //->setParameter('parameter', $parameter)
         ->getQuery();
