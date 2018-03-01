@@ -25,10 +25,11 @@ class MemberController extends Controller{
         $logo = $company->getLogo();
         
         $results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                ->findAllMembers();
+                ->findMembersByCompany($company);
+        
         $total = count($results);
         $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                ->findCodeValues();
+                ->findCodeValues($company);
         
         return $this->render('member/listmembers.html.twig',array('members' => $results,
             'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo));

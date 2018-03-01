@@ -23,13 +23,21 @@ class VaultController extends Controller{
     /** @Route("/vault/assign")*/
     public function assignToMember(Request $request, \Swift_Mailer $mailer){
          if ($request->isMethod('POST')) {
+             
+            $em = $this->getDoctrine()->getManager();
+            $user=$this->getUser();
+            $companyId = $user->getCompany()->getId();
+            $company = $em->find('AppBundle\Entity\Company', $companyId);
+            $logo = $company->getLogo();
+             
              $total_asignados=0;
              $valorbonos=0;
             $data =$request->request->all();
             foreach($data as $k /*member*/ => $d /*value*/){
                 $vault = $this->getDoctrine()->getRepository(Vault::class)
-                            ->findFirstAvailableCodeByValue($data['tipo-bono']);
-                if(count($vault)>0){
+                            ->findFirstAvailableCodeByValue($data['tipo-bono'],$company);
+
+                if(isset($vault)){
                     if (is_numeric($k)){
                         $member = $this->getDoctrine()->getRepository(Member::class)
                                 ->find((int)$k);
@@ -37,7 +45,8 @@ class VaultController extends Controller{
                         $email = $member->getMemberEmail();
                         $name = $member->getMemberName();
 
-                        $vault->AssignCode($id);
+                        $vault->setMember($member);
+                        $vault->setAssigned(new \DateTime("now"));
                         $total_asignados+=1;
                         $bono = $vault->getCode();
                         $fecha = $vault->getExpiration();
@@ -45,11 +54,12 @@ class VaultController extends Controller{
                         $valorbonos+=$valor;
                         $cantidad = 1;
 
+                        $this->getDoctrine()->getManager()->persist($vault);
                         $this->getDoctrine()->getManager()->flush();
 
 
 
-                    $message = (new \Swift_Message('Bono de Bienvenida Credencial – Bodytech'))
+                    /*$message = (new \Swift_Message('Bono de Bienvenida Credencial – Bodytech'))
                                 ->setFrom('boveda@fluzfluz.com')
                                 ->setTo($email)
                                 ->setBody(
@@ -67,11 +77,11 @@ class VaultController extends Controller{
                                     'text/html'
                                 );
 
-                        $mailer->send($message);
+                        $mailer->send($message);*/
                     }
                 }
             }
-            return $this->render('vault/results.html.twig',array('bonosasignados'=>$total_asignados, 'valortotal'=>$valorbonos));
+            return $this->render('vault/results.html.twig',array('bonosasignados'=>$total_asignados, 'valortotal'=>$valorbonos, 'logo' => $logo));
         }else{
             return new Response("<div>Error. Nada que Mostrar</div>");
         }

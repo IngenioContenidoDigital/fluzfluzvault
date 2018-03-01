@@ -23,11 +23,19 @@ class MemberRepository extends EntityRepository{
     }
     
     public function findAllMembers(){
-        //LEFT JOIN AppBundle:Vault v WITH v.member_id=m.id WHERE v.member_id IS NULL 
         return $this->getEntityManager()
-            ->createQuery(
-                'SELECT m FROM AppBundle:Member m ORDER BY m.id ASC'
-            )
+            ->createQuery('SELECT m FROM AppBundle:Member m')
             ->getResult();
+    }
+    
+    public function findMembersByCompany($company){
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('m, g')
+                ->from('AppBundle:Member','m')
+                ->innerJoin('m.group', 'g')
+                ->where('m.company = :company')
+                ->setParameter('company', $company)
+                ->getQuery()
+                ->getResult();
     }
 }

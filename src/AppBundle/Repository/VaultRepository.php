@@ -8,9 +8,15 @@ use Doctrine\ORM\EntityRepository;
 
 
 class VaultRepository extends EntityRepository{
-    public function findCodeValues(){
-        return $this->getEntityManager()
-                ->createQuery('SELECT DISTINCT v.code_value FROM AppBundle:Vault v WHERE v.id is NULL')
+    public function findCodeValues($company){
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('v.code_value, g.name')
+                ->distinct('v.code_value, g.name')
+                ->from('AppBundle:Vault', 'v')
+                ->leftJoin('v.group', 'g')
+                ->where('v.members IS NULL AND v.company=:company')
+                ->setParameter('company', $company)
+                ->getQuery()
                 ->getResult();
     }
     
@@ -21,10 +27,11 @@ class VaultRepository extends EntityRepository{
                 ->getResult();
     }
     
-    public function findFirstAvailableCodeByValue($code_value){
+    public function findFirstAvailableCodeByValue($code_value, $company){
         return $this->getEntityManager()
-                ->createQuery('SELECT v FROM AppBundle:Vault v WHERE v.code_value=:value AND v.member_id is NULL')
+                ->createQuery('SELECT v FROM AppBundle:Vault v WHERE v.code_value=:value AND v.members is NULL AND v.company=:company')
                 ->setParameter('value', $code_value)
+                ->setParameter('company', $company)
                 ->setMaxResults(1)
                 ->getOneOrNullResult();
     }

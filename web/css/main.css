@@ -173,7 +173,7 @@
 }
 .encabezado{
     min-height: 30px;
-    color:#c9b197;
+    color:white;
     text-align: center;
     background-color: #474747;
     line-height: 15px;
@@ -189,7 +189,7 @@
 .seleccion{
     min-height: 20px;
     min-width: 256px;
-    color:#c9b197;
+    color:white;
     text-align: center;
     background-color: #474747;
     line-height: 30px;
