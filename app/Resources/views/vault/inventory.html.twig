@@ -1,0 +1,68 @@
+{% extends 'header.html.twig' %}
+{% use "menu.html.twig" %}
+{% block content %}
+<div id="wrapper" class="fondo">
+    <div id="container">
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+    <h3>Inventario Disponible</h3>
+    <br>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        {% set flag = 0 %}
+        {% for item in data %}
+            {% if item.total > 0 %}
+                {% set flag = 1 %}
+            {% endif %}
+        {% endfor %}
+        {% if flag == 0 %}
+            <div class="alert alert-warning"><b>No hay Datos!!</b>. Por favor distribuye algunos códigos para ver algunos datos en esta sección.</div>
+        {%else%}
+            <table class="table table-striped report">
+                <thead>
+                    <th class="encabezado">Grupo Inventario</th>
+                    <th class="encabezado">Valor</th>
+                    <th class="encabezado">Total Disponibles</th>
+                </thead>
+                <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td class="fila-datos">{{item.name}}</td>
+                        <td class="fila-datos">$ {{item.code_value|number_format(0,'.',',')}}</td>
+                        <td class="fila-datos">{{item.total}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {%endif%}
+    </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('.table').DataTable({
+            "ordering": true,
+            "filter": false,
+            "language": {
+                "lengthMenu": "Mostrando _MENU_ registros por pagina",
+                "zeroRecords": "No hay registros",
+                "info": "Pagina _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros",
+                "infoFiltered": "(filtrando de  _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                 },
+                 "oAria": {
+                     "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                     "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                 }
+             }
+        })
+    })
+</script>
+{% endblock %}

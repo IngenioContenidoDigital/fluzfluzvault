@@ -38,7 +38,7 @@ class VaultRepository extends EntityRepository{
     
     public function countAssignedCodes(){
         $query = $this->createQueryBuilder('v')
-        ->select('count(v.id) total, sum(v.code_value) value, DATE_FORMAT(m.date_add, \'%Y-%m-%d\') date')
+        ->select('count(v.id) total, sum(v.code_value) value, DATE_FORMAT(v.assigned, \'%Y-%m-%d\') date')
         ->innerJoin('v.members', 'm')
         ->groupBy('date')
         ->orderBy('date')
@@ -47,5 +47,17 @@ class VaultRepository extends EntityRepository{
         ->getQuery();
 
         return $query->getResult(); 
+    }
+    
+    public function inventory($company){
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('g.name, v.code_value, count(v) total')
+                ->from('AppBundle:Vault', 'v')
+                ->leftJoin('v.group', 'g')
+                ->groupBy('g.name, v.code_value')
+                ->where('v.members IS NULL AND v.company=:company')
+                ->setParameter('company', $company)
+                ->getQuery()
+                ->getResult();
     }
 }

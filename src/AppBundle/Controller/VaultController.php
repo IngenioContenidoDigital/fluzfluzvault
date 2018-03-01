@@ -59,7 +59,7 @@ class VaultController extends Controller{
 
 
 
-                    /*$message = (new \Swift_Message('Bono de Bienvenida Credencial – Bodytech'))
+                    $message = (new \Swift_Message('Bono de Bienvenida Credencial – Bodytech'))
                                 ->setFrom('boveda@fluzfluz.com')
                                 ->setTo($email)
                                 ->setBody(
@@ -77,7 +77,7 @@ class VaultController extends Controller{
                                     'text/html'
                                 );
 
-                        $mailer->send($message);*/
+                        $mailer->send($message);
                     }
                 }
             }
@@ -176,5 +176,21 @@ class VaultController extends Controller{
         }else{
             return $this->render('vault/inventoryUpload.html.twig',array('error'=>$error, 'form'=>$form->createView()));
         }
+    }
+    
+    /**
+     * @Route("/inventory")
+     */
+    public function vaultInventory(){
+        $error = NULL;
+        $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        $companyId = $user->getCompany()->getId();
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        $logo = $company->getLogo();
+            
+        $result = $this->getDoctrine()->getRepository('AppBundle:Vault')
+                ->inventory($company);
+        return $this->render('vault/inventory.html.twig', array('error' => $error, 'data' => $result, 'logo' => $logo));
     }
 }

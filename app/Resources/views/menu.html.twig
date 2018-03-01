@@ -2,7 +2,7 @@
     <div class="vertical-menu">
         <a href="/">Cargar usuarios</a>
         <a href="/member/view">Asignar Bonos</a>
-        <a href="#">Inventarios</a>
+        <a href="/inventory">Inventarios</a>
         <a href="#">Reportes</a>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             {% for key,value in app.user.getRoles %}
