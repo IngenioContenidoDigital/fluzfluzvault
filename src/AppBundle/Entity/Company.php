@@ -36,7 +36,7 @@ class Company
      */
     public $logo;
     /**
-     * @ORM\Column(type="integer", length=15)
+     * @ORM\Column(type="decimal", length=15)
      */
     public $phone;
     /**
