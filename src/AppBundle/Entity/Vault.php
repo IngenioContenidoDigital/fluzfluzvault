@@ -3,6 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 
 /**
  * @ORM\Table(name="vault")
@@ -32,17 +35,40 @@ class Vault {
     public $assigned;
     
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Member")
+     * ORM\OneToOne(targetEntity="AppBundle\Entity\Member", inversedBy="vault")
      * @ORM\JoinColumn(name="member_id",referencedColumnName="id")
      */
-    private $member;
+    private $members;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\VaultGroup", inversedBy="vault")
+     * @ORM\JoinColumn(name="vault_group_id",referencedColumnName="id")
+     */
+    private $group;
+    
+    
+    /**
+     * @return Collection|VaultGroup[]
+     */
+    public function getgroup(){
+        return $this->group;
+    }
+    
+    public function setGroup(VaultGroup $group){
+        $this->group=$group;
+        return $this;
+    }
+    
+    /**
+     * @return Collection|Member[]
+     */
     public function getMember(){
-        return $this->member;
+        return $this->members;
     }
 
     public function setMember(Member $member){
-        $this->member = $member;
+        $this->members = $member;
+        return $this;
     }
     
     /**
@@ -51,12 +77,22 @@ class Vault {
      */
     private $company;
     
+    /**
+     * @return Collection|Company[]
+     */
     public function getCompany(){
         return $this->company;
     }
 
     public function setCompany(Company $company){
         $this->company = $company;
+        return $this;
+    }
+    
+    public function __construct(){
+        $this->members = new ArrayCollection();
+        $this->company = new ArrayCollection();
+        $this->group = new ArrayCollection();
     }
     
     /**

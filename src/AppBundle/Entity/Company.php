@@ -55,6 +55,9 @@ class Company
      */
     private $codes;
     
+    /**
+     * @return Collection|Vault[]
+     */
     public function getCodes(){
         return $this->codes;
     }

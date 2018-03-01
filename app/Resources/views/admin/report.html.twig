@@ -10,8 +10,8 @@
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
         <table class="table table-striped report">
             <thead>
-                <th class="encabezado">Mes</th>
-                <th class="encabezado">D&iacute;a</th>
+                <!--<th class="encabezado">Mes</th>
+                <th class="encabezado">D&iacute;a</th>-->
                 <th class="encabezado">Total Asignados</th>
                 <th class="encabezado">Valor C&oacute;digos</th>
                 <th class="encabezado">Valor Promedio</th>
@@ -21,8 +21,8 @@
             {% set count_total = 0 %}
             {% for item in data %}
                 <tr>
-                    <td class="fila-datos">{{item.date | date('F')}}</td>
-                    <td class="fila-datos">{{item.date}}</td>
+                   <!-- <td class="fila-datos">{#item.date | date('F')#}</td>
+                    <td class="fila-datos">{#item.date#}</td>-->
                     <td class="fila-datos">{{item.total}}</td>
                     <td class="fila-datos">$ {{item.value | number_format(0, '.', ',')}}</td>
                     {% set avg = item.value / item.total %}
@@ -34,7 +34,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td class="fila-datos" colspan="2"></td>
+                    <!--<td class="fila-datos" colspan="2"></td>-->
                     <td class="fila-datos"><b>{{count_total | number_format(0, '.', ',')}}</b></td>
                     <td class="fila-datos"><b>$ {{sum_total | number_format(0, '.', ',')}}</b></td>
                     {% set avg_total = sum_total / count_total %}

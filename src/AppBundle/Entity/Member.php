@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Table(name="members")
@@ -47,6 +49,22 @@ class Member {
      * @ORM\JoinColumn(name="member_group_id",referencedColumnName="id")
      */
     private $group;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vault", mappedBy="members")
+     */
+    private $vault;
+    
+    public function getVault(){
+        return $this->vault;
+    }
+    
+    /**
+     * @return Collection|Vault[]
+     */
+    public function setVault(Vault $vault){
+        $this->vault = $vault;
+    }
     
     /**
      * @return Collection|Company[]
@@ -196,6 +214,13 @@ class Member {
         $this->date_add = new \DateTime("now");
         //$this->date_add=$date_add;
         return $this;
+    }
+    
+    public function __construct(){
+        $this->company = new ArrayCollection();
+        $this->group = new ArrayCollection();
+        $this->vault = new ArrayCollection();
+        
     }
     
 }

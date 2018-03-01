@@ -17,6 +17,13 @@ class MemberController extends Controller{
     
     /** @Route("/member/view", name="listarmiembros")*/
     public function viewMembers(Request $request){
+        
+        $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        $companyId = $user->getCompany()->getId();
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        $logo = $company->getLogo();
+        
         $results = $this->getDoctrine()->getRepository('AppBundle:Member')
                 ->findAllMembers();
         $total = count($results);
@@ -24,7 +31,7 @@ class MemberController extends Controller{
                 ->findCodeValues();
         
         return $this->render('member/listmembers.html.twig',array('members' => $results,
-            'total'=> $total, 'bonos'=>$bonos));
+            'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo));
     }
     
     /** @Route("/member/create")*/

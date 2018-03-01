@@ -1,0 +1,22 @@
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="container-fluid">
+    <h3>Carga de Inventarios</h3>
+    <br>
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.group, null, {'label': 'Nombre Inventario:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.group, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.vault, null, {'label': 'Archivo CSV:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.vault, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.company, null, {'label': 'Empresa:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.company, {'attr': {'class': 'form-control form-control-sm'} }) }}
+    </div>
+    <input type="submit" class="btn btn-fluz" value="Procesar Inventario" />
+    {{ form_end(form) }}
+</div>
+{% endblock %}

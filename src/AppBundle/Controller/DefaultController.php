@@ -27,6 +27,12 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
             'error' => null, 'last_username'=>null,));
         }else{
+            $em = $this->getDoctrine()->getManager();
+            $user=$this->getUser();
+            $companyId = $user->getCompany()->getId();
+            $company = $em->find('AppBundle\Entity\Company', $companyId);
+            $logo = $company->getLogo();
+                        
             $form = $this->createFormBuilder()
                     ->setAttribute('id', 'myform')
                     ->setAction($this->generateUrl('homepage'))
@@ -52,7 +58,6 @@ class DefaultController extends Controller
                 $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/'.$file_name)
                 ->setHeaderOffset(0)
                 ;
-                $em = $this->getDoctrine()->getManager();
                 $group = new MemberGroup();
                 $group->setName($form['group']->getData());
                 $em->persist($group);
@@ -97,7 +102,8 @@ class DefaultController extends Controller
 
             return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'logo' => $logo
             ]);
         }
         
