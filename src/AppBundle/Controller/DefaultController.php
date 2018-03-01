@@ -22,10 +22,10 @@ class DefaultController extends Controller
     public function indexAction(Request $request){
         // replace this example code with whatever you need
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            
+            $logo='logo-2.png';
             return $this->render('security/login.html.twig', array(
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-            'error' => null, 'last_username'=>null,));
+            'error' => null, 'last_username'=>null,'logo'=>$logo));
         }else{
             $em = $this->getDoctrine()->getManager();
             $user=$this->getUser();
