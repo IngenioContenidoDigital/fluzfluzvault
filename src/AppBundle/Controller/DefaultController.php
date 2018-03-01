@@ -142,11 +142,10 @@ class DefaultController extends Controller
             $result = $this->getDoctrine()
                 ->getRepository('AppBundle:Vault')
                 ->countAssignedCodes();
-            $records = count($result[0]);
         }catch(Exception $e){
             $error = isset($e) ? $e->getMessage() : $error;
         }
         
-        return $this->render('admin/report.html.twig', array('error' => $error, 'data' => $result, 'records' => $records));
+        return $this->render('admin/report.html.twig', array('error' => $error, 'data' => $result));
     }
 }
