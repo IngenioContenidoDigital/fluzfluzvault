@@ -90,7 +90,6 @@ class Vault {
     }
     
     public function __construct(){
-        $this->members = new ArrayCollection();
         $this->company = new ArrayCollection();
         $this->group = new ArrayCollection();
     }

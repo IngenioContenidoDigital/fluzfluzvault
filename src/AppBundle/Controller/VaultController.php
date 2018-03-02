@@ -171,7 +171,7 @@ class VaultController extends Controller{
             }catch(Exception $e){
                 $error = isset($error) ? $e->getMessage() : $error;
             }
-            return new Response('<p>Se ha realizado el proceso de carga de los Inventarios</p>');
+            return $this->render('vault/inventoryConfirm.html.twig',array('error'=>$error));
             //return $this->render('admin/company/companyCreate.html.twig', array('error' => $error, 'form' => $form->createView()));
         }else{
             return $this->render('vault/inventoryUpload.html.twig',array('error'=>$error, 'form'=>$form->createView()));
