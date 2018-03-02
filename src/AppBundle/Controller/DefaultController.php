@@ -53,7 +53,7 @@ class DefaultController extends Controller
                 $companyId = $user->getCompany()->getId();
 
                 $company = $em->find('AppBundle\Entity\Company', $companyId);
-                $member->setCompany($company);
+                
                 
                 
                 $file=$form['file']->getData();
@@ -80,7 +80,7 @@ class DefaultController extends Controller
                             ->setIdentification($row['identification'])
                             ->setDateAdd(new \DateTime("now"))
                             ->setGroup($group);
-
+                        $member->setCompany($company);
                         $em->persist($member);
                    }
                 }
