@@ -11,10 +11,14 @@
             <div class="float-left col-md-4">
                 <label for="tipo-bono" class="seleccion">Elije el tipo de bono a Asignar:</label>
                 <select class="asigna-bono" id="tipo-bono" name="tipo-bono" >
-                    <option value="0" selected="selected">Elegir bono a Asignar</option>
-                    {% for bono in bonos %}
-                        <option value="{{bono.code_value}}">{{bono.name}}  - $ {{bono.code_value|number_format(0,'.')}} </option>
-                    {% endfor%}
+                    {% if bonos is empty %}
+                        <option value="0" selected="selected">Sin Inventario Disponible</option>
+                    {% else %}
+                        <option value="0" selected="selected">Elegir bono a Asignar</option>
+                        {% for bono in bonos %}
+                            <option value="{{bono.code_value}}">{{bono.name}}  - $ {{bono.code_value|number_format(0,'.')}} </option>
+                        {% endfor%}
+                    {% endif %}
                 </select>
             </div>
             <div class="float-right col-md-8">
@@ -22,33 +26,37 @@
             </div>
         </div>
                 <hr>
-    <table class="table table-striped members">
-        <thead>
-            <th class="encabezado">
-                <b><input type="radio" id="todos" name="marcar"/>&nbsp;Todos&nbsp;</b>
-                <b><input type="radio" id="ninguno" name="marcar"/>&nbsp;Ninguno&nbsp;</b>
-            </th>
-            <th class="encabezado">Grupo<span>&#x21C5;</span></th>
-            <th class="encabezado">Nombre<span>&#x21C5;</span></th>
-            <th class="encabezado">Email<span>&#x21C5;</span></th>
-            <th class="encabezado">Teléfono<span>&#x21C5;</span></th>
-            <th class="encabezado">Identificación<span>&#x21C5;</span></th>
-            <th class="encabezado">Total Bonos Asignados<span>&#x21C5;</span></th>
-        </thead>
-        <tbody>
-            {% for member in members %}
-            <tr>
-                <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id}}" name="{{member.id}}"/></p></td>
-                <td class="fila-datos">{{ member.group.name }}</td>
-                <td class="fila-datos">{{ member.member_name }}</td>
-                <td class="fila-datos">{{ member.member_email }}</td>
-                <td class="fila-datos">{{ member.mobile_phone }}</td>
-                <td class="fila-datos">{{ member.identification }}</td>
-                <td class="fila-datos">{{ member.vault|length|number_format }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% if total > 0 %}
+                    <table class="table table-striped members">
+                        <thead>
+                            <th class="encabezado">
+                                <b><input type="radio" id="todos" name="marcar"/>&nbsp;Todos&nbsp;</b>
+                                <b><input type="radio" id="ninguno" name="marcar"/>&nbsp;Ninguno&nbsp;</b>
+                            </th>
+                            <th class="encabezado">Grupo<span>&#x21C5;</span></th>
+                            <th class="encabezado">Nombre<span>&#x21C5;</span></th>
+                            <th class="encabezado">Email<span>&#x21C5;</span></th>
+                            <th class="encabezado">Teléfono<span>&#x21C5;</span></th>
+                            <th class="encabezado">Identificación<span>&#x21C5;</span></th>
+                            <th class="encabezado">Total Bonos Asignados<span>&#x21C5;</span></th>
+                        </thead>
+                        <tbody>
+                            {% for member in members %}
+                            <tr>
+                                <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id}}" name="{{member.id}}"/></p></td>
+                                <td class="fila-datos">{{ member.group.name }}</td>
+                                <td class="fila-datos">{{ member.member_name }}</td>
+                                <td class="fila-datos">{{ member.member_email }}</td>
+                                <td class="fila-datos">{{ member.mobile_phone }}</td>
+                                <td class="fila-datos">{{ member.identification }}</td>
+                                <td class="fila-datos">{{ member.vault|length|number_format }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-warning"><b>No hay Datos!!</b>. No Hay usuarios disponibles en este momento. Por favor carga algunos usuarios.</div>
+                {% endif %}
     </form>
 </div>
     <script>

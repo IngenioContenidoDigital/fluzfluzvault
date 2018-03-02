@@ -30,7 +30,9 @@ class MemberController extends Controller{
         $total = count($results);
         $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                 ->findCodeValues($company);
-        
+        if(count($bonos)<1){
+            $bonos=NULL;
+        };
         return $this->render('member/listmembers.html.twig',array('members' => $results,
             'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo));
     }
