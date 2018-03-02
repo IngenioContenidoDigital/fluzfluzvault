@@ -39,6 +39,13 @@ class MemberController extends Controller{
     
     /** @Route("/member/create")*/
     public function createMembers(Request $request){
+        
+        $user=$this->getUser();
+        $companyId =  $user->getCompany()->getId();
+        $em = $this->getDoctrine()->getManager();
+
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        
         $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/members.csv')
                 ->setHeaderOffset(0)
         ;
@@ -56,11 +63,7 @@ class MemberController extends Controller{
                     ->setDateAdd(new \DateTime("now"))
                 ;
                 
-                $user=$this->getUser();
-                $companyId =  $user->getCompany()->getId();
-                $em = $this->getDoctrine()->getManager();
-
-                $company = $em->find('AppBundle\Entity\Company', $companyId);
+                
                 $member->setCompany($company);
                 
                 $this->getDoctrine()->getManager()->persist($member);
@@ -74,7 +77,7 @@ class MemberController extends Controller{
                 ->findAllMembers();
         $total = count($results);
         $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                ->findCodeValues();
+                ->findCodeValues($company);
         
         return $this->render('member/listmembers.html.twig',array('members' => $results,
             'total'=> $total, 'bonos'=>$bonos));

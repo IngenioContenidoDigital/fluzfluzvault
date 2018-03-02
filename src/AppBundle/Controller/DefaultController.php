@@ -49,6 +49,12 @@ class DefaultController extends Controller
             
             if ($form->isSubmitted() && $form->isValid()) {
                 // $form->getData() holds the submitted values
+                $user=$this->getUser();
+                $companyId = $user->getCompany()->getId();
+
+                $company = $em->find('AppBundle\Entity\Company', $companyId);
+                $member->setCompany($company);
+                
                 
                 $file=$form['file']->getData();
                 $ext=$file->guessExtension();
@@ -74,15 +80,7 @@ class DefaultController extends Controller
                             ->setIdentification($row['identification'])
                             ->setDateAdd(new \DateTime("now"))
                             ->setGroup($group);
-                
-                        $user=$this->getUser();
-                        $companyId = $user->getCompany()->getId();
-                        
 
-                        $company = $em->find('AppBundle\Entity\Company', $companyId);
-                        $member->setCompany($company);
-                        
-                        
                         $em->persist($member);
                    }
                 }
@@ -94,7 +92,7 @@ class DefaultController extends Controller
                         ->findAllMembers();
                 $total = count($results);
                 $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                        ->findCodeValues();
+                        ->findCodeValues($company);
 
                 return $this->render('member/listmembers.html.twig',array('members' => $results,
                     'total'=> $total, 'bonos'=>$bonos));
