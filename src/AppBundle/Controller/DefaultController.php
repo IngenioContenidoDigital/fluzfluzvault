@@ -95,7 +95,7 @@ class DefaultController extends Controller
                         ->findCodeValues($company);
 
                 return $this->render('member/listmembers.html.twig',array('members' => $results,
-                    'total'=> $total, 'bonos'=>$bonos));
+                    'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo));
             }
 
             return $this->render('default/index.html.twig', [
