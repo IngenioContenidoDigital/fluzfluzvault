@@ -87,7 +87,7 @@ class MemberController extends Controller{
      * @Route("/member/detail")
      */
     public function detailMember(Request $request){
-        
+        $error= NULL;
         $em = $this->getDoctrine()->getManager();
         $user=$this->getUser();
         $companyId = $user->getCompany()->getId();
@@ -104,7 +104,8 @@ class MemberController extends Controller{
         return $this->render('member/detailmembers.html.twig', array('logo' => $logo, 
             'member' => $member, 
             'total'=>$total, 
-            'bonos' => $bonos));
+            'bonos' => $bonos,
+            'error' => $error));
         
     }
 }

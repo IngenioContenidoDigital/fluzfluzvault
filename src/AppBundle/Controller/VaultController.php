@@ -64,7 +64,6 @@ class VaultController extends Controller{
                                 ->setTo($email)
                                 ->setBody(
                                     $this->renderView(
-                                        // app/Resources/views/email/assign.html.twig
                                         'email/assign.html.twig',
                                         array(
                                             'name' => $name,
@@ -192,5 +191,95 @@ class VaultController extends Controller{
         $result = $this->getDoctrine()->getRepository('AppBundle:Vault')
                 ->inventory($company);
         return $this->render('vault/inventory.html.twig', array('error' => $error, 'data' => $result, 'logo' => $logo));
+    }
+    
+    /**
+     * @Route("/vault/print")
+     */
+    public function vaultPrint(Request $request){
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new Response('<div>Forbidden</div>');
+        }else{
+            $em = $this->getDoctrine()->getManager();
+            $user=$this->getUser();
+            $companyId = $user->getCompany()->getId();
+            $company = $em->find('AppBundle\Entity\Company', $companyId);
+            $logo = $company->getLogo();
+
+            $id_member = $request->query->get('member');
+            $code = $request->query->get('code');
+
+            $member = $em->find('AppBundle\Entity\Member', $id_member);
+            $bono = $em->find('AppBundle\Entity\Vault',$code);
+
+
+            $snappy = $this->get('knp_snappy.pdf');
+            $snappy->setOption('no-outline', true);
+            $snappy->setOption('orientation', 'landscape');
+            $snappy->setOption('page-size','A6');
+            $snappy->setOption('encoding', 'UTF-8');
+            $filename = 'Fluz Fluz Vault Printed Record';
+
+            $html = $this->renderView('vault/vaultPrint.html.twig', array(
+                'logo' => $logo,
+                'bono' => $bono,
+                'member' => $member
+            ));
+
+
+            return new Response(
+                $snappy->getOutputFromHtml($html),
+                200,
+                array(
+                    'Content-Type'          => 'application/pdf',
+                    'Content-Disposition'   => 'inline; filename="'.$filename.'.pdf"'
+                )
+            );
+        }
+    }
+
+    /**
+     * @Route("/vault/send")
+     */
+    public function vaultSend(Request $request, \Swift_Mailer $mailer){
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new Response('<div>Forbidden</div>');
+        }else{
+            $error=NULL;
+            $em = $this->getDoctrine()->getManager();
+            $user=$this->getUser();
+            $companyId = $user->getCompany()->getId();
+            $company = $em->find('AppBundle\Entity\Company', $companyId);
+            $logo = $company->getLogo();
+
+            $id_member = $request->query->get('member');
+            $code = $request->query->get('code');
+
+            $member = $em->find('AppBundle\Entity\Member', $id_member);
+            $bono = $em->find('AppBundle\Entity\Vault',$code);
+
+            $message = (new \Swift_Message('Bono de '.$company->getName()))
+                    ->setFrom('boveda@fluzfluz.com')
+                    ->setTo($member->getMemberEmail())
+                    ->setBody(
+                            $this->renderView(
+                                    'email/resend.html.twig',
+                                    array(
+                                        'logo' => $logo,
+                                        'member' => $member,
+                                        'bono' => $bono,
+                                        'error' => $error
+                                    )
+                            ),
+                            'text/html'
+                    );
+
+            try{           
+                $response = $mailer->send($message);
+            }catch(Exception $e){
+                $response = $e->getMessage();
+            }
+            return new Response($response);
+        }
     }
 }

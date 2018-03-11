@@ -3,7 +3,7 @@
         <a href="/">Cargar usuarios</a>
         <a href="/member/view">Asignar Bonos</a>
         <a href="/inventory">Inventarios</a>
-        <a href="#">Reportes</a>
+        <!--<a href="#">Reportes</a>-->
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             {% for key,value in app.user.getRoles %}
                 {% if value == 'ROLE_ADMIN' %}
