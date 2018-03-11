@@ -60,4 +60,15 @@ class VaultRepository extends EntityRepository{
                 ->getQuery()
                 ->getResult();
     }
+    
+    public function findCodeByMember($member){
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('v')
+                ->from('AppBundle:Vault', 'v')
+                ->where('v.members =:member')
+                ->setParameter('member', $member)
+                ->getQuery()
+                ->getResult();
+    }
+    
 }

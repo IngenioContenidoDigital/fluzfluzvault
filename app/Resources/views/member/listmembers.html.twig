@@ -33,12 +33,13 @@
                                 <b><input type="radio" id="todos" name="marcar"/>&nbsp;Todos&nbsp;</b>
                                 <b><input type="radio" id="ninguno" name="marcar"/>&nbsp;Ninguno&nbsp;</b>
                             </th>
-                            <th class="encabezado">Grupo<span>&#x21C5;</span></th>
-                            <th class="encabezado">Nombre<span>&#x21C5;</span></th>
-                            <th class="encabezado">Email<span>&#x21C5;</span></th>
-                            <th class="encabezado">Teléfono<span>&#x21C5;</span></th>
-                            <th class="encabezado">Identificación<span>&#x21C5;</span></th>
-                            <th class="encabezado">Total Bonos Asignados<span>&#x21C5;</span></th>
+                            <th class="encabezado">Grupo<span class="glyphicon glyphicon-sort"></span></th>
+                            <th class="encabezado">Nombre<span class="glyphicon glyphicon-sort"></span></th>
+                            <th class="encabezado">Email<span class="glyphicon glyphicon-sort"></span></th>
+                            <th class="encabezado">Teléfono<span class="glyphicon glyphicon-sort"></span></th>
+                            <th class="encabezado">Identificación<span class="glyphicon glyphicon-sort"></span></th>
+                            <th class="encabezado">Total Bonos Asignados<span class="glyphicon glyphicon-sort"></span></th>
+                            <th class="encabezado">Opciones</th>
                         </thead>
                         <tbody>
                             {% for member in members %}
@@ -50,6 +51,11 @@
                                 <td class="fila-datos">{{ member.mobile_phone }}</td>
                                 <td class="fila-datos">{{ member.identification }}</td>
                                 <td class="fila-datos">{{ member.vault|length|number_format }}</td>
+                                <td class="fila-datos">
+                                    {% if member.vault|length >0 %}
+                                        <p style="text-align:center;"><a href="/member/detail?member={{member.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-eye-open"></span></a></p>
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>

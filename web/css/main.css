@@ -325,3 +325,11 @@
 .report{
     font-size: 0.75em;
 }
+
+.glyphicon-sort {
+    font-size: 11px !important;
+}
+
+.glyphicon-sort:hover {
+   color:#FF592B;
+}

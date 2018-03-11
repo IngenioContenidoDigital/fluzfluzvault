@@ -82,4 +82,29 @@ class MemberController extends Controller{
         return $this->render('member/listmembers.html.twig',array('members' => $results,
             'total'=> $total, 'bonos'=>$bonos));
     }
+    
+    /**
+     * @Route("/member/detail")
+     */
+    public function detailMember(Request $request){
+        
+        $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        $companyId = $user->getCompany()->getId();
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        $logo = $company->getLogo();
+
+        $id_member = $request->query->get('member');
+                
+        $member = $em->find('AppBundle\Entity\Member', $id_member);
+        $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
+                ->findCodeByMember($member);
+        $total=count($bonos);
+        
+        return $this->render('member/detailmembers.html.twig', array('logo' => $logo, 
+            'member' => $member, 
+            'total'=>$total, 
+            'bonos' => $bonos));
+        
+    }
 }
