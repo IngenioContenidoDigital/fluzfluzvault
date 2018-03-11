@@ -1,0 +1,110 @@
+{% extends 'header.html.twig' %}
+{% use "menu.html.twig" %}
+{% block content %}
+{% if error %}
+    <div id="error" class="alert"></div>
+{% endif %}
+<div id="result"></div>
+<div id="wrapper" class="container-fluid fondo">
+    <input type="hidden" value="2" id="paso"/>
+    <h3>Detalle de Bonos de usuario {{member.member_name}}</h3>
+    <div class="subtitulo">Este usuario tiene un total de <strong>{{ total }}</strong>&nbsp;Bonos Asignados</div>
+    <hr>
+    {% if total > 0 %}
+        <table class="table table-striped members">
+            <thead>
+                <th class="encabezado">Empresa<span class="glyphicon glyphicon-sort"></span></th>
+                <th class="encabezado">Grupo<span class="glyphicon glyphicon-sort"></span></th>
+                <th class="encabezado">C&oacute;digo<span class="glyphicon glyphicon-sort"></span></th>
+                <th class="encabezado">Valor<span class="glyphicon glyphicon-sort"></span></th>
+                <th class="encabezado">Asignado<span class="glyphicon glyphicon-sort"></span></th>
+                <th class="encabezado">Expira<span class="glyphicon glyphicon-sort"></span></th>
+                <th class="encabezado">Opciones</th>
+            </thead>
+            <tbody>
+                {% for bono in bonos %}
+                    {% set l = bono.code|length%}
+                <tr>
+                    <td class="fila-datos">{{ bono.company.name }}</td>
+                    <td class="fila-datos">{{ bono.group.name }}</td>
+                    <td class="fila-datos">************{{ bono.code|slice(l-4, l) }}</td>
+                    <td class="fila-datos">$ {{ bono.code_value|number_format(0,',','.') }}</td>
+                    <td class="fila-datos">{{ bono.assigned|date('Y-m-d') }}</td>
+                    <td class="fila-datos">{{ bono.expiration|date('Y-m-d') }}</td>
+                    <td class="fila-datos">
+                        <p style="text-align:center;">
+                            <a id="print" href="/vault/print?member={{member.id}}&code={{bono.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-print"></span></a>
+                            <a id="send" href="#" member="{{member.id}}" code="{{bono.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-send"></span></a>
+                        </p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning"><b>No hay Datos!!</b>. Este usuario no tiene bonos asignados.</div>
+    {% endif %}
+</div>
+<div id="sending" style="position:absolute; top:20%; left:35%; display:none;"><img src="{{asset('images/sendmail.gif')}}" /></div>
+<script>
+       $(document).ready(function(){
+           $('#sending').hide();
+           $('.table').DataTable({
+               "ordering": true,
+                "language": {
+                    "lengthMenu": "Mostrando _MENU_ registros por pagina",
+                    "zeroRecords": "No hay registros",
+                    "info": "Pagina _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros",
+                    "infoFiltered": "(filtrando de  _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst":    "Primero",
+                        "sLast":     "Último",
+                        "sNext":     "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            })
+       })
+
+       $('#todos').on('click',function(){
+            if ($(this).is(':checked')) {
+                $('.check').attr('checked',true);
+            };
+       })
+       $('#ninguno').on('click',function(){
+           if ($(this).is(':checked')) {
+               $('.check').attr('checked', false);
+           }
+       })
+       
+       $('#send').click(function(e){
+           e.preventDefault();
+           $.ajax({
+               method:"GET",
+               url: "/vault/send",
+               data: {
+                   'member': $(this).attr('member'),
+                   'code' : $(this).attr('code'),
+               },
+               beforeSend:function(){
+                   $('#sending').show();
+               },
+               success:function(response){
+                    $('#sending').hide();
+                    $('#result').html('<div id="error" class="alert alert-success">Mensaje enviado con &eacute;xito!!</div>')
+               },
+               error:function(response){
+                   $('#sending').hide();
+                   $('#result').html('<div id="error" class="alert alert-danger">Problemas al Enviar el mensaje. intenta de nuevo m&aacute;s tarde</div>');
+               }
+           })
+       })
+</script>
+{% endblock %}

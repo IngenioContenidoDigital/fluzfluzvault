@@ -1,0 +1,12 @@
+{# app/Resources/views/security/login.html.twig #}
+
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="container-fluid">
+    <label>Espacio para el contenido</label>
+</div>
+{% endblock %}

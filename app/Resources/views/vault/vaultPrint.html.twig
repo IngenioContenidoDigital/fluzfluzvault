@@ -1,0 +1,28 @@
+<p style="border-top: solid lightgrey 1px; min-width: 100%; padding-top: 2px;position: absolute; top: 0px; text-align: center; font-size: 9px;"></p>
+<div style="width: 30%; height:58px; display:inline-block; padding-top: 15px; margin-bottom: 10px;"><img src="../../../../web/images/company/{{logo}}" style="width:100%;"/></div>
+<div style="width: 68%; display:inline-block;">
+    <p style="text-align: center;font-size: 1.5em; line-height: 30px; margin-top: 30px;">{{bono.company.name}}</p>
+</div>
+<br><br>
+<p style="text-align:center;max-height: 1px;font-weight: bold;">Al momento de pagar menciona el siguiente c&oacute;digo:</p>
+<p style="background: url('../../../../web/images/security.jpg') repeat;text-align: center;font-size: 3em; font-weight: bold;line-height: 15px; padding: 25px;">{{bono.code}}</p>
+<table align="center" cellspadding="0" cellspacing="0" style="font-size: 11px;">
+    <thead>
+        <th style="width:250px; background-color: lightgrey;">Nombre del Bono</th>
+        <th style="width:250px;background-color: lightgrey;">Fecha Caducidad</th>
+        <th style="width:250px;background-color: lightgrey;">Valor del Bono</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="width:250px;text-align:center;line-height: 21px;">{{bono.group.name}}</td>
+            <td style="width:250px;text-align:center;line-height: 21px;">{{bono.expiration|date('Y-M-d')}}</td>
+            <td style="width:250px;text-align:center;line-height: 21px;">$ {{bono.code_value|number_format(0,',','.')}}</td>
+        </tr>
+    </tbody>
+</table>
+<ul style="font-size: 9px;">
+    <li>El bono &uacute;nicamente puede ser usado por su valor total</li>
+    <li>En caso de compra de mayor valor, el usuario puede pagar el excedente con otro medio de pago</li>
+    <li>Bono v&aacute;lido para el portador</li>
+</ul>
+<p style="border-top: solid lightgrey 1px; min-width: 100%; padding-top: 2px;position: absolute; bottom: 0px; text-align: center; font-size: 9px;">Powered By - Fluz Fluz</p>

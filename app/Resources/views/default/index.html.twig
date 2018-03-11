@@ -1,34 +1,35 @@
 {% extends 'header.html.twig' %}
-
+{% use "menu.html.twig" %}
 {% block content %}
-    <div id="wrapper" class="fondo">
-        <div id="container">
-            <h3>Configuración de Cuenta</h3>
-            <hr>
-            {{ form_start(form, {'attr': {'id': 'form', 'enctype':"multipart/form-data"}})}}
-            <input type="hidden" value="1" id="paso"/>
-            <div class="bloque">
-                <div class="subtitulo">Cargar lista de contactos para asignar Bonos</div>
-                <span class="etiqueta">Importar desde CSV</span>
+    <div id="wrapper" class="fondo container-fluid">
+        <h3>Cargar usuarios para asignación de bonos</h3>
+        <hr>
+        <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        {{ form_start(form) }}
+        <input type="hidden" value="1" id="paso"/>
+        <div class="bloque form-group formulario">
+            <div class="subtitulo">Cargar lista de usuarios  para asignar Bonos</div>
+                {{ form_label(form.group, null, {'label': 'Nombre de grupo:','label_attr': {'class': 'form-label'} }) }}
+                {{ form_widget(form.group, {'attr': {'class': 'form-control form-control-sm group'} }) }}
+                {{ form_label(form.file, null, {'label': 'Archivo:','label_attr': {'class': 'form-label'} }) }}
                 <br>
                 <label class="custom-file">
-                    {{ form_widget(form) }}
-                    <span class="custom-file-control"></span>
+                    {{ form_widget(form.file, {'attr': {'class': 'form-control form-control-sm'} }) }}
+                <span class="custom-file-control"></span>
                 </label>
-                    <div class="nota">Si tienes problemas para subir tu CSV. Aseg&uacute;rate de que tu hoja de c&aacute;lculo est&eacute; formateada correctamente. Descargar <a href="{{asset('templates/members_template.csv')}}" class="link-down">CSV de Ejemplo</a></div>
-            </div>
-            <div class="bloque">
-                <span class="etiqueta">O Copiar/Arrastrar Archivo</span>
-                <div class="form-group col-md-4 arrastra" >
-                    <textarea class="form-control" disabled rows="5" id="comment" name="comment"></textarea>
-                </div>
-                <div class="nota">Si tienes problemas para subir tu CSV. Aseg&uacute;rate de que tu hoja de c&aacute;lculo est&eacute; formateada correctamente. Descargar <a href="{{asset('templates/members_template.csv')}}" class="link-down">CSV de Ejemplo</a></div>
-            </div>
-            {{ form_end(form) }}
+                <br><br>
+            <input type="submit" class="btn btn-fluz" value="Cargar usuarios" />
+            <div class="nota">Si tienes problemas para subir tu CSV. Aseg&uacute;rate de que tu hoja de c&aacute;lculo est&eacute; formateada correctamente. Descargar <a href="{{asset('templates/members_template.csv')}}" class="link-down">CSV de Ejemplo</a></div>
         </div>
-    </div>
-    <div class="footer">
-        <button type="button" id="siguiente" class="btn btn-default btn-md">SIGUIENTE PASO</button>
+        {{ form_end(form) }}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <span><b>Ejemplo del Archivo CSV:</b></span>
+            <a href="{{asset('templates/members_template.csv')}}"><p><img class="img-responsive" src="{{asset('images/ejemplo_csv.png')}}" /></p></a>
+            <span class="note">Nota: Archivo CSV deliminado por coma (,)</span>
+        </div>
+        </div>
     </div>
     <div id="dialog" title="Elije un Archivo" style="display:none;">
         <p>Aun no haz seleccionado un archivo. Por Favor elije un archivo CSV para continuar.</p>

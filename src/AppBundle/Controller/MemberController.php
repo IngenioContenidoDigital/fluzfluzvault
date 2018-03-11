@@ -4,10 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Member;
 use AppBundle\Entity\Vault;
+use AppBundle\Entity\Customer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use League\Csv\Reader;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class MemberController extends Controller{
@@ -15,18 +17,35 @@ class MemberController extends Controller{
     
     /** @Route("/member/view", name="listarmiembros")*/
     public function viewMembers(Request $request){
+        
+        $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        $companyId = $user->getCompany()->getId();
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        $logo = $company->getLogo();
+        
         $results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                ->findAllMembers();
+                ->findMembersByCompany($company);
+        
         $total = count($results);
         $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                ->findCodeValues();
-        
+                ->findCodeValues($company);
+        if(count($bonos)<1){
+            $bonos=NULL;
+        };
         return $this->render('member/listmembers.html.twig',array('members' => $results,
-            'total'=> $total, 'bonos'=>$bonos));
+            'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo));
     }
     
     /** @Route("/member/create")*/
-    public function createMembers(){
+    public function createMembers(Request $request){
+        
+        $user=$this->getUser();
+        $companyId =  $user->getCompany()->getId();
+        $em = $this->getDoctrine()->getManager();
+
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        
         $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/members.csv')
                 ->setHeaderOffset(0)
         ;
@@ -41,8 +60,12 @@ class MemberController extends Controller{
                     ->setMemberEmail($row['member_email'])
                     ->setMobilePhone($row['mobile_phone'])
                     ->setIdentification($row['identification'])
-                    ->setDateAdd(new \DateTime())
+                    ->setDateAdd(new \DateTime("now"))
                 ;
+                
+                
+                $member->setCompany($company);
+                
                 $this->getDoctrine()->getManager()->persist($member);
            }
         }
@@ -54,9 +77,35 @@ class MemberController extends Controller{
                 ->findAllMembers();
         $total = count($results);
         $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                ->findCodeValues();
+                ->findCodeValues($company);
         
         return $this->render('member/listmembers.html.twig',array('members' => $results,
             'total'=> $total, 'bonos'=>$bonos));
+    }
+    
+    /**
+     * @Route("/member/detail")
+     */
+    public function detailMember(Request $request){
+        $error= NULL;
+        $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        $companyId = $user->getCompany()->getId();
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        $logo = $company->getLogo();
+
+        $id_member = $request->query->get('member');
+                
+        $member = $em->find('AppBundle\Entity\Member', $id_member);
+        $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
+                ->findCodeByMember($member);
+        $total=count($bonos);
+        
+        return $this->render('member/detailmembers.html.twig', array('logo' => $logo, 
+            'member' => $member, 
+            'total'=>$total, 
+            'bonos' => $bonos,
+            'error' => $error));
+        
     }
 }

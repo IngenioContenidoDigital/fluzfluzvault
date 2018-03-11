@@ -1,0 +1,84 @@
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="container-fluid">
+    <h3>Reporte C&oacute;digos Entregados</h3>
+    <br>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        {% set flag = 0 %}
+        {% for item in data %}
+            {% if item.total > 0 %}
+                {% set flag = 1 %}
+            {% endif %}
+        {% endfor %}
+        {% if flag == 0 %}
+            <div class="alert alert-warning"><b>No hay Datos!!</b>. Por favor distribuye algunos códigos para ver algunos datos en esta sección.</div>
+        {%else%}
+            <table class="table table-striped report">
+                <thead>
+                    <th class="encabezado">Mes</th>
+                    <th class="encabezado">D&iacute;a</th>
+                    <th class="encabezado">Total Asignados</th>
+                    <th class="encabezado">Valor C&oacute;digos</th>
+                    <th class="encabezado">Valor Promedio</th>
+                </thead>
+                <tbody>
+                {% set sum_total = 0 %}
+                {% set count_total = 0 %}
+                {% for item in data %}
+                    <tr>
+                        <td class="fila-datos">{{item.date | date('F')}}</td>
+                        <td class="fila-datos">{{item.date}}</td>
+                        <td class="fila-datos">{{item.total}}</td>
+                        <td class="fila-datos">$ {{item.value | number_format(0, '.', ',')}}</td>
+                        {% set avg = item.value / item.total %}
+                        <td class="fila-datos">$ {{avg | number_format(2, '.', ',')}}</td>
+                        {% set count_total = count_total + item.total %}
+                        {% set sum_total = sum_total + item.value %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="fila-datos" colspan="2"></td>
+                        <td class="fila-datos"><b>{{count_total | number_format(0, '.', ',')}}</b></td>
+                        <td class="fila-datos"><b>$ {{sum_total | number_format(0, '.', ',')}}</b></td>
+                        {% set avg_total = sum_total / count_total %}
+                        <td class="fila-datos"><b>$ {{avg_total | number_format(2, '.', ',')}}</b></td>
+                    </tr>
+                </tfoot>
+            </table>
+        {%endif%}
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('.table').DataTable({
+            "ordering": true,
+            "filter": false,
+            "language": {
+                "lengthMenu": "Mostrando _MENU_ registros por pagina",
+                "zeroRecords": "No hay registros",
+                "info": "Pagina _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros",
+                "infoFiltered": "(filtrando de  _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                 },
+                 "oAria": {
+                     "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                     "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                 }
+             }
+        })
+    })
+</script>
+{% endblock %}

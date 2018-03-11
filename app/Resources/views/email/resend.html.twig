@@ -1,0 +1,94 @@
+<p>&nbsp;</p>
+<!--Header-->
+<table class="table table-mail" style="font-family: 'Open Sans', Helvetica Neue, Helvetica, Arial; width: 650px; border: 5px solid #f9f9f9; margin: 0 auto; filter: progid:DXImageTransform.Microsoft.Shadow(color=#afafaf,Direction=134,Strength=5);">
+    <tbody>
+        <tr>
+            <td align="center">
+                <table class="table" style="width: 100%;" bgcolor="#ffffff"><!--Header-->
+                    <tbody>
+                        <tr>
+                            <td style="width: 100%; background: #FFF;" colspan="2"><a style="color: #337ff1;" title="{shop_name}" href="{shop_url}"> <img class="logo" style="margin: 5px 0 5px 5px;" src="{{asset('images/company/'~logo)}}" alt="fluz fluz" width="200" /></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 7px 0 20px 0;" align="center"><br />
+                                <table class="table" style="width: 100%;" bgcolor="#ffffff">
+                                    <tbody>
+                                    <tr>
+                                    <table class="table" style="width: 100%;" bgcolor="#ffffff">
+                                        <tbody>
+                                            <tr>
+                                                <span class="title" style="font-weight: 500; font-size: 28px; text-transform: uppercase; line-height: 20px; color: #333; font-family: 'Open Sans', Helvetica Neue, Helvetica, Arial;">Hola {{member.member_name}}</span><br />
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 7px 0;">
+                                            <table class="prueba table table-recap" style="max-width: 650px; border-collapse: collapse;" bgcolor="#ffffff"><!-- Title -->
+                                                <tbody>
+                                                    <tr><!--th bgcolor="#f8f8f8" style="background-color:#fbfbfb;color:#333;font-size:13px;padding:10px;">Referencia</th-->
+                                                        <th style="background-color: #fbfbfb; color: #333; font-size: 13px; padding: 10px;" bgcolor="#f8f8f8">Bono</th>
+                                                        <th style="background-color: #fbfbfb; color: #333; font-size: 13px; padding: 10px; padding-left: 20px;" bgcolor="#f8f8f8" width="25%">Fecha Expiraci&oacute;n</th>
+                                                        <th style="background-color: #fbfbfb; color: #333; font-size: 13px; padding: 10px;" bgcolor="#f8f8f8" width="17%">Valor&nbsp;Bono</th>
+                                                        <th style="background-color: #fbfbfb; color: #333; font-size: 13px; padding: 10px;" bgcolor="#f8f8f8">Cantidad</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border-top: 1px solid #333; text-align: center; color: #777; padding: 7px;">{{ bono.code }}</td>
+                                                        <td style="border-top: 1px solid #333; text-align: center; color: #777; padding: 7px;">{{ bono.expiration| date('Y-F-d') }}</td>
+                                                        <td style="border-top: 1px solid #333; text-align: center; color: #777; padding: 7px;">$ {{ bono.code_value|number_format(0,'.') }}</td>
+                                                        <td style="border-top: 1px solid #333; text-align: center; color: #777; padding: 7px;">1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border-top: 1px solid #333; text-align: center; color: #333; padding: 7px 0;" colspan="7">INSTRUCCIONES</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="font-size:11px; text-align: justify; color: #000; padding: 15px;" colspan="7">
+                                                            <div>Para redimir tu código debes hacer lo siguiente:</div>
+                                                            <ol>
+                                                                <li>Dir&iacute;gete a uno de los puntos de venta que aplican para redimir tu c&oacute;digo electr&oacute;nico.</li>
+                                                                <li>Pide tu producto.</li>
+                                                                <li>Al momento de pagar, di que vas a redimir un c&oacute;digo Electr&oacute;nico.</li>
+                                                                <li>Dicta al cajero el c&oacute;digo que recibiste a trav&eacute;s de tu correo electr&oacute;nico.</li>
+                                                                <li>El cajero ingresa el n&uacute;mero del c&oacute;digo en el dat&aacute;fono Credibanco para validarlo a trav&eacute;s de la opci&oacute;n Cupones.</li>
+                                                                <li>El c&oacute;digo se redime autom&aacute;ticamente por el valor completo.</li>
+                                                                <li>Si tu compra supera el valor de tu c&oacute;digo, puedes dar el excedente en otro medio de pago usado por el punto de venta.</li>
+                                                            </ol>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border-top: 1px solid #333; text-align: center; color: #777; padding: 7px 0;" colspan="7">&nbsp;</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="space_footer" style="padding: 0;">&nbsp;</td>
+                                    </tr>
+                                    <tr>    
+                                    <table>
+                                            <tr>
+                                                <td>
+<p style="font-size:8px; text-align:justify;">
+        Fluz Fluz Colombia S.A.S. opera como proveedor de la plataforma de distribución digital de bonos electrónicos. Los bonos entregados a los tarjetahabientes de la alianza Banco de Occidente - Bodytech son propiedad del usuario final. La información de los tarjetahabientes del presente convenio es propiedad de los operadores de la alianza (Bodytech y Banco de Occidente), en ningún caso Fluz Fluz Colombia S.A.S. tiene acceso a la misma. Fluz Fluz Colombia S.A.S. no se hace responsable por la pérdida, hurto o mal uso de los códigos entregados a los tarjetahabientes. 
+
+        Bonos electrónicos de redención total, en ningún caso se permitirá redención parcial del bono. 
+        </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

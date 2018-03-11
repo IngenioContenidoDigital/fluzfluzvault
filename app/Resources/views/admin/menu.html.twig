@@ -1,0 +1,15 @@
+{% block menu %}
+    <div class="bienvenida">
+        <p>Bienvenid@ {{app.user.getName}}</p>
+        <a href="/logout" class="exit">Cerrar Sesion</a>
+        <hr>
+    </div>
+    <div class="vertical-menu">
+        <a href="/">Inicio</a>
+        <a href="/report">Reportes</a>
+        <a href="/company">Empresas</a>
+        <a href="/customer/view">Usuarios</a>
+        <a href="/vault/load">Inventarios</a>
+        <!--<a href="#">Imprimir</a>-->
+    </div>
+{% endblock %}

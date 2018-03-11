@@ -17,16 +17,25 @@ class MemberRepository extends EntityRepository{
     
     public function findMemberById($id_member){
         return $this->getEntityManager()
-                ->createQuery('SELECT m FROM AppBundle:Member m WHERE m.id_member=:id')
+                ->createQuery('SELECT m FROM AppBundle:Member m WHERE m.id=:id')
                 ->setParameter('id',$id_member)
                 ->getResult();
     }
     
     public function findAllMembers(){
         return $this->getEntityManager()
-            ->createQuery(
-                'SELECT m FROM AppBundle:Member m LEFT JOIN AppBundle:Vault v WITH v.id_member=m.id_member WHERE v.id_member IS NULL ORDER BY m.id_member ASC'
-            )
+            ->createQuery('SELECT m FROM AppBundle:Member m')
             ->getResult();
+    }
+    
+    public function findMembersByCompany($company){
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('m, g')
+                ->from('AppBundle:Member','m')
+                ->innerJoin('m.group', 'g')
+                ->where('m.company = :company')
+                ->setParameter('company', $company)
+                ->getQuery()
+                ->getResult();
     }
 }

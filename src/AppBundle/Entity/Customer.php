@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CustomerRepository")
@@ -18,25 +20,43 @@ class Customer implements AdvancedUserInterface, \Serializable{
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO") 
      */
-    private $id_customer;
+    public $id_customer;
     
     /** @ORM\Column(type="string", length=255) */
     public $name;
     
     /** @ORM\Column(type="string", length=255)*/
     public $password;
-    
-    /** @ORM\Column(type="string", length=255)*/
-    public $company;
-    
+      
     /** @ORM\Column(type="string", length=100, unique=true)*/
     public $email;    
     
     /** @ORM\Column(name="is_active", type="boolean")*/
     private $isActive;  
     
+    /** @ORM\Column(type="string", length=255)*/
+    public $role;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="users")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     */
+    private $company;
+    
+    /**
+     * @return Collection|Company[]
+     */
+    public function getCompany(){
+        return $this->company;
+    }
+
+    public function setMember(Member $member){
+        $this->member = $member;
+    }
+    
     public function __construct(){
-        $this->isActive = true;        
+        $this->isActive = true;
+        $this->company = new ArrayCollection();
     }
     
     public function setName($name){
@@ -78,8 +98,9 @@ class Customer implements AdvancedUserInterface, \Serializable{
     }
     
     public function getRoles(){
-       return array('ROLE_USER');
+       return explode(',',$this->role);
     }
+    
     public function getPassword(){
         return $this->password;
     }
@@ -108,11 +129,6 @@ class Customer implements AdvancedUserInterface, \Serializable{
     public function isEnabled(){
         return $this->isActive;
     }
-    /**
-     * @var integer
-     */
-    private $idCustomer;
-
 
     /**
      * Set password
@@ -127,15 +143,35 @@ class Customer implements AdvancedUserInterface, \Serializable{
 
         return $this;
     }
+    
+    /**
+     * Set Role
+     * 
+     * @param string $role
+     * 
+     * @return Customer
+     */
+    public function setRoles($role){
+        if($this->role == NULL){
+            $this->role=$role;
+        }else{
+            $lista_roles=explode(',',$this->role);
+            if(!in_array($role,$lista_roles)){
+                array_push($lista_roles,$role);
+                $this->role=  implode(',', $lista_roles);
+            }
+        }
+        return $this;
+    }
 
     /**
      * Set company
      *
-     * @param string $company
+     * @param Company $company
      *
      * @return Customer
      */
-    public function setCompany($company)
+    public function setCompany(Company $company)
     {
         $this->company = $company;
 
@@ -143,20 +179,10 @@ class Customer implements AdvancedUserInterface, \Serializable{
     }
 
     /**
-     * Get company
-     *
-     * @return string
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-    /**
      * Set isActive
      *
      * @param boolean $isActive
-     *
+         *
      * @return Customer
      */
     public function setIsActive($isActive)
@@ -183,6 +209,6 @@ class Customer implements AdvancedUserInterface, \Serializable{
      */
     public function getIdCustomer()
     {
-        return $this->idCustomer;
+        return $this->id_customer;
     }
 }

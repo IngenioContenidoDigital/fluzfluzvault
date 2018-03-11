@@ -3,6 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Table(name="members")
@@ -15,7 +18,7 @@ class Member {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO") 
      */
-    public $id_member;
+    public $id;
     
     /** @ORM\Column(type="string", length=255)*/
     public $member_name;
@@ -29,10 +32,78 @@ class Member {
     /** @ORM\Column(type="string", length=12, unique=true)*/
     public $identification;
     
-    /** @ORM\Column(type="datetime")*/
+    /**
+     * @Assert\DateTime() 
+     * @ORM\Column(type="datetime")
+     */
     public $date_add;
     
-
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="members")
+     * @ORM\JoinColumn(name="company_id",referencedColumnName="id")
+     */
+    private $company;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MemberGroup", inversedBy="members")
+     * @ORM\JoinColumn(name="member_group_id",referencedColumnName="id")
+     */
+    private $group;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vault", mappedBy="members")
+     */
+    private $vault;
+    
+    public function getVault(){
+        return $this->vault;
+    }
+    
+    /**
+     * @return Collection|Vault[]
+     */
+    public function setVault(Vault $vault){
+        $this->vault = $vault;
+    }
+    
+    /**
+     * @return Collection|Company[]
+     */
+    public function getCompany(){
+        return $this->company;
+    }
+    
+    /**
+     * Set company
+     *
+     * @param Company $company
+     *
+     * @return Member
+     */
+    public function setCompany(Company $company){
+        $this->company = $company;
+        return $this;
+    }
+    
+    /**
+     * @return Collection|MemberGroup[]
+     */
+    public function getGroup(){
+        return $this->group;
+    }
+    
+    /**
+     * Set group
+     *
+     * @param MemberGroup $group
+     *
+     * @return Member
+     */
+    public function setGroup(MemberGroup $group){
+        $this->group = $group;
+        return $this;
+    }
+    
     /**
      * Get idMember
      *
@@ -40,7 +111,7 @@ class Member {
      */
     public function getIdMember()
     {
-        return $this->id_member;
+        return $this->id;
     }
     
     /**
@@ -82,6 +153,10 @@ class Member {
      */
     public function getDateAdd(){
         return $this->date_add;
+    }
+    
+    public function dateCreated(){
+        return date_format($this->date_add,'%Y-%m-%d');
     }
     
     /**
@@ -136,8 +211,16 @@ class Member {
      * @return Member
      */
     public function setDateAdd($date_add){
-        $this->date_add=$date_add;
+        $this->date_add = new \DateTime("now");
+        //$this->date_add=$date_add;
         return $this;
+    }
+    
+    public function __construct(){
+        $this->company = new ArrayCollection();
+        $this->group = new ArrayCollection();
+        $this->vault = new ArrayCollection();
+        
     }
     
 }

@@ -1,0 +1,16 @@
+{% block menu %}
+    <div class="vertical-menu">
+        <a href="/">Cargar usuarios</a>
+        <a href="/member/view">Asignar Bonos</a>
+        <a href="/inventory">Inventarios</a>
+        <!--<a href="#">Reportes</a>-->
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% for key,value in app.user.getRoles %}
+                {% if value == 'ROLE_ADMIN' %}
+                    <a href="/admin">Administrar</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <a href="/logout">Cerrar Sesi&oacute;n</a>
+    </div>
+{% endblock %}

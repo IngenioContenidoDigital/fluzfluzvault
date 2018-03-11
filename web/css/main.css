@@ -85,7 +85,7 @@
 
 .fondo{
     background-color: #f2f2f2;
-    padding: 50px 30px 30px 50px;
+    padding: 15px;
     min-height: 600px;
 }
 .bloque{
@@ -98,7 +98,7 @@
 .link-down:hover{color: #c9b197;}
 .custom-file-control:after{
     float: right;
-    background-color: #D3D3D3;
+    background-color: #FF592B;
     content: 'Buscar';
     color: #FFF;
     font-size: 13px;
@@ -112,8 +112,10 @@
 }
 
 .footer{
+    position: fixed;
+    bottom: 0px;
     background-color: #474747;
-    min-width: 100%;
+    min-width: 101%;
     min-height: 50px;
     text-align: center;
 }
@@ -160,8 +162,7 @@
 }
 
 .fila-datos{
-    line-height: 30px;
-    font-size: 14px;
+    line-height: 15px;
     color:black;
     background-color: #FFF;
     padding-left:20px;
@@ -172,11 +173,10 @@
 }
 .encabezado{
     min-height: 30px;
-    color:#c9b197;
+    color:white;
     text-align: center;
     background-color: #474747;
-    line-height: 30px;
-    font-size: 15px;
+    line-height: 15px;
     font-weight: bold;
 }
 
@@ -187,13 +187,13 @@
 }
 
 .seleccion{
-    min-height: 30px;
-    min-width: 266px;
-    color:#c9b197;
+    min-height: 20px;
+    min-width: 256px;
+    color:white;
     text-align: center;
     background-color: #474747;
     line-height: 30px;
-    font-size: 15px;
+    font-size: 0.75em;
     font-weight: bold;
 }
 
@@ -218,9 +218,9 @@
 }
 
 .asigna-bono{
-    line-height: 50px;
+    line-height: 20px;
     border: 1px solid #ccc;
-    font-size: 14px;
+    font-size: 0.75em;
     height: 34px;
     width: 70%;
     background-color: #FFF;
@@ -250,3 +250,86 @@
 .resultados li i{ color:#ef4136;}
 .blanca{float:right;background-color: #FFF; min-height: 40px; text-align: right; }
 .occidente{max-height: 50px;}
+
+.vertical-menu a {
+    list-style-type: none;
+    background-color: #eee;    
+    color: black; /* Black text color */
+    display: block; /* Make the links appear below each other */
+    padding: 12px; /* Add some padding */
+    text-decoration: none; /* Remove underline from links */
+    min-width: 110%;
+}
+
+.vertical-menu a:hover {
+    background-color: #FF592B;
+    color:white;/* Dark grey background on mouse-over */
+}
+
+.bienvenida{
+    background-color: #eee;
+    padding-top:20px;
+    padding-left:10px;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+.members{
+    font-size: 0.75em;
+}
+
+.dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate, .dataTables_simple_button{
+    font-size: 0.75em;
+}
+
+.form-label{
+    font-size: 0.75em;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.btn-fluz{
+    color: #fff;
+    background-color: #FF592B;
+    border-color: #FF592B;
+}
+
+.btn-fluz:hover{
+    color: #fff;
+    cursor:pointer;
+    font-weight: bold;
+}
+
+.btn-xs{
+    font-size: 0.8em;
+}
+
+.group{
+    line-height: 30px;
+    max-width: 285px;
+}
+
+.formulario{
+    border: solid #BDBDBD 1px;
+    border-radius: 8px;
+    padding: 20px;      
+    padding-left: 35px;
+    min-height: 185px;
+}
+
+.note{
+    color:#FF592B;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.report{
+    font-size: 0.75em;
+}
+
+.glyphicon-sort {
+    font-size: 11px !important;
+}
+
+.glyphicon-sort:hover {
+   color:#FF592B;
+}
