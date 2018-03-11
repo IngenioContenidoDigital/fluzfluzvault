@@ -19,10 +19,10 @@ class CustomerController extends Controller{
         $em = $this->getDoctrine()->getManager();
 
         $customer = new Customer();
-        $customer->setName('Milton Andres Quijano Lopez');
-        $customer->setPassword('1031143285');
-        $customer->setCompany('Banco de Occidente');
-	$customer->setEmail('mquijano@bancodeoccidente.com.co');
+        $customer->setName('Ricardo Armenta');
+        $customer->setPassword('fluz1234');
+        $customer->setCompany('Fluz Fluz');
+	$customer->setEmail('ricardo@fluzfluz.com');
 
         // tells Doctrine you want to (eventually) save the Product (no queries yet)
         $em->persist($customer);
