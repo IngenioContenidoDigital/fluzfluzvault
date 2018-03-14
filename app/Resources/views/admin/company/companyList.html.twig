@@ -2,7 +2,7 @@
 {% use "admin/menu.html.twig" %}
 {% block content %}
 {% if error %}
-<div class="alert alert-danger">{{ error | default("")}}</div>
+<div class="alert alert-success">{{ error | default("")}}</div>
 {% endif %}
 <div class="container-fluid">
     <h3>Listado de Empresas</h3>
@@ -20,7 +20,7 @@
                 <th class="encabezado">Nit</th>
                 <th class="encabezado">Email Empresa</th>
                 <th class="encabezado">Tel&eacute;fono</th>
-                <!--<th class="encabezado">Opciones</th>-->
+                <th class="encabezado">Opciones</th>
             </thead>
             <tbody>
             {% for item in companies %}
@@ -30,7 +30,7 @@
                     <td class="fila-datos">{{item.nit}}</td>
                     <td class="fila-datos">{{item.email}}</td>
                     <td class="fila-datos">{{item.phone}}</td>
-                    <!--<td class="fila-datos"><button class="btn btn-fluz btn-xs">Editar</button></td>-->
+                    <td class="fila-datos"><a href="/company/email?cp={{item.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-cog"></span></a></td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -97,10 +97,12 @@
                    $('#sending').show();
                },
                success:function(response){
+                   console.log(response)
                     $('#sending').hide();
                     $('#result').html('<div id="error" class="alert alert-success">Mensaje enviado con &eacute;xito!!</div>')
                },
                error:function(response){
+                   console.log(response)
                    $('#sending').hide();
                    $('#result').html('<div id="error" class="alert alert-danger">Problemas al Enviar el mensaje. intenta de nuevo m&aacute;s tarde</div>');
                }

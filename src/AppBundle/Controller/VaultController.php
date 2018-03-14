@@ -16,6 +16,7 @@ use AppBundle\Entity\Vault;
 use AppBundle\Entity\Member;
 use AppBundle\Entity\VaultGroup;
 use AppBundle\Entity\Company;
+use AppBundle\Entity\CompanyEmail;
 
 
 
@@ -257,20 +258,38 @@ class VaultController extends Controller{
 
             $member = $em->find('AppBundle\Entity\Member', $id_member);
             $bono = $em->find('AppBundle\Entity\Vault',$code);
-
+            
+            $template=$em->getRepository(CompanyEmail::class)
+                    ->findTemplateByCompany($company);
+            
+            if($template==NULL){
+                $body = $this->renderView(
+                            'email/resend.html.twig',
+                            array(
+                                'logo' => $logo,
+                                'member' => $member,
+                                'bono' => $bono,
+                                'error' => $error
+                            )
+                        );
+            }else{
+                $body = $template->getTemplate();
+                $body = str_replace('{logo}', $request->getSchemeAndHttpHost(). '/images/company/'.$logo, $body);
+                $body = str_replace('{date}', date_format($bono->getAssigned(),'Y-m-d'), $body);
+                $body = str_replace('{products}', '<table align="center" border="0.5" cellpadding="0" cellspacing="0" style="width:500px"><tr><td>'.$bono->getCode().'</td><td></td><td>$ '.number_format($bono->getCodeValue(),0,'.',',').'</td><td>1</td><td>$ '.number_format($bono->getCodeValue(),0,'.',',').'</td></tr></table>', $body);
+                $body = str_replace('{total_products}', '$ '.number_format($bono->getCodeValue(),0,'.',','), $body);
+                $body = str_replace('{total_value}', '$ '.number_format($bono->getCodeValue(),0,'.',','), $body);
+                $group = $bono->getgroup();
+                $body = str_replace('{name_product}', $group->getName(), $body);
+                $body = str_replace('{expiration}', date_format($bono->getExpiration(),'Y-m-d'), $body);
+            }
+                
+            
             $message = (new \Swift_Message('Bono de '.$company->getName()))
                     ->setFrom('boveda@fluzfluz.com')
                     ->setTo($member->getMemberEmail())
                     ->setBody(
-                            $this->renderView(
-                                    'email/resend.html.twig',
-                                    array(
-                                        'logo' => $logo,
-                                        'member' => $member,
-                                        'bono' => $bono,
-                                        'error' => $error
-                                    )
-                            ),
+                            $body,
                             'text/html'
                     );
 

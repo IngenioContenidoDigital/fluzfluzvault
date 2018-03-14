@@ -1,0 +1,23 @@
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="container-fluid">
+    <h3>Creaci&oacute;n de Plantillas de Email</h3>
+    <br>
+    <h4>Empresa: <b>{{company}}</b></h4>
+    <hr>
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_widget(form.company, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.name, null, {'label': 'Nombre de la Plantilla:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.template, null, {'label': 'Plantilla HTML:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.template, {'attr': {'class': 'form-control form-control-sm'} }) }}
+    </div>
+    <input type="submit" class="btn btn-fluz" value="Guardar Plantilla HTML" />
+    {{ form_end(form) }}
+</div>
+{% endblock %}

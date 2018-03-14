@@ -74,12 +74,16 @@ class Company
         return $this->users;
     }
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CompanyEmail", mappedBy="company") 
+     */
+    private $template;
     
     public function __construct(){
         $this->members = new ArrayCollection();
         $this->codes = new ArrayCollection();
         $this->users= new ArrayCollection();
+        $this->template = new ArrayCollection();
     }
     
     /**
@@ -170,6 +174,13 @@ class Company
     public function setPhone($company_phone){
         $this->phone=$company_phone;
         return $this;
+    }
+    
+    /**
+     * @return Collection|CompanyEmail[]
+     */
+    public function getTemplates(){
+        return $this->template;
     }
 }
 
