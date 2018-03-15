@@ -20,8 +20,6 @@
             <div class="logo">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <a href="/"><img src="{{asset('images/company/'~logo)}}" width="320" height="78"/></a>
-            {% else %}
-                <a href="/"><img src="{{asset('images/'~logo)}}" width="320" height="78"/></a>
             {% endif %}
             </div>
         {% endblock %}
