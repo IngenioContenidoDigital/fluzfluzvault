@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,7 +21,7 @@ class DefaultController extends Controller
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request){
-        // replace this example code with whatever you need
+        $error = NULL;
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $logo='logo-2.png';
             return $this->render('security/login.html.twig', array(
@@ -54,54 +55,73 @@ class DefaultController extends Controller
 
                 $company = $em->find('AppBundle\Entity\Company', $companyId);
                 
-                
-                
                 $file=$form['file']->getData();
                 $ext=$file->guessExtension();
+                $valid_ext = array('csv', 'txt');
                 $file_name=time().".".$ext;
                 $file->move("uploads", $file_name);
-                
-                $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/'.$file_name)
-                ->setHeaderOffset(0)
-                ;
-                $group = new MemberGroup();
-                $group->setName($form['group']->getData());
-                $em->persist($group);
-                foreach ($reader as $row) {
-                    $member = $this->getDoctrine()->getRepository('AppBundle:Member')
-                        ->findMemberByEmail($row['member_email']);
-                    $total=count($member);
+                $valid_header = array("member_name","member_email","mobile_phone","identification");
+                if(in_array($ext, $valid_ext)){
+                    $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/'.$file_name,'r');
+                    $reader->setHeaderOffset(0);
+                    $header = $reader->getHeader();
+                    if(empty(array_diff($valid_header, $header))){
+                        $group = new MemberGroup();
+                        $group->setName($form['group']->getData());
+                        $em->persist($group);
+                        $duplicates=0;
+                        foreach ($reader as $row) {
+                            $member = $this->getDoctrine()->getRepository('AppBundle:Member')
+                                ->findOneBy(array(
+                                    'member_email' => $row['member_email'],
+                                    'identification' => $row['identification']
+                                ));
 
-                    if ($total == 0) {
-                        $member = (new Member())
-                            ->setMemberName($row['member_name'])
-                            ->setMemberEmail($row['member_email'])
-                            ->setMobilePhone($row['mobile_phone'])
-                            ->setIdentification($row['identification'])
-                            ->setDateAdd(new \DateTime("now"))
-                            ->setGroup($group);
-                        $member->setCompany($company);
-                        $em->persist($member);
-                   }
+                            if ($member) {
+                                $duplicates+=1;
+                            }else{
+                                $member = (new Member())
+                                    ->setMemberName($row['member_name'])
+                                    ->setMemberEmail($row['member_email'])
+                                    ->setMobilePhone($row['mobile_phone'])
+                                    ->setIdentification($row['identification'])
+                                    ->setDateAdd(new \DateTime("now"))
+                                    ->setGroup($group);
+                                $member->setCompany($company);
+                                $em->persist($member);
+                            }
+                        }
+                        $this->getDoctrine()->getManager()->flush();
+
+                        //$results = $this->getDoctrine()->getRepository('AppBundle:Member')
+                        //        ->findAllMembers();
+                        $results = $this->getDoctrine()->getRepository('AppBundle:Member')
+                                ->findMembersByCompany($company);
+                        $total = count($results);
+                        $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
+                                ->findCodeValues($company);
+
+                        return $this->render('member/listmembers.html.twig',array('members' => $results,
+                            'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo)); 
+                    }else{
+                        $error = "La Estructura del Archivo CSV NO es válida. Por favor revisa el archivo que intentaste cargar.";
+                    }
+                }else{
+                    $error = "Extensión del archivo no válida";
                 }
-
-                // save / write the changes to the database
-                $this->getDoctrine()->getManager()->flush();
-
-                $results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                        ->findAllMembers();
-                $total = count($results);
-                $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                        ->findCodeValues($company);
-
-                return $this->render('member/listmembers.html.twig',array('members' => $results,
-                    'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo));
+                return $this->render('default/index.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+                'form' => $form->createView(),
+                'logo' => $logo,
+                'error' => $error
+                ]);
             }
 
             return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
             'form' => $form->createView(),
-            'logo' => $logo
+            'logo' => $logo,
+            'error' => $error
             ]);
         }
         

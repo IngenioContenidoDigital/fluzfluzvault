@@ -1,6 +1,9 @@
 {% extends 'header.html.twig' %}
 {% use "menu.html.twig" %}
 {% block content %}
+{% if error %}
+    <div class="alert alert-danger">{{error}}</div>
+{% endif %}
     <div id="wrapper" class="fondo container-fluid">
         <h3>Cargar usuarios para asignación de bonos</h3>
         <hr>
@@ -15,8 +18,8 @@
                 {{ form_label(form.file, null, {'label': 'Archivo:','label_attr': {'class': 'form-label'} }) }}
                 <br>
                 <label class="custom-file">
-                    {{ form_widget(form.file, {'attr': {'class': 'form-control form-control-sm'} }) }}
-                <span class="custom-file-control"></span>
+                    {{ form_widget(form.file, {'attr': {'class': 'form-control form-control-sm fselect'} }) }}
+                    <span class="custom-file-control"></span>
                 </label>
                 <br><br>
             <input type="submit" class="btn btn-fluz" value="Cargar usuarios" />
@@ -35,6 +38,7 @@
         <p>Aun no haz seleccionado un archivo. Por Favor elije un archivo CSV para continuar.</p>
     </div>
     <script>
+       
         $('#form_file').on('change',function(){
             var route =$(this).val();
             var name = route.split("\\");
