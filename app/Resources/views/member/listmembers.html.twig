@@ -33,12 +33,12 @@
                                 <b><input type="radio" id="todos" name="marcar"/>&nbsp;Todos&nbsp;</b>
                                 <b><input type="radio" id="ninguno" name="marcar"/>&nbsp;Ninguno&nbsp;</b>
                             </th>
-                            <th class="encabezado">Grupo<span class="glyphicon glyphicon-sort"></span></th>
-                            <th class="encabezado">Nombre<span class="glyphicon glyphicon-sort"></span></th>
-                            <th class="encabezado">Email<span class="glyphicon glyphicon-sort"></span></th>
-                            <th class="encabezado">Teléfono<span class="glyphicon glyphicon-sort"></span></th>
-                            <th class="encabezado">Identificación<span class="glyphicon glyphicon-sort"></span></th>
-                            <th class="encabezado">Total Bonos Asignados<span class="glyphicon glyphicon-sort"></span></th>
+                            <th class="encabezado">Grupo</th>
+                            <th class="encabezado">Nombre</th>
+                            <th class="encabezado">Email</th>
+                            <th class="encabezado">Teléfono</th>
+                            <th class="encabezado">Identificación</th>
+                            <th class="encabezado">Total Bonos Asignados</th>
                             <th class="encabezado">Opciones</th>
                         </thead>
                         <tbody>
@@ -69,6 +69,7 @@
            $(document).ready(function(){
                $('.table').DataTable({
                    "ordering": true,
+                    "filter": true,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por pagina",
                         "zeroRecords": "No hay registros",

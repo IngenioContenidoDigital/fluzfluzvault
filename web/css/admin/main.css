@@ -68,3 +68,10 @@
 .nota{font-size: 0.7em; color:#000; font-style: italic; max-width: 350px; margin-top: 15px;}
 .link-down{color: #ef4136;}
 .link-down:hover{color: #c9b197;}
+table.dataTable thead .sorting_asc {
+    background-image: url(../../images/sort_asc.png) !important;
+}
+
+table.dataTable thead .sorting_desc {
+    background-image: url(../../images/sort_desc.png) !important;
+}
