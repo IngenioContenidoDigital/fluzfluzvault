@@ -31,8 +31,8 @@ class VaultController extends Controller{
             $company = $em->find('AppBundle\Entity\Company', $companyId);
             $logo = $company->getLogo();
              
-             $total_asignados=0;
-             $valorbonos=0;
+            $total_asignados=0;
+            $valorbonos=0;
             $data =$request->request->all();
             foreach($data as $k /*member*/ => $d /*value*/){
                 $vault = $this->getDoctrine()->getRepository(Vault::class)
@@ -57,27 +57,49 @@ class VaultController extends Controller{
 
                         $this->getDoctrine()->getManager()->persist($vault);
                         $this->getDoctrine()->getManager()->flush();
-
-
-
-                    $message = (new \Swift_Message('Bono de Bienvenida Credencial – Bodytech'))
-                                ->setFrom('boveda@fluzfluz.com')
-                                ->setTo($email)
-                                ->setBody(
-                                    $this->renderView(
+                        
+                        $company1 = $member->getCompany();
+                        
+                        $template=$em->getRepository(CompanyEmail::class)
+                                ->findTemplateByCompany($company1);
+            
+                        if($template==NULL){
+                            $body = $this->renderView(
                                         'email/assign.html.twig',
                                         array(
                                             'name' => $name,
                                             'bono' => $bono,
-                                            'fecha' => $fecha,
+                                            'fecha' => date_format($vault->getExpiration(),'Y-m-d'),
                                             'valor' => $valor,
                                             'cantidad' => $cantidad
                                         )
-                                    ),
-                                    'text/html'
+                                    );
+                        }else{
+                            $body = $template->getTemplate();
+                            $body = str_replace('{logo}', $request->getSchemeAndHttpHost(). '/images/company/'.$logo, $body);
+                            $body = str_replace('{date}', date_format($vault->getAssigned(),'Y-m-d'), $body);
+                            $body = str_replace('{products}', '<table align="center" border="0.5" cellpadding="0" cellspacing="0" style="width:500px"><tr><td>'.$vault->getCode().'</td><td></td><td>$ '.number_format($vault->getCodeValue(),0,'.',',').'</td><td>1</td><td>$ '.number_format($vault->getCodeValue(),0,'.',',').'</td></tr></table>', $body);
+                            $body = str_replace('{total_products}', '$ '.number_format($vault->getCodeValue(),0,'.',','), $body);
+                            $body = str_replace('{total_value}', '$ '.number_format($vault->getCodeValue(),0,'.',','), $body);
+                            $group = $vault->getgroup();
+                            $body = str_replace('{name_product}', $group->getName(), $body);
+                            $body = str_replace('{expiration}', date_format($vault->getExpiration(),'Y-m-d'), $body);
+                        }
+                
+            
+                        $message = (new \Swift_Message('Bono de '.$company->getName()))
+                                ->setFrom('boveda@fluzfluz.com')
+                                ->setTo($member->getMemberEmail())
+                                ->setBody(
+                                        $body,
+                                        'text/html'
                                 );
 
-                        $mailer->send($message);
+                        try{           
+                            $response = $mailer->send($message);
+                        }catch(Exception $e){
+                            $response = $e->getMessage();
+                        }
                     }
                 }
             }
