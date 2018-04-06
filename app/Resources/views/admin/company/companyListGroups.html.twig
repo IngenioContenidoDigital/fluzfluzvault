@@ -1,0 +1,102 @@
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-success">{{ error | default("")}}</div>
+{% endif %}
+<div class="container-fluid">
+    <h3>Grupos de Usuarios para <b>{{company.name}}</b></h3>
+    <br>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <table class="table table-striped companies">
+            <thead>
+                <th class="encabezado">Id</th>
+                <th class="encabezado">Nombre Grupo</th>
+                <th class="encabezado">Miembros</th>
+                <th class="encabezado">Opciones</th>
+            </thead>
+            <tbody>
+            {% for item in groups %}
+                <tr>
+                    <td class="fila-datos">{{item.id}}</td>
+                    <td class="fila-datos">{{item.name}}</td>
+                    <td class="fila-datos">{{item.members}}</td>
+                    <td class="fila-datos">
+                        <p style="text-align:center;">
+                        <a href="/membergroup/edit?gp={{item.id}}&cp={{company.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#" id="delete" group="{{item.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-trash"></span></a>
+                        </p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="dialog-confirm" title="Borrar Grupo">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>El grupo será borrado permanentemente junto con todos sus usuarios. Está seguro?</p>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('#dialog-confirm').hide()
+        $('.table').DataTable({
+            "ordering": true,
+            "filter": true,
+            "language": {
+                "lengthMenu": "Mostrando _MENU_ registros por pagina",
+                "zeroRecords": "No hay registros",
+                "info": "Pagina _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros",
+                "infoFiltered": "(filtrando de  _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                 },
+                 "oAria": {
+                     "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                     "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                 }
+             }
+        })
+    })
+    
+    $('#delete').on('click',function(){
+        var gp = $(this).attr('group');
+        $('#dialog-confirm').dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+              "Borrar grupo": function() {
+                $.ajax({
+                    method:"GET",
+                    url: "/membergroup/remove",
+                    data: {
+                        "gp": gp
+                    },
+                    beforeSend:function(){
+                        $('.alert').remove();
+                    },
+                    success:function(response){
+                        $('.container-fluid').prepend('<div class="alert alert-success">Se ha eliminado el grupo <b>'+response+'</b></div>');
+                        $('#dialog-confirm').dialog('close');
+                    },
+                    error: function(response){
+                        $('.container-fluid').prepend('<div class="alert alert-danger">El grupo tiene usuarios activos. No se puede Eliminar</div>');
+                        $('#dialog-confirm').dialog('close');
+                    }
+                });
+              },
+              Cancelar: function() {
+                $(this).dialog( "close" );
+              }
+            }
+        });
+    })
+</script>
+{% endblock %}

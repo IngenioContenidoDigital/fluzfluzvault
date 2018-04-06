@@ -125,4 +125,63 @@ class CompanyController extends Controller{
         }
         return $this->render('admin/company/companyTemplate.html.twig', array('error' => $error, 'company' => $company->getName(), 'form' => $form->createView()));
     }
+    
+    /** @Route("/company/edit")*/
+    public function editCompany(Request $request){
+        $error = NULL;
+        
+        $id_company = $request->query->get('cp');
+        $em = $this->getDoctrine()->getManager();
+        $company = $em->find('AppBundle\Entity\Company', $id_company);
+        
+        $form = $this->createFormBuilder()
+            ->setMethod('POST')
+            ->setAttribute('id', 'company-form')
+            ->add('name', TextType::class, ['data' => $company->getName()])
+            ->add('nit', TextType::class, ['data' => $company->getNit()])
+            ->add('email', EmailType::class, ['data' => $company->getEmail()])
+            ->add('logo', FileType::class, array('required' => false))
+            ->add('phone', NumberType::class, ['data' => $company->getPhone()]) 
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            try{
+                
+                $company->setName($form['name']->getData());
+                $company->setEmail($form['email']->getData());  
+                $company->setNit($form['nit']->getData());
+                $company->setPhone($form['phone']->getData());
+                if(!empty($form['logo']->getData())){
+                    $file=$form['logo']->getData();
+                    $ext=$file->guessExtension();
+                    $file_name=time().".".$ext;
+                    $file->move("images/company/", $file_name);   
+                    $company->setLogo($file_name);
+                }
+
+                $this->getDoctrine()->getManager()->persist($company);
+                $this->getDoctrine()->getManager()->flush();
+            }catch(Exception $e){
+                $error = isset($error) ? $e->getMessage() : $error;
+            }
+            return $this->forward('AppBundle\Controller\CompanyController::listCompanies', array('error'  => $error));
+            //return $this->render('admin/company/companyCreate.html.twig', array('error' => $error, 'form' => $form->createView()));
+        }else{
+            return $this->render('admin/company/companyEdit.html.twig', array('error' => $error, 'form' => $form->createView()));
+        }
+    }
+    
+    /**
+     * @Route("/company/group")
+     */
+    public function CompanyGroups(Request $request){
+        $error = NULL;
+        $id_company = $request->query->get('cp');
+        $em = $this->getDoctrine()->getManager();
+        $company = $em->find('AppBundle\Entity\Company', $id_company);
+        $groups = $em->getRepository(Company::class)->findCompanyGroups($company);
+        return $this->render('admin/company/companyListGroups.html.twig', array('error' => $error, 'company' => $company,'groups' => $groups));
+    }
 }

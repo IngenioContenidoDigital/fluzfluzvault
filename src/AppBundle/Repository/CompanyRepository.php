@@ -23,4 +23,16 @@ class CompanyRepository extends EntityRepository{
                 ->setParameter('id',$id_company)
                 ->getResult();
     }
+    
+    public function findCompanyGroups($company){
+        return $this->getEntityManager()->createQueryBuilder()
+                ->select('g.id, g.name, COUNT(m.id) AS members')
+                ->from('AppBundle:Member','m')
+                ->innerJoin('m.group', 'g')
+                ->where('m.company = :company')
+                ->setParameter('company', $company)
+                ->groupBy('g.id, g.name')
+                ->getQuery()
+                ->getResult();
+    }
 }

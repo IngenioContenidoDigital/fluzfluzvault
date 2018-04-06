@@ -1,0 +1,47 @@
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="container-fluid">
+    <h3>Creacion de Usuarios</h3>
+    <br>
+    {{ form_start(form, {'attr': {'id': 'user-form'} }) }}
+    <div class="form-group">
+        {{ form_widget(form.cs, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_widget(form.cp, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.name, null, {'label': 'Nombre usuario:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.email, null, {'label': 'Email Usuario:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.company, null, {'label': 'Empresa:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.company, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.password, null, {'label': 'Contraseña:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.password, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.is_active, null, {'label': 'Activo:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.is_active, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.role_user, null, {'label': 'Usuario:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.role_user, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.role_admin, null, {'label': 'Adminstrador:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.role_admin, {'attr': {'class': 'form-control form-control-sm'} }) }}
+    </div>
+    <input type="submit" class="btn btn-fluz" value="Editar Usuario" />
+    {{ form_end(form) }}
+</div>
+    <script>
+        $('#send_form').click(function(e){
+            e.preventDefault();
+            if($('#form_password').val()==''){
+                $('#form_confirm').val("");
+                $('#user-form').submit();
+            }else{
+                if($('#form_password').val() == $('#form_confirm').val()){
+                    $('#user-form').submit();
+                }else{
+                    $('.container-fluid').prepend('<div class="alert alert-danger">Las contrase&ntilde;as no coinciden</div>');
+                }
+            }
+        })
+    </script>
+{% endblock %}

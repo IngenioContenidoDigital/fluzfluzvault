@@ -1,0 +1,26 @@
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="container-fluid">
+    <h3>Editar Empresa</h3>
+    <br>
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.name, null, {'label': 'Nombre Empresa:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.nit, null, {'label': 'Nit Empresa:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.nit, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.email, null, {'label': 'Email Empresa:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.logo, null, {'label': 'Logo Empresa:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.logo, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.phone, null, {'label': 'Teléfono Empresa:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.phone, {'attr': {'class': 'form-control form-control-sm'} }) }}
+    </div>
+    <input type="submit" class="btn btn-fluz" value="Guardar Empresa" />
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -25,7 +25,7 @@ class MemberGroup{
     public $name;
     
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Member", mappedBy="group") 
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Member", mappedBy="group", cascade={"remove"}) 
      */
     private $members;
     

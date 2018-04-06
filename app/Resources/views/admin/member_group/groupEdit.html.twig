@@ -1,0 +1,18 @@
+{% extends 'admin/adminheader.html.twig' %}
+{% use "admin/menu.html.twig" %}
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="container-fluid">
+    <h3>Editar Grupo</h3>
+    <br>
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.name, null, {'label': 'Nombre Empresa:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-sm'} }) }}
+    </div>
+    <input type="submit" class="btn btn-fluz" value="Editar Grupo" />
+    {{ form_end(form) }}
+</div>
+{% endblock %}

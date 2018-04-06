@@ -19,7 +19,8 @@
                 <th class="encabezado">Nombre</th>
                 <th class="encabezado">Empresa</th>
                 <th class="encabezado">Email</th>
-                <th class="encabezado">Active</th>
+                <th class="encabezado">Estado</th>
+                <th class="encabezado">Opciones</th>
             </thead>
             <tbody>
             {% for customer in customers %}
@@ -29,6 +30,11 @@
                     <td class="fila-datos">{{customer.company.name}}</td>
                     <td class="fila-datos">{{customer.email}}</td>
                     <td class="fila-datos">{% if(customer.isActive==1)%}<span>Activo</span>{%else%}<span>Inactivo</span>{%endif%}</td>
+                    <td class="fila-datos">
+                        <p style="text-align: center;">
+                            <a href="/customer/edit?cs={{customer.id_customer}}&cp={{customer.company.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
+                        </p>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

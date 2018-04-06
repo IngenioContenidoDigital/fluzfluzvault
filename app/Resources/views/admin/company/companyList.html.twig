@@ -30,7 +30,13 @@
                     <td class="fila-datos">{{item.nit}}</td>
                     <td class="fila-datos">{{item.email}}</td>
                     <td class="fila-datos">{{item.phone}}</td>
-                    <td class="fila-datos"><a href="/company/email?cp={{item.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-cog"></span></a></td>
+                    <td class="fila-datos">
+                        <p style="text-align: center;">
+                        <a href="/company/email?cp={{item.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-envelope"></span></a>
+                        <a href="/company/edit?cp={{item.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="/company/group?cp={{item.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-zoom-in"></span></a>
+                        </p>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

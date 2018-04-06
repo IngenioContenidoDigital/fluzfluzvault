@@ -163,6 +163,26 @@ class Customer implements AdvancedUserInterface, \Serializable{
         }
         return $this;
     }
+    
+    /**
+     * Remove Role
+     * 
+     * @param string $role
+     * 
+     * @return Customer
+     */
+    public function removeRole($role){
+        $lista_roles=explode(',',$this->role);
+        if(in_array($role,$lista_roles)){ 
+            $index = array_search($role, $lista_roles);
+            if($index !== false){
+                unset($lista_roles[$index]);
+            }
+
+            $this->role=  implode(',', $lista_roles);
+        }
+        return $this;
+    }
 
     /**
      * Set company
