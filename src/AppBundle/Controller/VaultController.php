@@ -178,7 +178,7 @@ class VaultController extends Controller{
                         
                         $date = new \DateTime();
                         $tz = new \DateTimeZone('America/Bogota');
-                        $date->createFromFormat('j/m/Y H:i:s', $row['expiration']);
+                        $date->createFromFormat('d/m/Y H:i:s', $row['expiration']);
                         $date->setTimezone($tz);
                         $vault = (new Vault())
                             ->setCode($row['code'])
