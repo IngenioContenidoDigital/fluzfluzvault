@@ -165,9 +165,17 @@ class VaultController extends Controller{
                 $reader->setEnclosure('"');
                 $reader->setHeaderOffset(0);
                 $em = $this->getDoctrine()->getManager();
-                $group = new VaultGroup();
-                $group->setName($form['group']->getData());
-                $em->persist($group);
+                
+                $group=null;
+                $group = $this->getDoctrine()->getRepository('AppBundle:VaultGroup')
+                    ->findVaultGroupByName($form['group']->getData());
+                if (isset($group[0])) {
+                    $group = $group[0];
+                }else{
+                    $group = new VaultGroup();
+                    $group->setName($form['group']->getData());
+                    $em->persist($group);   
+                }
                 $records = $reader->getRecords();
                 foreach ($records as $offset => $row) {
                     $vault = $this->getDoctrine()->getRepository('AppBundle:Vault')

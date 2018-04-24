@@ -10,4 +10,10 @@ namespace AppBundle\Repository;
  */
 class VaultGroupRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findVaultGroupByName($name){
+        return $this->getEntityManager()
+                ->createQuery('SELECT vg FROM AppBundle:VaultGroup vg WHERE vg.name=:name')
+                ->setParameter('name',$name)
+                ->getResult();
+    }
 }
