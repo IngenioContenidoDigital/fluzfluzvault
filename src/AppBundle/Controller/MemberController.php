@@ -137,11 +137,11 @@ class MemberController extends Controller{
             ->add('member_email', EmailType::class, array('attr' => array("required"=>true)))
             ->add('mobile_phone', NumberType::class, array('attr' => array("required"=>true)))
             ->add('identification', TextType::class, array('attr' => array("required"=>true)))
-            ->add('optional_1', TextType::class, array('attr' => array("required"=>true)))
-            ->add('optional_2', TextType::class, array('attr' => array("required"=>true)))
-            ->add('optional_3', TextType::class, array('attr' => array("required"=>true)))
-            ->add('optional_4', TextType::class, array('attr' => array("required"=>true)))
-            ->add('optional_5', TextType::class, array('attr' => array("required"=>true)))
+            ->add('optional_1', TextType::class, array("required"=>false))
+            ->add('optional_2', TextType::class, array("required"=>false))
+            ->add('optional_3', TextType::class, array("required"=>false))
+            ->add('optional_4', TextType::class, array("required"=>false))
+            ->add('optional_5', TextType::class, array("required"=>false))
             ->getForm();
 
         $form->handleRequest($request);
