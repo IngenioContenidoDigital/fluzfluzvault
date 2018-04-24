@@ -8,6 +8,15 @@ use Doctrine\ORM\EntityRepository;
 
 
 class MemberRepository extends EntityRepository{
+    public function findMember($member_email, $mobile_phone, $identification){
+        return $this->getEntityManager()
+                ->createQuery('SELECT m FROM AppBundle:Member m WHERE m.member_email=:email OR m.mobile_phone=:phone OR m.identification=:identification')
+                ->setParameter('email',$member_email)
+                ->setParameter('phone', $mobile_phone)
+                ->setParameter('identification', $identification)
+                ->getResult();
+    }
+    
     public function findMemberByEmail($member_email){
         return $this->getEntityManager()
                 ->createQuery('SELECT m FROM AppBundle:Member m WHERE m.member_email=:email')

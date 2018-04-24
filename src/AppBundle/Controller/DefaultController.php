@@ -63,21 +63,22 @@ class DefaultController extends Controller
                 $valid_header = array("member_name","member_email","mobile_phone","identification");
                 if(in_array($ext, $valid_ext)){
                     $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/'.$file_name,'r');
+                    $reader->setDelimiter(";");
+                    $reader->setEnclosure('"');
                     $reader->setHeaderOffset(0);
                     $header = $reader->getHeader();
-                    if(empty(array_diff($valid_header, $header))){
+                    
+                    if(in_array("member_name", $header) && in_array("member_email", $header) && in_array("moile_phone", $header) && in_array("identification", $header)){
                         $group = new MemberGroup();
                         $group->setName($form['group']->getData());
                         $em->persist($group);
                         $duplicates=0;
-                        foreach ($reader as $row) {
+                        $records = $reader->getRecords();
+                        foreach ($records as $offset => $row) {
+                            $member=null;
                             $member = $this->getDoctrine()->getRepository('AppBundle:Member')
-                                ->findOneBy(array(
-                                    'member_email' => $row['member_email'],
-                                    'identification' => $row['identification']
-                                ));
-
-                            if ($member) {
+                                ->findMember($row['member_email'],$row['identification'],$row['mobile_phone']);
+                            if (isset($member[0])) {
                                 $duplicates+=1;
                             }else{
                                 $member = (new Member())

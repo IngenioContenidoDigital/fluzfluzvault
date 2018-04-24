@@ -160,14 +160,16 @@ class VaultController extends Controller{
                 $file_name=time().".".$ext;
                 $file->move("inventory", $file_name);
                 
-                $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/inventory/'.$file_name)
-                ->setHeaderOffset(0)
-                ;
+                $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/inventory/'.$file_name);
+                $reader->setDelimiter(";");
+                $reader->setEnclosure('"');
+                $reader->setHeaderOffset(0);
                 $em = $this->getDoctrine()->getManager();
                 $group = new VaultGroup();
                 $group->setName($form['group']->getData());
                 $em->persist($group);
-                foreach ($reader as $row) {
+                $records = $reader->getRecords();
+                foreach ($records as $offset => $row) {
                     $vault = $this->getDoctrine()->getRepository('AppBundle:Vault')
                         ->findByCode($row['code']);
                     $total=count($vault);
@@ -176,7 +178,7 @@ class VaultController extends Controller{
                         
                         $date = new \DateTime();
                         $tz = new \DateTimeZone('America/Bogota');
-                        $date = $date->createFromFormat('d/m/Y H:i:s', $row['expiration']);
+                        $date = $date->createFromFormat('j/m/Y H:i:s', $row['expiration']);
                         $date->setTimezone($tz);
                         $vault = (new Vault())
                             ->setCode($row['code'])

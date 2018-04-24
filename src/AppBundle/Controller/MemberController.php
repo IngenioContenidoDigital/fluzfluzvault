@@ -5,11 +5,19 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Member;
 use AppBundle\Entity\Vault;
 use AppBundle\Entity\Customer;
+use AppBundle\Entity\MemberGroup;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use League\Csv\Reader;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class MemberController extends Controller{
@@ -107,5 +115,81 @@ class MemberController extends Controller{
             'bonos' => $bonos,
             'error' => $error));
         
+    }
+    
+    
+    /** @Route("/member/unique")*/
+    public function createUnique(Request $request){
+        $error = NULL;
+        
+        $user=$this->getUser();
+        $companyId =  $user->getCompany()->getId();
+        $em = $this->getDoctrine()->getManager();
+
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        $logo = $company->getLogo();
+        
+        $form = $this->createFormBuilder()
+            ->setMethod('POST')
+            ->setAttribute('id', 'member-form')
+            ->add('group', TextType::class, array('attr' => array("required"=>true)))
+            ->add('member_name', TextType::class, array('attr' => array("required"=>true)))
+            ->add('member_email', EmailType::class, array('attr' => array("required"=>true)))
+            ->add('mobile_phone', NumberType::class, array('attr' => array("required"=>true)))
+            ->add('identification', TextType::class, array('attr' => array("required"=>true)))
+            ->add('optional_1', TextType::class, array('attr' => array("required"=>true)))
+            ->add('optional_2', TextType::class, array('attr' => array("required"=>true)))
+            ->add('optional_3', TextType::class, array('attr' => array("required"=>true)))
+            ->add('optional_4', TextType::class, array('attr' => array("required"=>true)))
+            ->add('optional_5', TextType::class, array('attr' => array("required"=>true)))
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            try{
+                $group = new MemberGroup();
+                $group->setName($form['group']->getData());
+                $em->persist($group);
+                
+                
+                $member=null;
+                $member = $this->getDoctrine()->getRepository('AppBundle:Member')
+                    ->findMember($form['member_email']->getData(),$form['identification']->getData(),$form['mobile_phone']->getData());
+                if (isset($member[0])) {
+                    $duplicates+=1;
+                }else{
+                    $member = (new Member())
+                        ->setMemberName($form['member_name']->getData())
+                        ->setMemberEmail($form['member_email']->getData())
+                        ->setMobilePhone($form['mobile_phone']->getData())
+                        ->setIdentification($form['identification']->getData())
+                        ->setDateAdd(new \DateTime("now"))
+                        ->setGroup($group);
+                    ;
+
+                    $member->setCompany($company);
+
+                    $this->getDoctrine()->getManager()->persist($member);
+                }
+                
+                $this->getDoctrine()->getManager()->flush();
+            }catch(Exception $e){
+                $error = isset($error) ? $e->getMessage() : $error;
+            }
+            
+            
+            $results = $this->getDoctrine()->getRepository('AppBundle:Member')
+                                ->findMembersByCompany($company);
+            $total = count($results);
+            $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
+                    ->findCodeValues($company);
+
+            return $this->render('member/listmembers.html.twig',array('members' => $results,
+                    'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo)); 
+            
+        }else{
+            return $this->render('member/Create.html.twig', array('error' => $error, 'logo' => $logo, 'form' => $form->createView()));
+        }
     }
 }

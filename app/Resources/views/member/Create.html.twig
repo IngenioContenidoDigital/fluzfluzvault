@@ -1,0 +1,35 @@
+{% extends 'header.html.twig' %}
+{% use "menu.html.twig" %}
+{% block content %}
+<div id="wrapper" class="container-fluid fondo">
+    <h3>Creacion de Participante</h3>
+    <br>
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+    {{ form_start(form) }}
+    <div class="form-group" style="border: solid white 1px; border-radius: 3px; padding: 15px;">
+        {{ form_label(form.group, null, {'label': 'Grupo:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.group, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.member_name, null, {'label': 'Nombre:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.member_name, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.member_email, null, {'label': 'Email:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.member_email, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.mobile_phone, null, {'label': 'Teléfono Móvil:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.mobile_phone, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.identification, null, {'label': 'Identificación:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.identification, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.optional_1, null, {'label': 'Opcional 1:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.optional_1, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.optional_2, null, {'label': 'Opcional 2:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.optional_2, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.optional_3, null, {'label': 'Opcional 3:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.optional_3, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.optional_4, null, {'label': 'Opcional 4:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.optional_4, {'attr': {'class': 'form-control form-control-sm'} }) }}
+        {{ form_label(form.optional_5, null, {'label': 'Opcional 5:','label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.optional_5, {'attr': {'class': 'form-control form-control-sm'} }) }}
+    </div>
+    <input type="submit" class="btn btn-fluz" value="Guardar Participante" />
+    {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
