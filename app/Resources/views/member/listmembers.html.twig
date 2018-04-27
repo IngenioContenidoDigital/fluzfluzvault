@@ -39,6 +39,11 @@
                             <th class="encabezado">Teléfono</th>
                             <th class="encabezado">Identificación</th>
                             <th class="encabezado">Total Bonos Asignados</th>
+                            <th class="encabezado">C1</th>
+                            <th class="encabezado">C2</th>
+                            <th class="encabezado">C3</th>
+                            <th class="encabezado">C4</th>
+                            <th class="encabezado">C5</th>
                             <th class="encabezado">Opciones</th>
                         </thead>
                         <tbody>
@@ -51,6 +56,11 @@
                                 <td class="fila-datos">{{ member.mobile_phone }}</td>
                                 <td class="fila-datos">{{ member.identification }}</td>
                                 <td class="fila-datos">{{ member.vault|length|number_format }}</td>
+                                <td class="fila-datos">{{ member.optional_1 }}</td>
+                                <td class="fila-datos">{{ member.optional_2 }}</td>
+                                <td class="fila-datos">{{ member.optional_3 }}</td>
+                                <td class="fila-datos">{{ member.optional_4 }}</td>
+                                <td class="fila-datos">{{ member.optional_5 }}</td>
                                 <td class="fila-datos">
                                     {% if member.vault|length >0 %}
                                         <p style="text-align:center;"><a href="/member/detail?member={{member.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-eye-open"></span></a></p>

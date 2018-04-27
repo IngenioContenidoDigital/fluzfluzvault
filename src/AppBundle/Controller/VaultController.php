@@ -82,7 +82,13 @@ class VaultController extends Controller{
                             $body = str_replace('{total_products}', '$ '.number_format($vault->getCodeValue(),0,'.',','), $body);
                             $body = str_replace('{total_value}', '$ '.number_format($vault->getCodeValue(),0,'.',','), $body);
                             $group = $vault->getgroup();
+                            $body = str_replace('{inventory_group}', $group->getName(), $body);
                             $body = str_replace('{name_product}', $group->getName(), $body);
+                            $body = str_replace('{optional_1}', $member->getOptional1(), $body);
+                            $body = str_replace('{optional_2}', $member->getOptional2(), $body);
+                            $body = str_replace('{optional_3}', $member->getOptional3(), $body);
+                            $body = str_replace('{optional_4}', $member->getOptional4(), $body);
+                            $body = str_replace('{optional_5}', $member->getOptional5(), $body);
                             $body = str_replace('{expiration}', date_format($vault->getExpiration(),'Y-m-d'), $body);
                         }
                 
@@ -312,7 +318,13 @@ class VaultController extends Controller{
                 $body = str_replace('{total_products}', '$ '.number_format($bono->getCodeValue(),0,'.',','), $body);
                 $body = str_replace('{total_value}', '$ '.number_format($bono->getCodeValue(),0,'.',','), $body);
                 $group = $bono->getgroup();
+                $body = str_replace('{inventory_group}', $group->getName(), $body);
                 $body = str_replace('{name_product}', $group->getName(), $body);
+                $body = str_replace('{optional_1}', $member->getOptional1(), $body);
+                $body = str_replace('{optional_2}', $member->getOptional2(), $body);
+                $body = str_replace('{optional_3}', $member->getOptional3(), $body);
+                $body = str_replace('{optional_4}', $member->getOptional4(), $body);
+                $body = str_replace('{optional_5}', $member->getOptional5(), $body);
                 $body = str_replace('{expiration}', date_format($bono->getExpiration(),'Y-m-d'), $body);
             }
                 

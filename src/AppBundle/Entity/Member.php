@@ -38,6 +38,21 @@ class Member {
      */
     public $date_add;
     
+    /** @ORM\Column(type="string", length=255, nullable=true)*/
+    public $optional_1;
+    
+    /** @ORM\Column(type="string", length=255, nullable=true)*/
+    public $optional_2;
+    
+    /** @ORM\Column(type="string", length=255, nullable=true)*/
+    public $optional_3;
+    
+    /** @ORM\Column(type="string", length=255, nullable=true)*/
+    public $optional_4;
+    
+    /** @ORM\Column(type="string", length=255, nullable=true)*/
+    public $optional_5;
+    
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="members")
      * @ORM\JoinColumn(name="company_id",referencedColumnName="id")
@@ -223,4 +238,100 @@ class Member {
         
     }
     
+    /**
+     * Set optional 1
+     *
+     * @param string $optional_1
+     *
+     * @return Member
+     */
+    public function setOptional1($optional_1){
+        $this->optional_1=$optional_1;
+        return $this;
+    }
+    /**
+     * Set optional 2
+     *
+     * @param string $optional_2
+     *
+     * @return Member
+     */
+    public function setOptional2($optional_2){
+        $this->optional_2=$optional_2;
+        return $this;
+    }
+    /**
+     * Set optional 3
+     *
+     * @param string $optional_3
+     *
+     * @return Member
+     */
+    public function setOptional3($optional_3){
+        $this->optional_3=$optional_3;
+        return $this;
+    }
+    /**
+     * Set optional 4
+     *
+     * @param string $optional_4
+     *
+     * @return Member
+     */
+    public function setOptional4($optional_4){
+        $this->optional_4=$optional_4;
+        return $this;
+    }
+    /**
+     * Set optional 5
+     *
+     * @param string $optional_5
+     *
+     * @return Member
+     */
+    public function setOptional5($optional_5){
+        $this->optional_5=$optional_5;
+        return $this;
+    }
+    
+    /**
+     * Get optional 1
+     *
+     * @return string
+     */
+    public function getOptional1(){
+        return $this->optional_1;
+    }
+    /**
+     * Get optional 2
+     *
+     * @return string
+     */
+    public function getOptional2(){
+        return $this->optional_2;
+    }
+    /**
+     * Get optional 3
+     *
+     * @return string
+     */
+    public function getOptional3(){
+        return $this->optional_3;
+    }
+    /**
+     * Get optional 4
+     *
+     * @return string
+     */
+    public function getOptional4(){
+        return $this->optional_4;
+    }
+    /**
+     * Get optional 5
+     *
+     * @return string
+     */
+    public function getOptional5(){
+        return $this->optional_5;
+    }
 }

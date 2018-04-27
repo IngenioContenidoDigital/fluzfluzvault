@@ -172,7 +172,14 @@ class MemberController extends Controller{
                         ->setDateAdd(new \DateTime("now"))
                         ->setGroup($group);
                     ;
-
+                    
+                    if($form['optional_1']->getData()!= NULL){$member->setOptional1($form['optional_1']->getData());}
+                    if($form['optional_2']->getData()!= NULL){$member->setOptional2($form['optional_2']->getData());}
+                    if($form['optional_3']->getData()!= NULL){$member->setOptional3($form['optional_3']->getData());}
+                    if($form['optional_4']->getData()!= NULL){$member->setOptional4($form['optional_4']->getData());}
+                    if($form['optional_5']->getData()!= NULL){$member->setOptional5($form['optional_5']->getData());}
+                    
+                    
                     $member->setCompany($company);
 
                     $this->getDoctrine()->getManager()->persist($member);

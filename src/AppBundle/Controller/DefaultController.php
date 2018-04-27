@@ -83,6 +83,7 @@ class DefaultController extends Controller
                     $reader->setHeaderOffset(0);
                     $header = $reader->getHeader();
                     if(in_array("member_name", $header) && in_array("member_email", $header) && in_array("mobile_phone", $header) && in_array("identification", $header)){
+                        $repository = $this->getDoctrine()->getRepository(MemberGroup::class);
                         $group=null;
                         $group = $repository->findOneBy(['name'=> $form['group']->getData()]);
                         if(!isset($group)){
@@ -106,6 +107,11 @@ class DefaultController extends Controller
                                     ->setIdentification($row['identification'])
                                     ->setDateAdd(new \DateTime("now"))
                                     ->setGroup($group);
+                                if($row['optional_1']!=NULL){$member->setOptional1($row['optional_1']);}
+                                if($row['optional_2']!=NULL){$member->setOptional2($row['optional_2']);}
+                                if($row['optional_3']!=NULL){$member->setOptional3($row['optional_3']);}
+                                if($row['optional_4']!=NULL){$member->setOptional4($row['optional_4']);}
+                                if($row['optional_5']!=NULL){$member->setOptional5($row['optional_5']);}
                                 $member->setCompany($company);
                                 $em->persist($member);
                             }
