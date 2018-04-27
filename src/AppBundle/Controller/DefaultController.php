@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use League\Csv\Reader;
 use AppBundle\Entity\Member;
 use AppBundle\Entity\MemberGroup;
@@ -42,6 +43,20 @@ class DefaultController extends Controller
                         "required"=>true,
                         "placeholder" => "Identificador para este grupo de usuarios"
                     )))
+                    ->add('delimiter',ChoiceType::class,
+                            array(
+                            'choices' => array(
+                                ',' => ',',
+                                ';' => ';',
+                                '|' => '|'/*,
+                                'Espacio' => "\u{0020}",
+                                'Tab' => "\u{0009}"*/),
+                            'choices_as_values' => true,
+                            'multiple'=>false,
+                            'expanded'=>true,
+                            'data' => ';'
+                            )     
+                    )
                     ->add('file', FileType::class,array(
                         "attr" =>array("class" => "custom-file-input", "id"=>"file", "required"=>true, 'accept' => ".csv")
                     ));
@@ -63,15 +78,18 @@ class DefaultController extends Controller
                 $valid_header = array("member_name","member_email","mobile_phone","identification");
                 if(in_array($ext, $valid_ext)){
                     $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/'.$file_name,'r');
-                    $reader->setDelimiter(";");
+                    $reader->setDelimiter($form['delimiter']->getData());
                     $reader->setEnclosure('"');
                     $reader->setHeaderOffset(0);
                     $header = $reader->getHeader();
-                    
-                    if(in_array("member_name", $header) && in_array("member_email", $header) && in_array("moile_phone", $header) && in_array("identification", $header)){
-                        $group = new MemberGroup();
-                        $group->setName($form['group']->getData());
-                        $em->persist($group);
+                    if(in_array("member_name", $header) && in_array("member_email", $header) && in_array("mobile_phone", $header) && in_array("identification", $header)){
+                        $group=null;
+                        $group = $repository->findOneBy(['name'=> $form['group']->getData()]);
+                        if(!isset($group)){
+                            $group = new MemberGroup();
+                            $group->setName($form['group']->getData());
+                            $em->persist($group);
+                        }
                         $duplicates=0;
                         $records = $reader->getRecords();
                         foreach ($records as $offset => $row) {

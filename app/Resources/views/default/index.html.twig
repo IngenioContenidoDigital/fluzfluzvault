@@ -16,6 +16,8 @@
             <div class="subtitulo">Cargar lista de usuarios  para asignar Bonos</div>
                 {{ form_label(form.group, null, {'label': 'Nombre de grupo:','label_attr': {'class': 'form-label'} }) }}
                 {{ form_widget(form.group, {'attr': {'class': 'form-control form-control-sm group'} }) }}
+                {{ form_label(form.delimiter, null, {'label': 'Delimitador de Archivo:','label_attr': {'class': 'form-label'} }) }}
+                {{ form_widget(form.delimiter) }}
                 {{ form_label(form.file, null, {'label': 'Archivo:','label_attr': {'class': 'form-label'} }) }}
                 <br>
                 <label class="custom-file">

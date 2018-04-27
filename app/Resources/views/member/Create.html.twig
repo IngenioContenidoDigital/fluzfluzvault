@@ -1,6 +1,9 @@
 {% extends 'header.html.twig' %}
 {% use "menu.html.twig" %}
 {% block content %}
+{% if error %}
+    <div id="error" class="alert alert-danger">{{error}}</div>
+{% endif %}
 <div id="wrapper" class="container-fluid fondo">
     <h3>Creacion de Participante</h3>
     <br>

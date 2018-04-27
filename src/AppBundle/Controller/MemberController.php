@@ -121,7 +121,7 @@ class MemberController extends Controller{
     /** @Route("/member/unique")*/
     public function createUnique(Request $request){
         $error = NULL;
-        
+        $duplicates=0;
         $user=$this->getUser();
         $companyId =  $user->getCompany()->getId();
         $em = $this->getDoctrine()->getManager();
@@ -148,16 +148,21 @@ class MemberController extends Controller{
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             try{
-                $group = new MemberGroup();
-                $group->setName($form['group']->getData());
-                $em->persist($group);
-                
+                $repository = $this->getDoctrine()->getRepository(MemberGroup::class);
+                $group=null;
+                $group = $repository->findOneBy(['name'=> $form['group']->getData()]);
+                if(!isset($group)){
+                    $group = new MemberGroup();
+                    $group->setName($form['group']->getData());
+                    $em->persist($group);
+                }
                 
                 $member=null;
                 $member = $this->getDoctrine()->getRepository('AppBundle:Member')
                     ->findMember($form['member_email']->getData(),$form['identification']->getData(),$form['mobile_phone']->getData());
                 if (isset($member[0])) {
                     $duplicates+=1;
+                    $error="El usuario que intentas crear ya existe.";
                 }else{
                     $member = (new Member())
                         ->setMemberName($form['member_name']->getData())
@@ -184,7 +189,9 @@ class MemberController extends Controller{
             $total = count($results);
             $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                     ->findCodeValues($company);
-
+            if($error!=NULL){
+                return $this->render('member/Create.html.twig', array('error' => $error, 'logo' => $logo, 'form' => $form->createView()));
+            }
             return $this->render('member/listmembers.html.twig',array('members' => $results,
                     'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo)); 
             
