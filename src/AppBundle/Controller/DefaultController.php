@@ -46,12 +46,11 @@ class DefaultController extends Controller
                     ->add('delimiter',ChoiceType::class,
                             array(
                             'choices' => array(
-                                ',' => ',',
-                                ';' => ';',
-                                '|' => '|'/*,
+                                'Coma ( , )' => ',',
+                                'Punto y Coma ( ; )' => ';',
+                                'Pipe ( | )' => '|'/*,
                                 'Espacio' => "\u{0020}",
                                 'Tab' => "\u{0009}"*/),
-                            'choices_as_values' => true,
                             'multiple'=>false,
                             'expanded'=>true,
                             'data' => ';'

@@ -149,6 +149,20 @@ class VaultController extends Controller{
             ->setAction('/vault/load')
             ->setAttribute('id', 'vault-upload')
             ->add('group', TextType::class)
+            ->add('delimiter',
+                    ChoiceType::class,
+                    array(
+                    'choices' => array(
+                        'Coma ( , )' => ',',
+                        'Punto y Coma ( ; )' => ';',
+                        'Pipe ( | )' => '|'/*,
+                        'Espacio' => "\u{0020}",
+                        'Tab' => "\u{0009}"*/),
+                    'multiple'=>false,
+                    'expanded'=>true,
+                    'data' => ';'
+                    )     
+            )
             ->add('vault', FileType::class, array('attr' => array("required"=>true)))
             ->add('company', ChoiceType::class, array(
                 'choices' => $opciones,
@@ -166,51 +180,61 @@ class VaultController extends Controller{
                 $file_name=time().".".$ext;
                 $file->move("inventory", $file_name);
                 
-                $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/inventory/'.$file_name);
-                $reader->setDelimiter(";");
-                $reader->setEnclosure('"');
-                $reader->setHeaderOffset(0);
-                $em = $this->getDoctrine()->getManager();
-                
-                $group=null;
-                $group = $this->getDoctrine()->getRepository('AppBundle:VaultGroup')
-                    ->findVaultGroupByName($form['group']->getData());
-                if (isset($group[0])) {
-                    $group = $group[0];
+                $valid_ext = array('csv', 'txt');
+                $valid_header = array("code","code_value","expiration");
+                if(in_array($ext, $valid_ext)){
+                    $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/inventory/'.$file_name);
+                    $reader->setDelimiter($form['delimiter']->getData());
+                    $reader->setEnclosure('"');
+                    $reader->setHeaderOffset(0);
+                    $header = $reader->getHeader();
+                    if(in_array("code", $header) && in_array("code_value", $header) && in_array("expiration", $header)){
+                        $em = $this->getDoctrine()->getManager();
+                        $repository = $this->getDoctrine()->getRepository(VaultGroup::class);
+                        $group=null;
+                        $group = $repository->findOneBy(['name'=> $form['group']->getData()]);
+                        if(!isset($group)){
+                            $group = new VaultGroup();
+                            $group->setName($form['group']->getData());
+                            $em->persist($group);
+                        }
+                        $duplicates=0;                        
+                        $records = $reader->getRecords();
+                        foreach ($records as $offset => $row) {
+                            
+                            $vault = $this->getDoctrine()->getRepository('AppBundle:Vault')
+                                ->findByCode($row['code']);
+                            $total=count($vault);
+
+                            if ($total == 0) {
+
+                                $tz = new \DateTimeZone('America/Bogota');
+                                //$date->setTimezone($tz);
+                                $date = \DateTime::createFromFormat('d/m/Y H:i:s', $row['expiration'], $tz);
+                                //$date->createFromFormat();
+                                $vault = (new Vault())
+                                    ->setCode($row['code'])
+                                    ->setCodeValue($row['code_value'])
+                                    ->setExpiration($date)
+                                    ->setGroup($group);
+
+                                $company = $em->find('AppBundle\Entity\Company', $form['company']->getData());
+                                $vault->setCompany($company);
+                                $em->persist($vault);
+                           }
+                        }
+                        $this->getDoctrine()->getManager()->flush();
+                        return $this->render('vault/inventoryConfirm.html.twig',array('error'=>$error));
+                    }else{
+                        $error = "La Estructura del Archivo CSV NO es válida. Por favor revisa el archivo que intentaste cargar.";
+                    }
                 }else{
-                    $group = new VaultGroup();
-                    $group->setName($form['group']->getData());
-                    $em->persist($group);   
+                    $error = "Extensión del archivo no válida";
                 }
-                $records = $reader->getRecords();
-                foreach ($records as $offset => $row) {
-                    $vault = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                        ->findByCode($row['code']);
-                    $total=count($vault);
-                    
-                    if ($total == 0) {
-                        
-                        $date = new \DateTime();
-                        $tz = new \DateTimeZone('America/Bogota');
-                        $date->createFromFormat('d/m/Y H:i:s', $row['expiration']);
-                        $date->setTimezone($tz);
-                        $vault = (new Vault())
-                            ->setCode($row['code'])
-                            ->setCodeValue($row['code_value'])
-                            ->setExpiration($date)
-                            ->setGroup($group);
-                        
-                        $company = $em->find('AppBundle\Entity\Company', $form['company']->getData());
-                        $vault->setCompany($company);
-                        $em->persist($vault);
-                   }
-                }
-                $this->getDoctrine()->getManager()->flush();
             }catch(Exception $e){
                 $error = isset($error) ? $e->getMessage() : $error;
             }
-            return $this->render('vault/inventoryConfirm.html.twig',array('error'=>$error));
-            //return $this->render('admin/company/companyCreate.html.twig', array('error' => $error, 'form' => $form->createView()));
+            return $this->render('vault/inventoryUpload.html.twig',array('error'=>$error, 'form'=>$form->createView()));
         }else{
             return $this->render('vault/inventoryUpload.html.twig',array('error'=>$error, 'form'=>$form->createView()));
         }
