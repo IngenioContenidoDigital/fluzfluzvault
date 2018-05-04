@@ -88,3 +88,7 @@ knp_snappy:
         enabled: true
         binary: /usr/bin/wkhtmltoimage
         options: []
+
+cmen_google_charts:
+    version: "current"
+    language: "es-CO"

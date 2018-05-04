@@ -1,0 +1,75 @@
+{% extends 'header.html.twig' %}
+{% use "menu.html.twig" %}
+{% block content %}
+<div id="wrapper" class="fondo">
+    <div id="container">
+{% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+{% else %}
+    <h3>Reporte Detallado</h3>
+    <br>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <table class="table table-striped report">
+            <thead>
+                <th class="encabezado">Grupo Inventario</th>
+                <th class="encabezado">A&ntilde;o</th>
+                <th class="encabezado">Mes</th>
+                <th class="encabezado">Fecha</th>
+                <th class="encabezado">Id Bono</th>
+                <th class="encabezado">Bono</th>
+                <th class="encabezado">Valor</th>
+                <th class="encabezado">Nombre</th>
+                <th class="encabezado">Email</th>
+                <th class="encabezado">Id usuario</th>
+                <th class="encabezado">Tel&eacute;fono</th>
+            </thead>
+            <tbody>
+            {% for item in data %}
+                <tr>
+                    <td class="fila-datos">{{item.grupo_inventario}}</td>
+                    <td class="fila-datos">{{item.anio_asignacion}}</td>
+                    <td class="fila-datos">{{item.mes_asignacion}}</td>
+                    <td class="fila-datos">{{item.fecha_asignacion}}</td>
+                    <td class="fila-datos">{{item.bono_id}}</td>
+                    <td class="fila-datos">{{item.bono}}</td>
+                    <td class="fila-datos">$ {{item.valor_bono|number_format(0,'.',',')}}</td>
+                    <td class="fila-datos">{{item.nombre}}</td>
+                    <td class="fila-datos">{{item.email}}</td>
+                    <td class="fila-datos">{{item.id}}</td>
+                    <td class="fila-datos">{{item.celular}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('.table').DataTable({
+            "ordering": true,
+            "filter": true,
+            "language": {
+                "lengthMenu": "Mostrando _MENU_ registros por pagina",
+                "zeroRecords": "No hay registros",
+                "info": "Pagina _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros",
+                "infoFiltered": "(filtrando de  _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                 },
+                 "oAria": {
+                     "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                     "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                 }
+             }
+        })
+    })
+</script>
+{% endblock %}
