@@ -37,7 +37,7 @@
 #/web/bundles/
 /web/uploads/
 /web/images/company/
-
+/web/inventory/
 # PHPUnit
 /app/phpunit.xml
 /phpunit.xml
