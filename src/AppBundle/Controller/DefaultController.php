@@ -68,72 +68,74 @@ class DefaultController extends Controller
                 // $form->getData() holds the submitted values
                 $user=$this->getUser();
                 $companyId = $user->getCompany()->getId();
-
                 $company = $em->find('AppBundle\Entity\Company', $companyId);
-                
-                $file=$form['file']->getData();
-                $ext=$file->guessExtension();
-                $valid_ext = array('csv', 'txt');
-                $file_name=time().".".$ext;
-                $file->move("uploads", $file_name);
-                $valid_header = array("member_name","member_email","mobile_phone","identification");
-                if(in_array($ext, $valid_ext)){
-                    $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/'.$file_name,'r');
-                    $reader->setDelimiter($form['delimiter']->getData());
-                    $reader->setEnclosure('"');
-                    $reader->setHeaderOffset(0);
-                    $header = $reader->getHeader();
-                    if(in_array("member_name", $header) && in_array("member_email", $header) && in_array("mobile_phone", $header) && in_array("identification", $header)){
-                        $repository = $this->getDoctrine()->getRepository(MemberGroup::class);
-                        $group=null;
-                        $group = $repository->findOneBy(['name'=> $form['group']->getData()]);
-                        if(!isset($group)){
-                            $group = new MemberGroup();
-                            $group->setName($form['group']->getData());
-                            $em->persist($group);
-                        }
-                        $duplicates=0;
-                        $records = $reader->getRecords();
-                        foreach ($records as $offset => $row) {
-                            $member=null;
-                            $member = $this->getDoctrine()->getRepository('AppBundle:Member')
-                                ->findMember($row['member_email'],$row['identification'],$row['mobile_phone']);
-                            if (isset($member[0])) {
-                                $duplicates+=1;
-                            }else{
-                                $member = (new Member())
-                                    ->setMemberName($row['member_name'])
-                                    ->setMemberEmail($row['member_email'])
-                                    ->setMobilePhone($row['mobile_phone'])
-                                    ->setIdentification($row['identification'])
-                                    ->setDateAdd(new \DateTime("now"))
-                                    ->setGroup($group);
-                                if($row['optional_1']!=NULL){$member->setOptional1($row['optional_1']);}
-                                if($row['optional_2']!=NULL){$member->setOptional2($row['optional_2']);}
-                                if($row['optional_3']!=NULL){$member->setOptional3($row['optional_3']);}
-                                if($row['optional_4']!=NULL){$member->setOptional4($row['optional_4']);}
-                                if($row['optional_5']!=NULL){$member->setOptional5($row['optional_5']);}
-                                $member->setCompany($company);
-                                $em->persist($member);
+                try{
+                    $file=$form['file']->getData();
+                    $ext=$file->guessExtension();
+                    $valid_ext = array('csv', 'txt');
+                    $file_name=time().".".$ext;
+                    $file->move("uploads", $file_name);
+                    $valid_header = array("member_name","member_email","mobile_phone","identification");
+                    if(in_array($ext, $valid_ext)){
+                        $reader = Reader::createFromPath($this->get('kernel')->getRootDir().'/../web/uploads/'.$file_name,'r');
+                        $reader->setDelimiter($form['delimiter']->getData());
+                        $reader->setEnclosure('"');
+                        $reader->setHeaderOffset(0);
+                        $header = $reader->getHeader();
+                        if(in_array("member_name", $header) && in_array("member_email", $header) && in_array("mobile_phone", $header) && in_array("identification", $header)){
+                            $repository = $this->getDoctrine()->getRepository(MemberGroup::class);
+                            $group=null;
+                            $group = $repository->findOneBy(['name'=> $form['group']->getData()]);
+                            if(!isset($group)){
+                                $group = new MemberGroup();
+                                $group->setName($form['group']->getData());
+                                $em->persist($group);
                             }
+                            $duplicates=0;
+                            $records = $reader->getRecords();
+                            foreach ($records as $offset => $row) {
+                                $member=null;
+                                $member = $this->getDoctrine()->getRepository('AppBundle:Member')
+                                    ->findMember($row['member_email'],$row['identification'],$row['mobile_phone']);
+                                if (isset($member[0])) {
+                                    $duplicates+=1;
+                                }else{
+                                    $member = (new Member())
+                                        ->setMemberName($row['member_name'])
+                                        ->setMemberEmail($row['member_email'])
+                                        ->setMobilePhone($row['mobile_phone'])
+                                        ->setIdentification($row['identification'])
+                                        ->setDateAdd(new \DateTime("now"))
+                                        ->setGroup($group);
+                                    if($row['optional_1']!=NULL){$member->setOptional1($row['optional_1']);}
+                                    if($row['optional_2']!=NULL){$member->setOptional2($row['optional_2']);}
+                                    if($row['optional_3']!=NULL){$member->setOptional3($row['optional_3']);}
+                                    if($row['optional_4']!=NULL){$member->setOptional4($row['optional_4']);}
+                                    if($row['optional_5']!=NULL){$member->setOptional5($row['optional_5']);}
+                                    $member->setCompany($company);
+                                    $em->persist($member);
+                                }
+                            }
+                            $this->getDoctrine()->getManager()->flush();
+
+                            //$results = $this->getDoctrine()->getRepository('AppBundle:Member')
+                            //        ->findAllMembers();
+                            $results = $this->getDoctrine()->getRepository('AppBundle:Member')
+                                    ->findMembersByCompany($company);
+                            $total = count($results);
+                            $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
+                                    ->findCodeValues($company);
+
+                            return $this->render('member/listmembers.html.twig',array('members' => $results,
+                                'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo)); 
+                        }else{
+                            $error = "La Estructura del Archivo CSV NO es válida. Por favor revisa el archivo que intentaste cargar.";
                         }
-                        $this->getDoctrine()->getManager()->flush();
-
-                        //$results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                        //        ->findAllMembers();
-                        $results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                                ->findMembersByCompany($company);
-                        $total = count($results);
-                        $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
-                                ->findCodeValues($company);
-
-                        return $this->render('member/listmembers.html.twig',array('members' => $results,
-                            'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo)); 
                     }else{
-                        $error = "La Estructura del Archivo CSV NO es válida. Por favor revisa el archivo que intentaste cargar.";
+                        $error = "Extensión del archivo no válida";
                     }
-                }else{
-                    $error = "Extensión del archivo no válida";
+                }catch(\League\Csv\Exception $e){
+                    $error = $e->getMessage();
                 }
                 return $this->render('default/index.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
