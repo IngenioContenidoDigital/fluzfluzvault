@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\ComboChart;
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\GaugeChart;
 use League\Csv\Reader;
 use AppBundle\Entity\Member;
 use AppBundle\Entity\MemberGroup;
@@ -189,5 +191,150 @@ class DefaultController extends Controller
         }
         
         return $this->render('admin/report.html.twig', array('error' => $error, 'data' => $result));
+    }
+    
+    /**
+     * @Route("/customer/report", name="customer_report")
+     */
+    public function customerReport(Request $request){
+        $em = $this->getDoctrine()->getManager();
+            $user=$this->getUser();
+            $companyId = $user->getCompany()->getId();
+            $company = $em->find('AppBundle\Entity\Company', $companyId);
+            $logo = $company->getLogo();
+            $conn = $em->getConnection();
+            $meses= $conn->query("SELECT
+MONTH(v.assigned) AS mes,
+MONTHNAME(v.assigned) AS nombre_mes
+FROM
+vault AS v
+WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL
+GROUP BY MONTH(v.assigned)
+ORDER BY MONTH(v.assigned)")->fetchAll();
+            
+            $grupos = $conn->query("SELECT vg.`name` AS `grupo_inventario`
+FROM
+vault AS v
+LEFT JOIN vault_group AS vg ON v.vault_group_id = vg.id
+WHERE v.company_id=7 AND v.assigned IS NOT NULL
+GROUP BY MONTH(v.assigned), vg.`name`")->fetchAll();
+            $i=0;
+            $titulo=array('Mes');
+            $tgrupos=0;
+            foreach($grupos as $kk => $vv){
+                array_push($titulo,$vv['grupo_inventario']);
+                $tgrupos+=1;
+            }
+            array_push($titulo,'Total');
+            $resultados[$i]=$titulo;
+        $i+=1;
+        foreach($meses as $key => $value){
+            $query="SELECT
+IFNULL(Count(v.`code`),0) AS bonos,
+vg.`name` AS `grupo_inventario`
+FROM
+vault AS v
+INNER JOIN vault_group AS vg ON v.vault_group_id = vg.id
+WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL AND MONTH(v.assigned) = ".$value['mes']."
+GROUP BY MONTH(v.assigned), vg.`name`";
+            $fila = $conn->query($query)->fetchAll();
+            $datos=array($value['mes']." - ".$value['nombre_mes'] );
+            $tbonos=0;
+            foreach($fila as $k => $v){
+                $tbonos+=(int)$v['bonos'];
+                array_push($datos,(int)$v['bonos']);
+            }
+            array_push($datos,$tbonos);
+            $resultados[$i]=$datos;
+            $i+=1;
+        }    
+            
+        $Combo = new ComboChart();
+        $Combo->getData()->setArrayToDataTable($resultados);
+        $Combo->getOptions()->setTitle('Reporte Códigos Entregados');
+        $Combo->getOptions()->setHeight(350);
+        $Combo->getOptions()->setWidth(650);
+        $Combo->getOptions()->getTitleTextStyle()->setBold(true);
+        $Combo->getOptions()->getTitleTextStyle()->setColor('#000');
+        $Combo->getOptions()->getTitleTextStyle()->setItalic(true);
+        $Combo->getOptions()->getTitleTextStyle()->setFontName('Arial');
+        $Combo->getOptions()->getTitleTextStyle()->setFontSize(10);
+        $Combo->getOptions()->getVAxis()->setTitle('Bonos Asignados');
+        $Combo->getOptions()->getHAxis()->setTitle('Mes');
+        $Combo->getOptions()->setSeriesType('bars');
+        $Combo->getOptions()->setColors(['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6', '#FFA07A','#FA8072','#E9967A','#F08080','#CD5C5C','#DC143C','#B22222','#FF0000','#8B0000','#800000','#FF6347','#FF4500','#DB7093']);
+        $Combo->getOptions()->setBackgroundColor('#F2F2F2');
+        
+        $series = new \CMEN\GoogleChartsBundle\GoogleCharts\Options\ComboChart\Series();
+        $series->setType('line');
+        $Combo->getOptions()->setSeries([(int)$tgrupos => $series]);
+        
+        
+        $inventario = $conn->query("SELECT
+Count(vault.`code`) AS inventario
+FROM
+vault
+WHERE
+vault.assigned IS NULL AND
+vault.company_id = ".$companyId)->fetchAll();
+        
+        $inv_total = (int)$inventario[0]['inventario'];
+        
+        $gauge = new GaugeChart();
+        $gauge->getData()->setArrayToDataTable([
+            ['Label', 'Value'],
+            ['Inventario', $inv_total]
+        ]);
+        $gauge->getOptions()->setWidth(350);
+        $gauge->getOptions()->setHeight(250);
+        $gauge->getOptions()->setRedFrom(0);
+        $gauge->getOptions()->setRedTo(150);
+        $gauge->getOptions()->setYellowFrom(151);
+        $gauge->getOptions()->setYellowTo(500);
+        $gauge->getOptions()->setGreenFrom(501);
+        $gauge->getOptions()->setGreenTo(1000);
+        $gauge->getOptions()->setMinorTicks(5);
+
+        return $this->render('reports/customerReport.html.twig', array('logo' => $logo, 'piechart' => $Combo, 'gaugechart' => $gauge));
+    }
+    
+    /**
+     * @Route("/customer/detailed", name="customer_detailed")
+     */
+    public function customerDetailed(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        $companyId = $user->getCompany()->getId();
+        $company = $em->find('AppBundle\Entity\Company', $companyId);
+        $logo = $company->getLogo();
+        $conn = $em->getConnection();
+        $error=null;
+        $companyId=7;
+        $query="SELECT vault_group.`name` AS grupo_inventario,
+            YEAR(vault.assigned) AS anio_asignacion,
+MONTHNAME(vault.assigned) AS mes_asignacion,
+vault.assigned AS `fecha_asignacion`,
+CONCAT('*********',RIGHT(vault.`code`,4)) AS bono,
+vault.id AS bono_id,
+vault.code_value AS valor_bono,
+members.member_name AS nombre,
+members.member_email AS email,
+members.id AS id,
+members.mobile_phone AS celular
+FROM
+vault
+INNER JOIN vault_group ON vault.vault_group_id = vault_group.id
+INNER JOIN members ON vault.member_id = members.id
+WHERE
+vault.assigned IS NOT NULL AND
+vault.company_id = ".$companyId;
+        
+        $report = $conn->query($query)->fetchAll();
+        
+        if(empty($report)){
+            $error = 'No Hay Datos para Mostrar';
+        }
+        return $this->render('reports/customerDetailed.html.twig', array('logo' => $logo, 'data' => $report, 'error' => $error));
+        
     }
 }

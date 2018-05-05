@@ -1,0 +1,14 @@
+{% extends 'header.html.twig' %}
+{% use "menu.html.twig" %}
+{% block content %}
+<div id="wrapper" class="container-fluid fondo">
+        <p style="text-align: left;"><a href="/customer/detailed" class="btn btn-fluz">Reporte Detallado</a></p>
+        <br><br>
+        <div id="div_chart" style="display:inline-block;"></div>
+        <div id="div_gauge" style="display:inline-block"></div>
+    <script type="text/javascript">
+        {{ gc_draw(piechart, 'div_chart') }}
+        {{ gc_draw(gaugechart, 'div_gauge') }}
+    </script>
+</div>
+{% endblock %}

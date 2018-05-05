@@ -86,5 +86,9 @@ knp_snappy:
         options: []
     image:
         enabled: true
-        binary: /usr/bin/xvfb-run /usr/bin/wkhtmltoimage
+        binary: /usr/bin/wkhtmltoimage
         options: []
+
+cmen_google_charts:
+    version: "current"
+    language: "es-CO"
