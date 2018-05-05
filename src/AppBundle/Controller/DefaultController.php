@@ -212,11 +212,11 @@ WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL
 GROUP BY MONTH(v.assigned)
 ORDER BY MONTH(v.assigned)")->fetchAll();
             
-            $grupos = $conn->query("SELECT vg.`name` AS `grupo_inventario`
+            $grupos = $conn->query("SELECT DISTINCT vg.`name` AS `grupo_inventario`
 FROM
 vault AS v
 LEFT JOIN vault_group AS vg ON v.vault_group_id = vg.id
-WHERE v.company_id=7 AND v.assigned IS NOT NULL
+WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL
 GROUP BY MONTH(v.assigned), vg.`name`")->fetchAll();
             $i=0;
             $titulo=array('Mes');
@@ -229,13 +229,13 @@ GROUP BY MONTH(v.assigned), vg.`name`")->fetchAll();
             $resultados[$i]=$titulo;
         $i+=1;
         foreach($meses as $key => $value){
-            $query="SELECT
+            $query="SELECT 
 IFNULL(Count(v.`code`),0) AS bonos,
 vg.`name` AS `grupo_inventario`
 FROM
 vault AS v
 INNER JOIN vault_group AS vg ON v.vault_group_id = vg.id
-WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL AND MONTH(v.assigned) = ".$value['mes']."
+WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL AND MONTH(v.assigned) = ".(int)$value['mes']."
 GROUP BY MONTH(v.assigned), vg.`name`";
             $fila = $conn->query($query)->fetchAll();
             $datos=array($value['mes']." - ".$value['nombre_mes'] );
@@ -309,7 +309,7 @@ vault.company_id = ".$companyId)->fetchAll();
         $logo = $company->getLogo();
         $conn = $em->getConnection();
         $error=null;
-        $companyId=7;
+//        $companyId=7;
         $query="SELECT vault_group.`name` AS grupo_inventario,
             YEAR(vault.assigned) AS anio_asignacion,
 MONTHNAME(vault.assigned) AS mes_asignacion,
