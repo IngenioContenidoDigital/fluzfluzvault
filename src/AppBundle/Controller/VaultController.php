@@ -231,7 +231,7 @@ class VaultController extends Controller{
                 }else{
                     $error = "Extensión del archivo no válida";
                 }
-            }catch(Exception $e){
+            }catch(\League\Csv\Exception $e){
                 $error = isset($error) ? $e->getMessage() : $error;
             }
             return $this->render('vault/inventoryUpload.html.twig',array('error'=>$error, 'form'=>$form->createView()));
