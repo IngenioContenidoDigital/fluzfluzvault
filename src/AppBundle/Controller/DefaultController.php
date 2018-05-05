@@ -203,21 +203,24 @@ class DefaultController extends Controller
             $company = $em->find('AppBundle\Entity\Company', $companyId);
             $logo = $company->getLogo();
             $conn = $em->getConnection();
-            $meses= $conn->query("SELECT
+            $qmeses = "SELECT
 MONTH(v.assigned) AS mes,
 MONTHNAME(v.assigned) AS nombre_mes
 FROM
 vault AS v
 WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL
 GROUP BY MONTH(v.assigned)
-ORDER BY MONTH(v.assigned)")->fetchAll();
+ORDER BY MONTH(v.assigned)";
             
-            $grupos = $conn->query("SELECT DISTINCT vg.`name` AS `grupo_inventario`
+            $meses= $conn->query($qmeses)->fetchAll();
+            $qgrupos ="SELECT DISTINCT vg.`name` AS `grupo_inventario`
 FROM
 vault AS v
 LEFT JOIN vault_group AS vg ON v.vault_group_id = vg.id
 WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL
-GROUP BY MONTH(v.assigned), vg.`name`")->fetchAll();
+GROUP BY MONTH(v.assigned), vg.`name`";
+            
+            $grupos = $conn->query($qgrupos)->fetchAll();
             $i=0;
             $titulo=array('Mes');
             $tgrupos=0;
@@ -229,14 +232,16 @@ GROUP BY MONTH(v.assigned), vg.`name`")->fetchAll();
             $resultados[$i]=$titulo;
         $i+=1;
         foreach($meses as $key => $value){
-            $query="SELECT 
-IFNULL(Count(v.`code`),0) AS bonos,
-vg.`name` AS `grupo_inventario`
-FROM
-vault AS v
-INNER JOIN vault_group AS vg ON v.vault_group_id = vg.id
-WHERE v.company_id=".$companyId." AND v.assigned IS NOT NULL AND MONTH(v.assigned) = ".(int)$value['mes']."
-GROUP BY MONTH(v.assigned), vg.`name`";
+            $query="
+SELECT vg.`name` AS grupo_inventario, 
+(SELECT IFNULL(Count(v1.`code`),0) FROM vault AS v1 
+INNER JOIN vault_group AS vg1 ON vg1.id=v1.vault_group_id 
+WHERE v1.company_id=".$companyId." AND v1.assigned IS NOT NULL AND MONTH(v1.assigned)=".(int)$value['mes']." AND vg1.id=vg.id) AS bonos
+FROM vault_group AS vg 
+LEFT JOIN vault AS v ON v.vault_group_id=vg.id
+WHERE v.company_id =".$companyId."
+GROUP BY vg.`name`";
+            
             $fila = $conn->query($query)->fetchAll();
             $datos=array($value['mes']." - ".$value['nombre_mes'] );
             $tbonos=0;
@@ -248,7 +253,7 @@ GROUP BY MONTH(v.assigned), vg.`name`";
             $resultados[$i]=$datos;
             $i+=1;
         }    
-            
+        
         $Combo = new ComboChart();
         $Combo->getData()->setArrayToDataTable($resultados);
         $Combo->getOptions()->setTitle('Reporte Códigos Entregados');
