@@ -288,19 +288,19 @@ vault.company_id = ".$companyId)->fetchAll();
         $inv_total = (int)$inventario[0]['inventario'];
         
         $gauge = new GaugeChart();
-        $gauge->getData()->setArrayToDataTable([
-            ['Label', 'Value'],
-            ['Inventario', $inv_total]
-        ]);
         $gauge->getOptions()->setWidth(350);
         $gauge->getOptions()->setHeight(250);
         $gauge->getOptions()->setRedFrom(0);
-        $gauge->getOptions()->setRedTo(150);
-        $gauge->getOptions()->setYellowFrom(151);
-        $gauge->getOptions()->setYellowTo(500);
-        $gauge->getOptions()->setGreenFrom(501);
-        $gauge->getOptions()->setGreenTo(1000);
-        $gauge->getOptions()->setMinorTicks(5);
+        $gauge->getOptions()->setRedTo(3000);
+        $gauge->getOptions()->setYellowFrom(3000);
+        $gauge->getOptions()->setYellowTo(9000);
+        $gauge->getOptions()->setGreenFrom(9000);
+        $gauge->getOptions()->setGreenTo(30000);
+        $gauge->getOptions()->setMax(30000);
+        $gauge->getData()->setArrayToDataTable([
+            ['Label', 'Value'],
+            ['Inventario', (int)$inv_total]
+        ]);
 
         return $this->render('reports/customerReport.html.twig', array('logo' => $logo, 'piechart' => $Combo, 'gaugechart' => $gauge));
     }
