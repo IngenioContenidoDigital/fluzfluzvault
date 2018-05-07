@@ -77,19 +77,23 @@ class VaultController extends Controller{
                         }else{
                             $body = $template->getTemplate();
                             $body = str_replace('{logo}', $request->getSchemeAndHttpHost(). '/images/company/'.$logo, $body);
-                            $body = str_replace('{date}', date_format($vault->getAssigned(),'Y-m-d'), $body);
-                            $body = str_replace('{products}', '<table align="center" border="0.5" cellpadding="0" cellspacing="0" style="width:500px"><tr><td>'.$vault->getCode().'</td><td></td><td>$ '.number_format($vault->getCodeValue(),0,'.',',').'</td><td>1</td><td>$ '.number_format($vault->getCodeValue(),0,'.',',').'</td></tr></table>', $body);
-                            $body = str_replace('{total_products}', '$ '.number_format($vault->getCodeValue(),0,'.',','), $body);
-                            $body = str_replace('{total_value}', '$ '.number_format($vault->getCodeValue(),0,'.',','), $body);
-                            $group = $vault->getgroup();
+                            $body = str_replace('{date}', date_format($bono->getAssigned(),'Y-m-d'), $body);
+                            $body = str_replace('{products}', '<table align="center" border="0.5" cellpadding="0" cellspacing="0" style="width:500px"><tr><td>'.$bono->getCode().'</td><td></td><td>$ '.number_format($bono->getCodeValue(),0,'.',',').'</td><td>1</td><td>$ '.number_format($bono->getCodeValue(),0,'.',',').'</td></tr></table>', $body);
+                            $body = str_replace('{total_products}', '$ '.number_format($bono->getCodeValue(),0,'.',','), $body);
+                            $body = str_replace('{total_value}', '$ '.number_format($bono->getCodeValue(),0,'.',','), $body);
+                            $group = $bono->getgroup();
                             $body = str_replace('{inventory_group}', $group->getName(), $body);
                             $body = str_replace('{name_product}', $group->getName(), $body);
+                            $body = str_replace('{member_name}', $member->getMemberName(), $body);
+                            $body = str_replace('{member_email}', $member->getMemberEmail(), $body);
+                            $body = str_replace('{member_mobile}', $member->getMobilePhone(), $body);
+                            $body = str_replace('{member_identification}', $member->getIdentification(), $body);
                             $body = str_replace('{optional_1}', $member->getOptional1(), $body);
                             $body = str_replace('{optional_2}', $member->getOptional2(), $body);
                             $body = str_replace('{optional_3}', $member->getOptional3(), $body);
                             $body = str_replace('{optional_4}', $member->getOptional4(), $body);
                             $body = str_replace('{optional_5}', $member->getOptional5(), $body);
-                            $body = str_replace('{expiration}', date_format($vault->getExpiration(),'Y-m-d'), $body);
+                            $body = str_replace('{expiration}', date_format($bono->getExpiration(),'Y-m-d'), $body);
                         }
                 
             
@@ -344,6 +348,10 @@ class VaultController extends Controller{
                 $group = $bono->getgroup();
                 $body = str_replace('{inventory_group}', $group->getName(), $body);
                 $body = str_replace('{name_product}', $group->getName(), $body);
+                $body = str_replace('{member_name}', $member->getMemberName(), $body);
+                $body = str_replace('{member_email}', $member->getMemberEmail(), $body);
+                $body = str_replace('{member_mobile}', $member->getMobilePhone(), $body);
+                $body = str_replace('{member_identification}', $member->getIdentification(), $body);
                 $body = str_replace('{optional_1}', $member->getOptional1(), $body);
                 $body = str_replace('{optional_2}', $member->getOptional2(), $body);
                 $body = str_replace('{optional_3}', $member->getOptional3(), $body);
