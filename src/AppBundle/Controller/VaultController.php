@@ -94,6 +94,9 @@ class VaultController extends Controller{
                             $body = str_replace('{optional_4}', $member->getOptional4(), $body);
                             $body = str_replace('{optional_5}', $member->getOptional5(), $body);
                             $body = str_replace('{expiration}', date_format($vault->getExpiration(),'Y-m-d'), $body);
+                            $body = str_replace('{bono}', $vault->getCode(), $body);
+                            $body = str_replace('{bono_value}', '$ '.number_format($vault->getCodeValue(),0,'.',','), $body);
+                            $body = str_replace('{quantity}', '1', $body);
                         }
                 
             
