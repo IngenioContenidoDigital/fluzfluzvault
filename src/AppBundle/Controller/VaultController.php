@@ -23,7 +23,8 @@ use AppBundle\Entity\CompanyEmail;
 class VaultController extends Controller{
     /** @Route("/vault/assign")*/
     public function assignToMember(Request $request, \Swift_Mailer $mailer){
-         if ($request->isMethod('POST')) {
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            if ($request->isMethod('POST')) {
              
             $em = $this->getDoctrine()->getManager();
             $user=$this->getUser();
@@ -118,7 +119,10 @@ class VaultController extends Controller{
             }
             return $this->render('vault/results.html.twig',array('bonosasignados'=>$total_asignados, 'valortotal'=>$valorbonos, 'logo' => $logo));
         }else{
-            return new Response("<div>Error. Nada que Mostrar</div>");
+                return new Response("<div>Error. Nada que Mostrar</div>");
+            }
+        }else{
+            return new Response("<div>Usuario no autenticado</div>");
         }
     }
     
