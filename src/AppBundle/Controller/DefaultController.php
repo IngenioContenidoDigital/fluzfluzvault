@@ -107,11 +107,11 @@ class DefaultController extends Controller
                                         ->setIdentification($row['identification'])
                                         ->setDateAdd(new \DateTime("now"))
                                         ->setGroup($group);
-                                    if($row['optional_1']!=NULL){$member->setOptional1($row['optional_1']);}
-                                    if($row['optional_2']!=NULL){$member->setOptional2($row['optional_2']);}
-                                    if($row['optional_3']!=NULL){$member->setOptional3($row['optional_3']);}
-                                    if($row['optional_4']!=NULL){$member->setOptional4($row['optional_4']);}
-                                    if($row['optional_5']!=NULL){$member->setOptional5($row['optional_5']);}
+                                    if(isset($row['optional_1'])){$member->setOptional1($row['optional_1']);}
+                                    if(isset($row['optional_2'])){$member->setOptional2($row['optional_2']);}
+                                    if(isset($row['optional_3'])){$member->setOptional3($row['optional_3']);}
+                                    if(isset($row['optional_4'])){$member->setOptional4($row['optional_4']);}
+                                    if(isset($row['optional_5'])){$member->setOptional5($row['optional_5']);}
                                     $member->setCompany($company);
                                     $em->persist($member);
                                 }
