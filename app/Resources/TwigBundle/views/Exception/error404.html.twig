@@ -1,5 +1,11 @@
-<h1>P&aacute;gina no localizada</h1>
-<p>
-    La direcci&oacute;n solicitada no pudo ser localizada. Por favor Verif&iacute;cala.
-    <a href="{{ path('homepage') }}">Regresar al inicio.</a>.
-</p>
+# app/Resources/TwigBundle/views/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Page not found</h1>
+
+    <p>
+        The requested page couldn't be located. Checkout for any URL
+        misspelling or <a href="{{ path('homepage') }}">return to the homepage</a>.
+    </p>
+{% endblock %}
