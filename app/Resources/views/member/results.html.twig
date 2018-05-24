@@ -1,0 +1,47 @@
+{% extends 'header.html.twig' %}
+{% use "menu.html.twig" %}
+{% block content %}
+    <div id="wrapper" class="fondo">
+        <div id="container">
+            <h3>Resultado de Proceso</h3>
+            <hr>
+            <div class="bloque">
+                <div class="subtitulo">A continuacion de presentan los resultados de esta transacci&oacute;n</div>
+                <hr>
+                <ul class="resultados">
+                    <li>Se ha realizado la creaci&oacute;n de <span>{{ users }}</span> usuarios.</li>
+                    {% if duplicates>0 %}
+                    <li>Se han encontrado <span>{{ duplicates }}</span> usuarios duplicados <i>Los siguentes usuarios ya se encuentran en el sistema y no fueron creados.</i></li>
+                    {% endif %}
+                </ul>
+                {% if duplicates>0 %}
+                    <h3>Usuarios Duplicados</h3>
+                    <table class="table table-striped members">
+                        <thead>
+                            <tr>
+                                <th class="encabezado"><b>member_name</b></th>
+                                <th class="encabezado"><b>member_email</b></th>
+                                <th class="encabezado"><b>member_phone</b></th>
+                                <th class="encabezado"><b>identification</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    {% for key,value in lista_duplicados %}
+                            <tr>
+                                <td class="fila-datos">{{value[0]}}</td>
+                                <td class="fila-datos">{{value[1]}}</td>
+                                <td class="fila-datos">{{value[2]}}</td>
+                                <td class="fila-datos">{{value[3]}}</td>
+                            <tr>
+                    {% endfor%}
+                        </tbody>
+                    </table>
+                {% endif %}
+                <br>
+                <a href="/member/view" class="btn btn-fluz">Continuar</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
