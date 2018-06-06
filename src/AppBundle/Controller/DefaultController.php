@@ -101,9 +101,21 @@ class DefaultController extends Controller
                                 $member = $this->getDoctrine()->getRepository('AppBundle:Member')
                                     ->findMember($row['member_email'],$row['identification'],$row['mobile_phone']);
                                 if (isset($member[0])) {
-                                    $duplicates+=1;
-                                    $list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
-                                    $iterator+=1;
+                                    $m = $em->find('AppBundle\Entity\Member', $member[0]->getIdMember());
+                                    $list_companies = $m->getCompany();
+                                    $exists=0;
+                                    foreach($list_companies as $c){
+                                        if($c->getId() == $companyId){ $exists=1;}
+                                    }
+                                    if($exists==0){
+                                        $company->addMember($m);
+                                        $this->getDoctrine()->getManager()->persist($m);
+                                        $users+=1;
+                                    }else{
+                                        $duplicates+=1;
+                                        $list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
+                                        $iterator+=1;
+                                    }
                                 }else{
                                     $member = (new Member())
                                         ->setMemberName($row['member_name'])
@@ -117,7 +129,8 @@ class DefaultController extends Controller
                                     if(isset($row['optional_3'])){$member->setOptional3($row['optional_3']);}
                                     if(isset($row['optional_4'])){$member->setOptional4($row['optional_4']);}
                                     if(isset($row['optional_5'])){$member->setOptional5($row['optional_5']);}
-                                    $member->setCompany($company);
+                                    $company->addMember($member);
+                                    //$member->setCompany($company);
                                     $em->persist($member);
                                     $users+=1;
                                 }
@@ -126,8 +139,9 @@ class DefaultController extends Controller
 
                             //$results = $this->getDoctrine()->getRepository('AppBundle:Member')
                             //        ->findAllMembers();
-                            $results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                                    ->findMembersByCompany($company);
+                            /*$results = $this->getDoctrine()->getRepository('AppBundle:Member')
+                                    ->findMembersByCompany($company);*/
+                            $results = $company->getMembers();
                             $total = count($results);
                             $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                                     ->findCodeValues($company);

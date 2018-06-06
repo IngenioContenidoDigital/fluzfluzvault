@@ -54,8 +54,8 @@ class Member {
     public $optional_5;
     
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="members")
-     * @ORM\JoinColumn(name="company_id",referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Company", mappedBy="members")
+     * ORM\JoinColumn(name="company_id",referencedColumnName="id")
      */
     private $company;
     
@@ -96,7 +96,7 @@ class Member {
      * @return Member
      */
     public function setCompany(Company $company){
-        $this->company = $company;
+        $this->company[] = $company;
         return $this;
     }
     

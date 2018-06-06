@@ -65,7 +65,7 @@ class VaultController extends Controller{
                             $this->getDoctrine()->getManager()->persist($vault);
                             $this->getDoctrine()->getManager()->flush();
 
-                            $company1 = $member->getCompany();
+                            $company1 = $em->find('AppBundle\Entity\Company', $companyId);
 
                             $template=$em->getRepository(CompanyEmail::class)
                                     ->findTemplateByCompany($company1);

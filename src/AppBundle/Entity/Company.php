@@ -40,7 +40,8 @@ class Company
      */
     public $phone;
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Member", mappedBy="company") 
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Member", inversedBy="company") 
+     * @ORM\JoinTable(name="company_members")
      */
     private $members;
     /**
@@ -48,6 +49,12 @@ class Company
      */
     public function getMembers(){
         return $this->members;
+    }
+    
+    
+    public function addMember(Member $member){
+        $member->setCompany($this); // synchronously updating inverse side
+        $this->members[] = $member;
     }
     
     /**

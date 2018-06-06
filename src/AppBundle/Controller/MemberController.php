@@ -37,10 +37,12 @@ class MemberController extends Controller{
             $company = $em->find('AppBundle\Entity\Company', $companyId);
             $logo = $company->getLogo();
 
-            $results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                    ->findMembersByCompany($company);
+            //$results = $this->getDoctrine()->getRepository('AppBundle:Member')
+            //        ->findMembersByCompany($company);
+            $results = $company->getMembers();
 
             $total = count($results);
+            
             $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                     ->findCodeValues($company);
             if(count($bonos)<1){
@@ -82,18 +84,29 @@ class MemberController extends Controller{
                         ->setDateAdd(new \DateTime("now"))
                     ;
 
-
-                    $member->setCompany($company);
+                    $company->addMember($member);
+                    //$member->setCompany($company);
 
                     $this->getDoctrine()->getManager()->persist($member);
+               }else{
+                   $list_companies = $member->getCompany();
+                   $exists=0;
+                   foreach($m as $list_companies){
+                       if($m->getId() == $company->getId()){ $exists=1;}
+                   }
+                   if(!$exists){
+                       $member->setCompany($company);
+                   }
+                   $this->getDoctrine()->getManager()->persist($member);
                }
             }
 
             // save / write the changes to the database
             $this->getDoctrine()->getManager()->flush();
 
-            $results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                    ->findAllMembers();
+            /*$results = $this->getDoctrine()->getRepository('AppBundle:Member')
+                    ->findAllMembers();*/
+            $results = $company->getMembers();
             $total = count($results);
             $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                     ->findCodeValues($company);
@@ -186,8 +199,22 @@ class MemberController extends Controller{
                     $member = $this->getDoctrine()->getRepository('AppBundle:Member')
                         ->findMember($form['member_email']->getData(),$form['identification']->getData(),$form['mobile_phone']->getData());
                     if (isset($member[0])) {
-                        $duplicates+=1;
-                        $error="El usuario que intentas crear ya existe.";
+                        $m = $em->find('AppBundle\Entity\Member', $member[0]->getIdMember());
+                        $list_companies = $m->getCompany();
+                        $exists=0;
+                        foreach($list_companies as $c){
+                            if($c->getId() == $companyId){ $exists=1;}
+                        }
+                        if($exists==0){
+                            $company->addMember($m);
+                            $this->getDoctrine()->getManager()->persist($m);
+                            $users+=1;
+                        }else{
+                            $duplicates+=1;
+                            $list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
+                            $iterator+=1;
+                            $error="El usuario que intentas crear ya existe.";
+                        }
                     }else{
                         $member = (new Member())
                             ->setMemberName($form['member_name']->getData())
@@ -204,8 +231,8 @@ class MemberController extends Controller{
                         if($form['optional_4']->getData()!= NULL){$member->setOptional4($form['optional_4']->getData());}
                         if($form['optional_5']->getData()!= NULL){$member->setOptional5($form['optional_5']->getData());}
 
-
-                        $member->setCompany($company);
+                        $company->addMember($member);
+                        //$member->setCompany($company);
 
                         $this->getDoctrine()->getManager()->persist($member);
                     }
@@ -216,8 +243,9 @@ class MemberController extends Controller{
                 }
 
 
-                $results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                                    ->findMembersByCompany($company);
+                /*$results = $this->getDoctrine()->getRepository('AppBundle:Member')
+                                    ->findMembersByCompany($company);*/
+                $results = $company->getMembers();
                 $total = count($results);
                 $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                         ->findCodeValues($company);
