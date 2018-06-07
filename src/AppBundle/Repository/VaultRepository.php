@@ -38,12 +38,12 @@ class VaultRepository extends EntityRepository{
     
     public function countAssignedCodes(){
         $query = $this->createQueryBuilder('v')
-        ->select('c.name company, count(v.id) total, sum(v.code_value) value, DATE_FORMAT(v.assigned, \'%Y-%m-%d\') date')
-        ->innerJoin('v.members', 'm')
+        ->select('c.name company, count(v.id) total, sum(v.code_value) value, YEAR(v.assigned) year, CONCAT(MONTH(v.assigned),\' \',MONTHNAME(v.assigned)) month')
+        ->distinct('c.name, year, month ')
         ->innerJoin('v.company', 'c')
-        ->groupBy('date')
-        ->groupBy('company')
-        ->orderBy('date')
+        ->where('v.assigned IS NOT NULL')
+        ->groupBy('year, month, company')
+        ->orderBy('year, month, c.name')
         //->where('r.foo = :parameter')
         //->setParameter('parameter', $parameter)
         ->getQuery();

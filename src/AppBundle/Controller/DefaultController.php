@@ -214,6 +214,7 @@ class DefaultController extends Controller
                 $result = $this->getDoctrine()
                     ->getRepository('AppBundle:Vault')
                     ->countAssignedCodes();
+                
             }catch(Exception $e){
                 $error = isset($e) ? $e->getMessage() : $error;
             }

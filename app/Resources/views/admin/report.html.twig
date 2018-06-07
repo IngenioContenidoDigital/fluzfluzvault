@@ -19,9 +19,9 @@
         {%else%}
             <table class="table table-striped report">
                 <thead>
+                    <th class="encabezado">A&ntilde;o</th>
                     <th class="encabezado">Mes</th>
                     <th class="encabezado">Empresa</th>
-                    <th class="encabezado">D&iacute;a</th>
                     <th class="encabezado">Total Asignados</th>
                     <th class="encabezado">Valor C&oacute;digos</th>
                     <th class="encabezado">Valor Promedio</th>
@@ -31,9 +31,9 @@
                 {% set count_total = 0 %}
                 {% for item in data %}
                     <tr>
-                        <td class="fila-datos">{{item.date | date('m F')}}</td>
+                        <td class="fila-datos">{{item.year}}</td>
+                        <td class="fila-datos">{{item.month}}</td>
                         <td class="fila-datos">{{item.company }}</td>
-                        <td class="fila-datos">{{item.date}}</td>
                         <td class="fila-datos">{{item.total}}</td>
                         <td class="fila-datos">$ {{item.value | number_format(0, '.', ',')}}</td>
                         {% set avg = item.value / item.total %}

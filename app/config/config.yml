@@ -64,6 +64,13 @@ doctrine:
             datetime_functions:
                 DATE_FORMAT:
                     AppBundle\DQL\DateFormatFunction
+                MONTH: 
+                    DoctrineExtensions\Query\Mysql\Month
+                MONTHNAME:
+                    DoctrineExtensions\Query\Mysql\MonthName
+                YEAR:
+                    DoctrineExtensions\Query\Mysql\Year
+                
 
 # Swiftmailer Configuration
 swiftmailer:
