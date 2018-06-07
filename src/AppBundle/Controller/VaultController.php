@@ -41,6 +41,11 @@ class VaultController extends Controller{
                 $total_asignados=0;
                 $valorbonos=0;
                 $data =$request->request->all();
+                if(isset($data['sms']) && $data['sms']=='on'){
+                    $sms=true;
+                }else{
+                    $sms=false;
+                }
                 foreach($data as $k /*member*/ => $d /*value*/){
                     $vault = $this->getDoctrine()->getRepository(Vault::class)
                                 ->findFirstAvailableCodeByValue($data['tipo-bono'],$company);
@@ -116,8 +121,41 @@ class VaultController extends Controller{
                                             'text/html'
                                     );
 
-                            try{           
+                            try{
                                 $response = $mailer->send($message);
+                                if($sms){
+                                    $sms_txt ='Hola '.$member->getMemberName().'\n\n'.$company->getName().' hace entrega del siguiente bono '.$group->getName().' por valor de $'.number_format($vault->getCodeValue(),0,'.',',').' Bono: '.$vault->getCode();
+                                    $sms_url = urlencode($sms_txt);
+                                    
+                                    
+                                    $url = 'https://api.masivapp.com/SmsHandlers/sendhandler.ashx?action=sendmessage&username=Api_A91ON&password=WBZ45NA8Z3&recipient=+57'.$member->getMobilePhone()."&messagedata=".$sms_url."&longMessage=true";
+
+                                    /*$curl = curl_init();
+                                    $headers = array(
+                                            "Content-Type: text/xml; charset=utf-8"
+                                    );
+                                    curl_setopt($curl,CURLOPT_HTTPHEADER, $headers);
+                                    curl_setopt($curl, CURLOPT_URL, $url);
+                                    $response = curl_exec($curl);
+                                    curl_close($curl);*/
+
+                                    $args = array ('username'=>'Api_A91ON', 'password'=>'WBZ45NA8Z3');
+                                    $opts = array(
+                                      'http' => array(
+                                        'method'=>'POST', 
+                                        'header'=>'Content-Type: application/xml', 
+                                        'content'=>http_build_query($args)
+                                      )
+                                    );
+
+                                    $context = stream_context_create($opts);
+                                    $result = file_get_contents($url, false, $context);
+
+                                    $xml=simplexml_load_string($result);
+                                    $items   = $xml->data;
+                                    $response = json_decode(json_encode($items), TRUE)['acceptreport'];
+                                    $result = ( $response['statuscode'] == 0 ) ? true : false;    
+                                }
                             }catch(Exception $e){
                                 $response = $e->getMessage();
                             }

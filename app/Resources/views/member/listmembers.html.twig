@@ -22,57 +22,78 @@
                 </select>
             </div>
             <div class="float-right col-md-8">
-                <p style="text-align:right;"><input type="submit" class="btn btn-fluz" value="Asignar Bonos"></p>
+                <table style="float:right;">
+                    <tr>
+                        <td>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <span>Enviar SMS a usuarios</span>
+                                    <div class="material-switch pull-right">
+                                        <input id="sms" name="sms" type="checkbox"/>
+                                        <label for="sms" class="label-danger"></label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" class="btn btn-fluz btn-fluz-largo" value="Asignar Bonos">
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
-                <hr>
-                {% if total > 0 %}
-                    <table class="table table-striped members">
-                        <thead>
-                            <th class="encabezado">
-                                <b><input type="radio" id="todos" name="marcar"/>&nbsp;Todos&nbsp;</b>
-                                <b><input type="radio" id="ninguno" name="marcar"/>&nbsp;Ninguno&nbsp;</b>
-                            </th>
-                            <th class="encabezado">Grupo</th>
-                            <th class="encabezado">Nombre</th>
-                            <th class="encabezado">Email</th>
-                            <th class="encabezado">Teléfono</th>
-                            <th class="encabezado">Identificación</th>
-                            <th class="encabezado">Total Bonos Asignados</th>
-                            <th class="encabezado">C1</th>
-                            <th class="encabezado">C2</th>
-                            <th class="encabezado">C3</th>
-                            <th class="encabezado">C4</th>
-                            <th class="encabezado">C5</th>
-                            <th class="encabezado">Opciones</th>
-                        </thead>
-                        <tbody>
-                            {% for member in members %}
-                            <tr>
-                                <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id}}" name="{{member.id}}"/></p></td>
-                                <td class="fila-datos">{{ member.group.name }}</td>
-                                <td class="fila-datos">{{ member.member_name }}</td>
-                                <td class="fila-datos">{{ member.member_email }}</td>
-                                <td class="fila-datos">{{ member.mobile_phone }}</td>
-                                <td class="fila-datos">{{ member.identification }}</td>
-                                <td class="fila-datos">{{ member.vault|length|number_format }}</td>
-                                <td class="fila-datos">{{ member.optional_1 }}</td>
-                                <td class="fila-datos">{{ member.optional_2 }}</td>
-                                <td class="fila-datos">{{ member.optional_3 }}</td>
-                                <td class="fila-datos">{{ member.optional_4 }}</td>
-                                <td class="fila-datos">{{ member.optional_5 }}</td>
-                                <td class="fila-datos">
-                                    {% if member.vault|length >0 %}
-                                        <p style="text-align:center;"><a href="/member/detail?member={{member.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-eye-open"></span></a></p>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                    <div class="alert alert-warning"><b>No hay Datos!!</b>. No Hay usuarios disponibles en este momento. Por favor carga algunos usuarios.</div>
-                {% endif %}
+        <hr>
+        <div class="container tcontainer">
+        {% if total > 0 %}
+            <table class="table table-striped members">
+                <thead>
+                    <th class="encabezado">
+                        <b><input type="radio" id="todos" name="marcar"/>&nbsp;Todos&nbsp;</b>
+                        <b><input type="radio" id="ninguno" name="marcar"/>&nbsp;Ninguno&nbsp;</b>
+                    </th>
+                    <th class="encabezado">Opciones</th>
+                    <th class="encabezado">Grupo</th>
+                    <th class="encabezado">Nombre</th>
+                    <th class="encabezado">Email</th>
+                    <th class="encabezado">Teléfono</th>
+                    <th class="encabezado">Identificación</th>
+                    <th class="encabezado">Total Bonos Asignados</th>
+                    <th class="encabezado">C1</th>
+                    <th class="encabezado">C2</th>
+                    <th class="encabezado">C3</th>
+                    <th class="encabezado">C4</th>
+                    <th class="encabezado">C5</th>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id}}" name="{{member.id}}"/></p></td>
+                        <td class="fila-datos">
+                            {% if member.vault|length >0 %}
+                                <p style="text-align:center;"><a href="/member/detail?member={{member.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-eye-open"></span></a></p>
+                            {% endif %}
+                        </td>
+                        <td class="fila-datos">{{ member.group.name }}</td>
+                        <td class="fila-datos">{{ member.member_name }}</td>
+                        <td class="fila-datos">{{ member.member_email }}</td>
+                        <td class="fila-datos">{{ member.mobile_phone }}</td>
+                        <td class="fila-datos">{{ member.identification }}</td>
+                        <td class="fila-datos">{{ member.vault|length|number_format }}</td>
+                        <td class="fila-datos">{{ member.optional_1 }}</td>
+                        <td class="fila-datos">{{ member.optional_2 }}</td>
+                        <td class="fila-datos">{{ member.optional_3 }}</td>
+                        <td class="fila-datos">{{ member.optional_4 }}</td>
+                        <td class="fila-datos">{{ member.optional_5 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-warning"><b>No hay Datos!!</b>. No Hay usuarios disponibles en este momento. Por favor carga algunos usuarios.</div>
+        {% endif %}
+        </div>
     </form>
 </div>
     <script>
