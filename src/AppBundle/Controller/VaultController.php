@@ -124,7 +124,7 @@ class VaultController extends Controller{
                             try{
                                 $response = $mailer->send($message);
                                 if($sms){
-                                    $sms_txt ='Hola '.$member->getMemberName().'\n\n'.$company->getName().' hace entrega del siguiente bono '.$group->getName().' por valor de $'.number_format($vault->getCodeValue(),0,'.',',').' Bono: '.$vault->getCode();
+                                    $sms_txt ='Hola '.$member->getMemberName().'%0A%0A'.$company->getName().' hace entrega de un bono '.$group->getName().' por valor de $'.number_format($vault->getCodeValue(),0,'.',',').' Bono: '.$vault->getCode();
                                     $sms_url = urlencode($sms_txt);
                                     
                                     
