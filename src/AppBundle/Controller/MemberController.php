@@ -160,6 +160,9 @@ class MemberController extends Controller{
         }else{
             $error = NULL;
             $duplicates=0;
+            $users=0;
+            $iterator=0;
+            $list_duplicates = array();
             $user=$this->getUser();
             $companyId =  $user->getCompany()->getId();
             $em = $this->getDoctrine()->getManager();
