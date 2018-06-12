@@ -214,7 +214,7 @@ class MemberController extends Controller{
                             $users+=1;
                         }else{
                             $duplicates+=1;
-                            $list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
+                            //$list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
                             $iterator+=1;
                             $error="El usuario que intentas crear ya existe.";
                         }
