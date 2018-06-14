@@ -12,7 +12,7 @@
             <thead>
                 <th class="encabezado">Id</th>
                 <th class="encabezado">Nombre Grupo</th>
-                <th class="encabezado">Miembros</th>
+                <!--<th class="encabezado">Miembros</th>-->
                 <th class="encabezado">Opciones</th>
             </thead>
             <tbody>
@@ -20,11 +20,11 @@
                 <tr>
                     <td class="fila-datos">{{item.id}}</td>
                     <td class="fila-datos">{{item.name}}</td>
-                    <td class="fila-datos">{{item.members}}</td>
+                    <!--<td class="fila-datos">{#item.members#}</td>-->
                     <td class="fila-datos">
                         <p style="text-align:center;">
                         <a href="/membergroup/edit?gp={{item.id}}&cp={{company.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a href="#" id="delete" group="{{item.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-trash"></span></a>
+                        <!--<a href="#" id="delete" group="{{item.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-trash"></span></a>-->
                         </p>
                     </td>
                 </tr>

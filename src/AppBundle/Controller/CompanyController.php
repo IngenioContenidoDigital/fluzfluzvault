@@ -215,7 +215,8 @@ class CompanyController extends Controller{
             $id_company = $request->query->get('cp');
             $em = $this->getDoctrine()->getManager();
             $company = $em->find('AppBundle\Entity\Company', $id_company);
-            $groups = $em->getRepository(Company::class)->findCompanyGroups($company);
+            //$groups = $em->getRepository(Company::class)->findCompanyGroups($company);
+            $groups = $company->getGroups();
             return $this->render('admin/company/companyListGroups.html.twig', array('error' => $error, 'company' => $company,'groups' => $groups));
         }
     }
