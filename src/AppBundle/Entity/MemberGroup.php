@@ -25,15 +25,46 @@ class MemberGroup{
     public $name;
     
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Member", mappedBy="group", cascade={"remove"}) 
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Member", mappedBy="group") 
+     * @ORM\JoinTable(name="groups_members")
      */
     private $members;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="groups")
+     * @ORM\JoinColumn(name="company_id",referencedColumnName="id")
+     */
+    private $company;
+    
+    /**
+     * @return Collection|Company[]
+     */
+    public function getCompany(){
+        return $this->company;
+    }
+    
+    /**
+     * Set company
+     *
+     * @param Company $company
+     *
+     * @return MemberGroup
+     */
+    public function setCompany(Company $company){
+        $this->company = $company;
+        return $this;
+    }
     
     /**
      * @return Collection|Member[]
      */
     public function getMembers(){
         return $this->members;
+    }
+    
+    public function addMember(Member $member){
+        $member->setGroup($this); // synchronously updating inverse side
+        $this->members[] = $member;
     }
 
     public function __construct(){

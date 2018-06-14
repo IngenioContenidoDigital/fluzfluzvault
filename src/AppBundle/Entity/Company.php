@@ -39,23 +39,7 @@ class Company
      * @ORM\Column(type="decimal", length=15)
      */
     public $phone;
-    /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Member", inversedBy="company") 
-     * @ORM\JoinTable(name="company_members")
-     */
-    private $members;
-    /**
-     * @return Collection|Member[]
-     */
-    public function getMembers(){
-        return $this->members;
-    }
     
-    
-    public function addMember(Member $member){
-        $member->setCompany($this); // synchronously updating inverse side
-        $this->members[] = $member;
-    }
     
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vault", mappedBy="company")
@@ -86,11 +70,30 @@ class Company
      */
     private $template;
     
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\MemberGroup", mappedBy="company") 
+     */
+    private $groups;
+    
+    
+    /**
+     * @return Collection|groups[]
+     */
+    public function getGroups(){
+        return $this->groups;
+    }
+    
+    public function addGroup(MemberGroup $group){
+        $group->setCompany($this); // synchronously updating inverse side
+        $this->groups[] = $group;
+    }
+    
     public function __construct(){
-        $this->members = new ArrayCollection();
+        //$this->members = new ArrayCollection();
         $this->codes = new ArrayCollection();
         $this->users= new ArrayCollection();
         $this->template = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
     
     /**

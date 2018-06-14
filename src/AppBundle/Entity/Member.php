@@ -53,15 +53,10 @@ class Member {
     /** @ORM\Column(type="string", length=255, nullable=true)*/
     public $optional_5;
     
+      
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Company", mappedBy="members")
-     * ORM\JoinColumn(name="company_id",referencedColumnName="id")
-     */
-    private $company;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MemberGroup", inversedBy="members")
-     * @ORM\JoinColumn(name="member_group_id",referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\MemberGroup", inversedBy="members")
+     * ORM\JoinColumn(name="member_group_id",referencedColumnName="id")
      */
     private $group;
     
@@ -81,24 +76,7 @@ class Member {
         $this->vault = $vault;
     }
     
-    /**
-     * @return Collection|Company[]
-     */
-    public function getCompany(){
-        return $this->company;
-    }
     
-    /**
-     * Set company
-     *
-     * @param Company $company
-     *
-     * @return Member
-     */
-    public function setCompany(Company $company){
-        $this->company[] = $company;
-        return $this;
-    }
     
     /**
      * @return Collection|MemberGroup[]
@@ -115,7 +93,7 @@ class Member {
      * @return Member
      */
     public function setGroup(MemberGroup $group){
-        $this->group = $group;
+        $this->group[] = $group;
         return $this;
     }
     
@@ -232,7 +210,7 @@ class Member {
     }
     
     public function __construct(){
-        $this->company = new ArrayCollection();
+        //$this->company = new ArrayCollection();
         $this->group = new ArrayCollection();
         $this->vault = new ArrayCollection();
         
