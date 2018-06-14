@@ -39,7 +39,7 @@ class MemberController extends Controller{
 
             //$results = $this->getDoctrine()->getRepository('AppBundle:Member')
             //        ->findMembersByCompany($company);
-            $results = $company->getMembers();
+            $results = $company->getGroups();
 
             $total = count($results);
             
@@ -48,7 +48,7 @@ class MemberController extends Controller{
             if(count($bonos)<1){
                 $bonos=NULL;
             };
-            return $this->render('member/listmembers.html.twig',array('members' => $results,
+            return $this->render('member/listmembers.html.twig',array('groups' => $results,
                 'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo));
         }
     }
@@ -196,6 +196,7 @@ class MemberController extends Controller{
                         $group = new MemberGroup();
                         $group->setName($form['group']->getData());
                         $em->persist($group);
+                        $company->addGroup($group);
                     }
 
                     $member=null;
@@ -203,13 +204,14 @@ class MemberController extends Controller{
                         ->findMember($form['member_email']->getData(),$form['identification']->getData(),$form['mobile_phone']->getData());
                     if (isset($member[0])) {
                         $m = $em->find('AppBundle\Entity\Member', $member[0]->getIdMember());
-                        $list_companies = $m->getCompany();
+                        $list_groups = $m->getGroup();
                         $exists=0;
-                        foreach($list_companies as $c){
-                            if($c->getId() == $companyId){ $exists=1;}
+                        foreach($list_groups as $g){
+                            if($g->getId() == $group->getId()){ $exists=1;}
                         }
                         if($exists==0){
-                            $company->addMember($m);
+                            $group->addMember($m);
+                            //$company->addMember($m);
                             $this->getDoctrine()->getManager()->persist($m);
                             $users+=1;
                         }else{
@@ -224,9 +226,7 @@ class MemberController extends Controller{
                             ->setMemberEmail($form['member_email']->getData())
                             ->setMobilePhone($form['mobile_phone']->getData())
                             ->setIdentification($form['identification']->getData())
-                            ->setDateAdd(new \DateTime("now"))
-                            ->setGroup($group);
-                        ;
+                            ->setDateAdd(new \DateTime("now"));
 
                         if($form['optional_1']->getData()!= NULL){$member->setOptional1($form['optional_1']->getData());}
                         if($form['optional_2']->getData()!= NULL){$member->setOptional2($form['optional_2']->getData());}
@@ -234,7 +234,8 @@ class MemberController extends Controller{
                         if($form['optional_4']->getData()!= NULL){$member->setOptional4($form['optional_4']->getData());}
                         if($form['optional_5']->getData()!= NULL){$member->setOptional5($form['optional_5']->getData());}
 
-                        $company->addMember($member);
+                        $group->addMember($member);
+                        //$company->addMember($member);
                         //$member->setCompany($company);
 
                         $this->getDoctrine()->getManager()->persist($member);
@@ -248,14 +249,14 @@ class MemberController extends Controller{
 
                 /*$results = $this->getDoctrine()->getRepository('AppBundle:Member')
                                     ->findMembersByCompany($company);*/
-                $results = $company->getMembers();
+                $results = $company->getGroups();
                 $total = count($results);
                 $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                         ->findCodeValues($company);
                 if($error!=NULL){
                     return $this->render('member/Create.html.twig', array('error' => $error, 'logo' => $logo, 'form' => $form->createView()));
                 }
-                return $this->render('member/listmembers.html.twig',array('members' => $results,
+                return $this->render('member/listmembers.html.twig',array('groups' => $results,
                         'total'=> $total, 'bonos'=>$bonos, 'logo'=>$logo)); 
 
             }else{

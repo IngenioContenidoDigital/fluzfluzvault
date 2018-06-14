@@ -67,26 +67,28 @@
                     <th class="encabezado">C5</th>
                 </thead>
                 <tbody>
-                    {% for member in members %}
-                    <tr>
-                        <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id}}" name="{{member.id}}"/></p></td>
-                        <td class="fila-datos">
-                            {% if member.vault|length >0 %}
-                                <p style="text-align:center;"><a href="/member/detail?member={{member.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-eye-open"></span></a></p>
-                            {% endif %}
-                        </td>
-                        <td class="fila-datos">{{ member.group.name }}</td>
-                        <td class="fila-datos">{{ member.member_name }}</td>
-                        <td class="fila-datos">{{ member.member_email }}</td>
-                        <td class="fila-datos">{{ member.mobile_phone }}</td>
-                        <td class="fila-datos">{{ member.identification }}</td>
-                        <td class="fila-datos">{{ member.vault|length|number_format }}</td>
-                        <td class="fila-datos">{{ member.optional_1 }}</td>
-                        <td class="fila-datos">{{ member.optional_2 }}</td>
-                        <td class="fila-datos">{{ member.optional_3 }}</td>
-                        <td class="fila-datos">{{ member.optional_4 }}</td>
-                        <td class="fila-datos">{{ member.optional_5 }}</td>
-                    </tr>
+                    {% for group in groups %}
+                        {% for member in group.members %}
+                            <tr>
+                                <td class="fila-datos"><p style="text-align:center;"><input type="checkbox" class="check" id="{{member.id}}" name="{{member.id}}"/></p></td>
+                                <td class="fila-datos">
+                                    {% if member.vault|length >0 %}
+                                        <p style="text-align:center;"><a href="/member/detail?member={{member.id}}" class="btn btn-fluz btn-sm"><span class="glyphicon glyphicon-eye-open"></span></a></p>
+                                    {% endif %}
+                                </td>
+                                <td class="fila-datos">{{ group.name }}</td>
+                                <td class="fila-datos">{{ member.member_name }}</td>
+                                <td class="fila-datos">{{ member.member_email }}</td>
+                                <td class="fila-datos">{{ member.mobile_phone }}</td>
+                                <td class="fila-datos">{{ member.identification }}</td>
+                                <td class="fila-datos">{{ member.vault|length|number_format }}</td>
+                                <td class="fila-datos">{{ member.optional_1 }}</td>
+                                <td class="fila-datos">{{ member.optional_2 }}</td>
+                                <td class="fila-datos">{{ member.optional_3 }}</td>
+                                <td class="fila-datos">{{ member.optional_4 }}</td>
+                                <td class="fila-datos">{{ member.optional_5 }}</td>
+                            </tr>
+                        {% endfor %}
                     {% endfor %}
                 </tbody>
             </table>

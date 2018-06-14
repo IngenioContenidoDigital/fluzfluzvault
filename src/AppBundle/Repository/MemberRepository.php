@@ -40,9 +40,10 @@ class MemberRepository extends EntityRepository{
     public function findMembersByCompany($company){
         return $this->getEntityManager()->createQueryBuilder()
                 ->select('m, g')
+                ->distinct()
                 ->from('AppBundle:Member','m')
                 ->innerJoin('m.group', 'g')
-                ->where('m.company = :company')
+                ->where('g.company = :company')
                 ->setParameter('company', $company)
                 ->getQuery()
                 ->getResult();

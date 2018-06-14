@@ -91,6 +91,7 @@ class DefaultController extends Controller
                                 $group = new MemberGroup();
                                 $group->setName($form['group']->getData());
                                 $em->persist($group);
+                                $company->addGroup($group);
                             }
                             $duplicates=0;
                             $iterator=0;
@@ -102,13 +103,13 @@ class DefaultController extends Controller
                                     ->findMember($row['member_email'],$row['identification'],$row['mobile_phone']);
                                 if (isset($member[0])) {
                                     $m = $em->find('AppBundle\Entity\Member', $member[0]->getIdMember());
-                                    $list_companies = $m->getCompany();
+                                    $list_groups = $m->getGroup();
                                     $exists=0;
-                                    foreach($list_companies as $c){
-                                        if($c->getId() == $companyId){ $exists=1;}
+                                    foreach($list_groups as $g){
+                                        if($g->getId() == $group->getId()){ $exists=1;}
                                     }
                                     if($exists==0){
-                                        $company->addMember($m);
+                                        $group->addMember($m);
                                         $this->getDoctrine()->getManager()->persist($m);
                                         $users+=1;
                                     }else{
@@ -122,14 +123,17 @@ class DefaultController extends Controller
                                         ->setMemberEmail($row['member_email'])
                                         ->setMobilePhone($row['mobile_phone'])
                                         ->setIdentification($row['identification'])
-                                        ->setDateAdd(new \DateTime("now"))
-                                        ->setGroup($group);
+                                        ->setDateAdd(new \DateTime("now"));
+                                    
+                                    
                                     if(isset($row['optional_1'])){$member->setOptional1($row['optional_1']);}
                                     if(isset($row['optional_2'])){$member->setOptional2($row['optional_2']);}
                                     if(isset($row['optional_3'])){$member->setOptional3($row['optional_3']);}
                                     if(isset($row['optional_4'])){$member->setOptional4($row['optional_4']);}
                                     if(isset($row['optional_5'])){$member->setOptional5($row['optional_5']);}
-                                    $company->addMember($member);
+                                    
+                                    $group->addMember($member);
+                                    //$company->addMember($member);
                                     //$member->setCompany($company);
                                     $em->persist($member);
                                     $users+=1;
@@ -141,7 +145,7 @@ class DefaultController extends Controller
                             //        ->findAllMembers();
                             /*$results = $this->getDoctrine()->getRepository('AppBundle:Member')
                                     ->findMembersByCompany($company);*/
-                            $results = $company->getMembers();
+                            $results = $group->getMembers();
                             $total = count($results);
                             $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                                     ->findCodeValues($company);
@@ -360,7 +364,7 @@ class DefaultController extends Controller
         //        $companyId=7;
                 $query="SELECT vault_group.`name` AS grupo_inventario,
                     YEAR(vault.assigned) AS anio_asignacion,
-        MONTHNAME(vault.assigned) AS mes_asignacion,
+        CONCAT(MONTH(vault.assigned), ' ' ,MONTHNAME(vault.assigned)) AS mes_asignacion,
         vault.assigned AS `fecha_asignacion`,
         CONCAT('*********',RIGHT(vault.`code`,4)) AS bono,
         vault.id AS bono_id,
