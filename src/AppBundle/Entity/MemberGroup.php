@@ -94,5 +94,27 @@ class MemberGroup{
         $this->name=$name;
         return $this;
     }
+    
+    public function hasMember(Member $member){
+        return $this->members->contains($member);
+    }
+    
+    public function findMemberByEmail($param){
+        foreach($this->members as $m){
+            if (($m->getMemberEmail()== $param)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function findMemberByIdentification($param){
+        foreach($this->members as $m){
+            if ($m->getIdentification()== $param){
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

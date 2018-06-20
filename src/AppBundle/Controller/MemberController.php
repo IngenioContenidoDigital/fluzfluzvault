@@ -199,27 +199,10 @@ class MemberController extends Controller{
                         $company->addGroup($group);
                     }
 
-                    $member=null;
-                    $member = $this->getDoctrine()->getRepository('AppBundle:Member')
-                        ->findMember($form['member_email']->getData(),$form['identification']->getData(),$form['mobile_phone']->getData());
-                    if (isset($member[0])) {
-                        $m = $em->find('AppBundle\Entity\Member', $member[0]->getIdMember());
-                        $list_groups = $m->getGroup();
-                        $exists=0;
-                        foreach($list_groups as $g){
-                            if($g->getId() == $group->getId()){ $exists=1;}
-                        }
-                        if($exists==0){
-                            $group->addMember($m);
-                            //$company->addMember($m);
-                            $this->getDoctrine()->getManager()->persist($m);
-                            $users+=1;
-                        }else{
-                            $duplicates+=1;
-                            //$list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
-                            $iterator+=1;
-                            $error="El usuario que intentas crear ya existe.";
-                        }
+                    if ($group->findMemberByEmail($form['member_email']->getData()) || $group->findMemberByIdentification($form['identification']->getData())){
+                        $duplicates+=1;
+                        $list_duplicates[$iterator] = [$form['member_name']->getData(),$form['member_email']->getData(),$form['mobile_phone']->getData(),$form['identification']->getData()];
+                        $iterator+=1;
                     }else{
                         $member = (new Member())
                             ->setMemberName($form['member_name']->getData())
@@ -235,8 +218,6 @@ class MemberController extends Controller{
                         if($form['optional_5']->getData()!= NULL){$member->setOptional5($form['optional_5']->getData());}
 
                         $group->addMember($member);
-                        //$company->addMember($member);
-                        //$member->setCompany($company);
 
                         $this->getDoctrine()->getManager()->persist($member);
                     }

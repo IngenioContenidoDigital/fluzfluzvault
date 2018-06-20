@@ -98,25 +98,10 @@ class DefaultController extends Controller
                             $users=0;
                             $records = $reader->getRecords();
                             foreach ($records as $offset => $row) {
-                                $member=null;
-                                $member = $this->getDoctrine()->getRepository('AppBundle:Member')
-                                    ->findMember($row['member_email'],$row['identification'],$row['mobile_phone']);
-                                if (isset($member[0])) {
-                                    $m = $em->find('AppBundle\Entity\Member', $member[0]->getIdMember());
-                                    $list_groups = $m->getGroup();
-                                    $exists=0;
-                                    foreach($list_groups as $g){
-                                        if($g->getId() == $group->getId()){ $exists=1;}
-                                    }
-                                    if($exists==0){
-                                        $group->addMember($m);
-                                        $this->getDoctrine()->getManager()->persist($m);
-                                        $users+=1;
-                                    }else{
-                                        $duplicates+=1;
-                                        $list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
-                                        $iterator+=1;
-                                    }
+                                if ($group->findMemberByEmail($row['member_email']) || $group->findMemberByIdentification($row['identification'])){
+                                    $duplicates+=1;
+                                    $list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
+                                    $iterator+=1;
                                 }else{
                                     $member = (new Member())
                                         ->setMemberName($row['member_name'])
@@ -125,7 +110,6 @@ class DefaultController extends Controller
                                         ->setIdentification($row['identification'])
                                         ->setDateAdd(new \DateTime("now"));
                                     
-                                    
                                     if(isset($row['optional_1'])){$member->setOptional1($row['optional_1']);}
                                     if(isset($row['optional_2'])){$member->setOptional2($row['optional_2']);}
                                     if(isset($row['optional_3'])){$member->setOptional3($row['optional_3']);}
@@ -133,18 +117,12 @@ class DefaultController extends Controller
                                     if(isset($row['optional_5'])){$member->setOptional5($row['optional_5']);}
                                     
                                     $group->addMember($member);
-                                    //$company->addMember($member);
-                                    //$member->setCompany($company);
                                     $em->persist($member);
                                     $users+=1;
                                 }
                             }
                             $this->getDoctrine()->getManager()->flush();
 
-                            //$results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                            //        ->findAllMembers();
-                            /*$results = $this->getDoctrine()->getRepository('AppBundle:Member')
-                                    ->findMembersByCompany($company);*/
                             $results = $group->getMembers();
                             $total = count($results);
                             $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')

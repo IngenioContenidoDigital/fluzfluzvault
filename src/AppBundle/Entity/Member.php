@@ -23,13 +23,13 @@ class Member {
     /** @ORM\Column(type="string", length=255)*/
     public $member_name;
     
-    /** @ORM\Column(type="string", length=50, unique=true)*/
+    /** @ORM\Column(type="string", length=50)*/
     public $member_email;
     
     /** @ORM\Column(type="decimal", length=10)*/
     public $mobile_phone;
     
-    /** @ORM\Column(type="string", length=12, unique=true)*/
+    /** @ORM\Column(type="string", length=12)*/
     public $identification;
     
     /**
@@ -311,5 +311,9 @@ class Member {
      */
     public function getOptional5(){
         return $this->optional_5;
+    }
+    
+    public function hasGroup(MemberGroup $group){
+        return $this->group->contains($group);
     }
 }
