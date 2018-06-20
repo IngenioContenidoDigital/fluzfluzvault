@@ -87,49 +87,55 @@ class DefaultController extends Controller
                             $repository = $this->getDoctrine()->getRepository(MemberGroup::class);
                             $group=null;
                             $group = $repository->findOneBy(['name'=> $form['group']->getData()]);
+                            
                             if(!isset($group)){
                                 $group = new MemberGroup();
                                 $group->setName($form['group']->getData());
                                 $em->persist($group);
                                 $company->addGroup($group);
                             }
-                            $duplicates=0;
-                            $iterator=0;
-                            $users=0;
-                            $records = $reader->getRecords();
-                            foreach ($records as $offset => $row) {
-                                if ($group->findMemberByEmail($row['member_email']) || $group->findMemberByIdentification($row['identification'])){
-                                    $duplicates+=1;
-                                    $list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
-                                    $iterator+=1;
-                                }else{
-                                    $member = (new Member())
-                                        ->setMemberName($row['member_name'])
-                                        ->setMemberEmail($row['member_email'])
-                                        ->setMobilePhone($row['mobile_phone'])
-                                        ->setIdentification($row['identification'])
-                                        ->setDateAdd(new \DateTime("now"));
-                                    
-                                    if(isset($row['optional_1'])){$member->setOptional1($row['optional_1']);}
-                                    if(isset($row['optional_2'])){$member->setOptional2($row['optional_2']);}
-                                    if(isset($row['optional_3'])){$member->setOptional3($row['optional_3']);}
-                                    if(isset($row['optional_4'])){$member->setOptional4($row['optional_4']);}
-                                    if(isset($row['optional_5'])){$member->setOptional5($row['optional_5']);}
-                                    
-                                    $group->addMember($member);
-                                    $em->persist($member);
-                                    $users+=1;
+                            if($company->hasGroup($group)){
+                                $duplicates=0;
+                                $iterator=0;
+                                $users=0;
+                                $records = $reader->getRecords();
+                                foreach ($records as $offset => $row) {
+                                    if ($group->findMemberByEmail($row['member_email']) || $group->findMemberByIdentification($row['identification'])){
+                                        $duplicates+=1;
+                                        $list_duplicates[$iterator] = [$row['member_name'],$row['member_email'],$row['mobile_phone'],$row['identification']];
+                                        $iterator+=1;
+                                    }else{
+                                        $member = (new Member())
+                                            ->setMemberName($row['member_name'])
+                                            ->setMemberEmail($row['member_email'])
+                                            ->setMobilePhone($row['mobile_phone'])
+                                            ->setIdentification($row['identification'])
+                                            ->setDateAdd(new \DateTime("now"));
+
+                                        if(isset($row['optional_1'])){$member->setOptional1($row['optional_1']);}
+                                        if(isset($row['optional_2'])){$member->setOptional2($row['optional_2']);}
+                                        if(isset($row['optional_3'])){$member->setOptional3($row['optional_3']);}
+                                        if(isset($row['optional_4'])){$member->setOptional4($row['optional_4']);}
+                                        if(isset($row['optional_5'])){$member->setOptional5($row['optional_5']);}
+
+                                        $group->addMember($member);
+                                        $em->persist($member);
+                                        $users+=1;
+                                    }
                                 }
-                            }
-                            $this->getDoctrine()->getManager()->flush();
+                                $this->getDoctrine()->getManager()->flush();
 
                             $results = $group->getMembers();
                             $total = count($results);
                             $bonos = $this->getDoctrine()->getRepository('AppBundle:Vault')
                                     ->findCodeValues($company);
-                            
+
                             return $this->render('member/results.html.twig',array('duplicates' => $duplicates,
-                                'users'=> $users, 'lista_duplicados'=>$list_duplicates, 'logo'=>$logo)); 
+                                'users'=> $users, 'lista_duplicados'=>$list_duplicates, 'logo'=>$logo, 'error' => $error));
+                            }else{
+                                $error = "El Nombre de Grupo ya Existe y No puede repetirse";
+                            }
+   
                         }else{
                             $error = "La Estructura del Archivo CSV NO es válida. Por favor revisa el archivo que intentaste cargar.";
                         }

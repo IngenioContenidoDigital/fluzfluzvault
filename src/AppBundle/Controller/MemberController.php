@@ -198,31 +198,35 @@ class MemberController extends Controller{
                         $em->persist($group);
                         $company->addGroup($group);
                     }
+                    
+                    if($company->hasGroup($group)){
+                        if ($group->findMemberByEmail($form['member_email']->getData()) || $group->findMemberByIdentification($form['identification']->getData())){
+                            $duplicates+=1;
+                            $list_duplicates[$iterator] = [$form['member_name']->getData(),$form['member_email']->getData(),$form['mobile_phone']->getData(),$form['identification']->getData()];
+                            $iterator+=1;
+                        }else{
+                            $member = (new Member())
+                                ->setMemberName($form['member_name']->getData())
+                                ->setMemberEmail($form['member_email']->getData())
+                                ->setMobilePhone($form['mobile_phone']->getData())
+                                ->setIdentification($form['identification']->getData())
+                                ->setDateAdd(new \DateTime("now"));
 
-                    if ($group->findMemberByEmail($form['member_email']->getData()) || $group->findMemberByIdentification($form['identification']->getData())){
-                        $duplicates+=1;
-                        $list_duplicates[$iterator] = [$form['member_name']->getData(),$form['member_email']->getData(),$form['mobile_phone']->getData(),$form['identification']->getData()];
-                        $iterator+=1;
+                            if($form['optional_1']->getData()!= NULL){$member->setOptional1($form['optional_1']->getData());}
+                            if($form['optional_2']->getData()!= NULL){$member->setOptional2($form['optional_2']->getData());}
+                            if($form['optional_3']->getData()!= NULL){$member->setOptional3($form['optional_3']->getData());}
+                            if($form['optional_4']->getData()!= NULL){$member->setOptional4($form['optional_4']->getData());}
+                            if($form['optional_5']->getData()!= NULL){$member->setOptional5($form['optional_5']->getData());}
+
+                            $group->addMember($member);
+
+                            $this->getDoctrine()->getManager()->persist($member);
+                        }
+
+                        $this->getDoctrine()->getManager()->flush();
                     }else{
-                        $member = (new Member())
-                            ->setMemberName($form['member_name']->getData())
-                            ->setMemberEmail($form['member_email']->getData())
-                            ->setMobilePhone($form['mobile_phone']->getData())
-                            ->setIdentification($form['identification']->getData())
-                            ->setDateAdd(new \DateTime("now"));
-
-                        if($form['optional_1']->getData()!= NULL){$member->setOptional1($form['optional_1']->getData());}
-                        if($form['optional_2']->getData()!= NULL){$member->setOptional2($form['optional_2']->getData());}
-                        if($form['optional_3']->getData()!= NULL){$member->setOptional3($form['optional_3']->getData());}
-                        if($form['optional_4']->getData()!= NULL){$member->setOptional4($form['optional_4']->getData());}
-                        if($form['optional_5']->getData()!= NULL){$member->setOptional5($form['optional_5']->getData());}
-
-                        $group->addMember($member);
-
-                        $this->getDoctrine()->getManager()->persist($member);
+                        $error = "El Nombre de Grupo ya Existe y No puede repetirse";
                     }
-
-                    $this->getDoctrine()->getManager()->flush();
                 }catch(Exception $e){
                     $error = isset($error) ? $e->getMessage() : $error;
                 }

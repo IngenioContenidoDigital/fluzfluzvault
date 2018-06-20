@@ -192,5 +192,9 @@ class Company
     public function getTemplates(){
         return $this->template;
     }
+    
+    public function hasGroup(MemberGroup $group){
+        return $this->groups->contains($group);
+    }
 }
 
