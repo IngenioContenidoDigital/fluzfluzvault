@@ -60,6 +60,7 @@ class VaultController extends Controller{
 
                             $vault->setMember($member);
                             $vault->setAssigned(new \DateTime("now"));
+                            $vault->setAssigneer($user->getUsername());
                             $total_asignados+=1;
                             $bono = $vault->getCode();
                             $fecha = $vault->getExpiration();

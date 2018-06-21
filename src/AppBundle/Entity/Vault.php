@@ -41,6 +41,11 @@ class Vault {
     private $members;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    public $assigneer;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\VaultGroup", inversedBy="vault")
      * @ORM\JoinColumn(name="vault_group_id",referencedColumnName="id")
      */
@@ -167,4 +172,20 @@ class Vault {
     /*public function AssignCode($id_member){
         $this->id_member=$id_member;
     }*/
+    
+    /**
+     * @return string
+     */
+    public function getAssigneer(){
+        return $this->assigneer;
+    }
+    
+    /**
+     * @param string $assigneer
+     * @return Vault
+     */
+    public function setAssigneer($assigneer){
+        $this->assigneer = $assigneer;
+        return $this;
+    }
 }

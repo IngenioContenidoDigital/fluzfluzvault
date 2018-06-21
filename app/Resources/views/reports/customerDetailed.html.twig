@@ -15,12 +15,12 @@
                 <th class="encabezado">A&ntilde;o</th>
                 <th class="encabezado">Mes</th>
                 <th class="encabezado">Fecha</th>
+                <th class="encabezado">Asignado por</th>
                 <th class="encabezado">Id Bono</th>
                 <th class="encabezado">Bono</th>
                 <th class="encabezado">Valor</th>
                 <th class="encabezado">Nombre</th>
                 <th class="encabezado">Email</th>
-                <th class="encabezado">Id usuario</th>
                 <th class="encabezado">Tel&eacute;fono</th>
             </thead>
             <tbody>
@@ -30,12 +30,12 @@
                     <td class="fila-datos">{{item.anio_asignacion}}</td>
                     <td class="fila-datos">{{item.mes_asignacion}}</td>
                     <td class="fila-datos">{{item.fecha_asignacion}}</td>
+                    <td class="fila-datos">{{item.asignado_por}}</td>
                     <td class="fila-datos">{{item.bono_id}}</td>
                     <td class="fila-datos">{{item.bono}}</td>
                     <td class="fila-datos">$ {{item.valor_bono|number_format(0,'.',',')}}</td>
                     <td class="fila-datos">{{item.nombre}}</td>
                     <td class="fila-datos">{{item.email}}</td>
-                    <td class="fila-datos">{{item.id}}</td>
                     <td class="fila-datos">{{item.celular}}</td>
                 </tr>
             {% endfor %}

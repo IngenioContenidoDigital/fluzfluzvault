@@ -350,6 +350,7 @@ class DefaultController extends Controller
                     YEAR(vault.assigned) AS anio_asignacion,
         CONCAT(MONTH(vault.assigned), ' ' ,MONTHNAME(vault.assigned)) AS mes_asignacion,
         vault.assigned AS `fecha_asignacion`,
+        vault.assigneer AS asignado_por,
         CONCAT('*********',RIGHT(vault.`code`,4)) AS bono,
         vault.id AS bono_id,
         vault.code_value AS valor_bono,
